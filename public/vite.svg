@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="truckGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+
+  <!-- High-contrast Rounded Badge for Browser Tabs -->
+  <rect width="64" height="64" rx="14" fill="url(#bgGrad)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#38bdf8" stroke-width="2" stroke-opacity="0.8"/>
+
+  <!-- Cargo Trailer with AR Initials -->
+  <rect x="7" y="15" width="30" height="23" rx="3" fill="url(#truckGrad)" stroke="#60a5fa" stroke-width="1"/>
+  <text x="22" y="31" fill="#ffffff" font-size="12" font-weight="900" font-family="system-ui, -apple-system, sans-serif" text-anchor="middle" letter-spacing="0.5">AR</text>
+
+  <!-- Truck Cabin -->
+  <path d="M 38 21 L 49 21 L 56 30 L 56 38 L 38 38 Z" fill="#38bdf8"/>
+  <path d="M 47 24 L 53 30 L 47 30 Z" fill="#0f172a" opacity="0.6"/>
+
+  <!-- Headlight beam -->
+  <polygon points="56,33 62,30 62,36" fill="#fef08a"/>
+
+  <!-- Wheels -->
+  <circle cx="16" cy="42" r="5" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <circle cx="28" cy="42" r="5" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+  <circle cx="49" cy="42" r="5" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+
+  <!-- Road Speed Line -->
+  <line x1="6" y1="52" x2="58" y2="52" stroke="#facc15" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
