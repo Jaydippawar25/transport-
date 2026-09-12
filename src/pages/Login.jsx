@@ -8,7 +8,6 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import Loader from '../components/Loader';
 
 export default function Login() {
   const [email, setEmail] = useState('admin@123.com');
@@ -304,15 +303,6 @@ export default function Login() {
 
           </div>
         </div>
-      )}
-
-      {/* Animated Fullscreen Loader while logging in */}
-      {isSubmitting && (
-        <Loader 
-          fullScreen={true} 
-          message="Authenticating Credentials..." 
-          subMessage="Connecting to ATHAHAR ROADWAYS terminal" 
-        />
       )}
 
     </div>

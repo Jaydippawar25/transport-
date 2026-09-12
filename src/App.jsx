@@ -11,14 +11,13 @@ import Masters from './pages/Masters';
 import Login from './pages/Login';
 import LRPrintModal from './components/LRPrintModal';
 import MemoPrintModal from './components/MemoPrintModal';
-import SplashScreen from './pages/SplashScreen';
 
 // Protected Route Guard: If not authenticated, render Login directly
 function AuthenticatedRoute({ children }) {
   const { currentUser, loading } = useAuth();
 
   if (loading) {
-    return <SplashScreen onFinish={() => {}} />;
+    return null;
   }
 
   if (!currentUser) {
@@ -66,29 +65,22 @@ function MainLayout({ children }) {
 }
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
-
   return (
-    <>
-      {showSplash && (
-        <SplashScreen onFinish={() => setShowSplash(false)} />
-      )}
-      <div className={`min-h-screen ${showSplash ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100 animate-page-entrance'}`}>
-        <AuthProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<AuthenticatedRoute><Dashboard /></AuthenticatedRoute>} />
-              <Route path="/dashboard" element={<AuthenticatedRoute><Dashboard /></AuthenticatedRoute>} />
-              <Route path="/stock-in" element={<AuthenticatedRoute><StockIn /></AuthenticatedRoute>} />
-              <Route path="/stock-out" element={<AuthenticatedRoute><StockOut /></AuthenticatedRoute>} />
-              <Route path="/masters" element={<AuthenticatedRoute><Masters /></AuthenticatedRoute>} />
-              <Route path="/reports" element={<AuthenticatedRoute><Reports /></AuthenticatedRoute>} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Router>
-        </AuthProvider>
-      </div>
-    </>
+    <div className="min-h-screen">
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<AuthenticatedRoute><Dashboard /></AuthenticatedRoute>} />
+            <Route path="/dashboard" element={<AuthenticatedRoute><Dashboard /></AuthenticatedRoute>} />
+            <Route path="/stock-in" element={<AuthenticatedRoute><StockIn /></AuthenticatedRoute>} />
+            <Route path="/stock-out" element={<AuthenticatedRoute><StockOut /></AuthenticatedRoute>} />
+            <Route path="/masters" element={<AuthenticatedRoute><Masters /></AuthenticatedRoute>} />
+            <Route path="/reports" element={<AuthenticatedRoute><Reports /></AuthenticatedRoute>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </div>
   );
 }

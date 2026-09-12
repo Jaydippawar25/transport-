@@ -11,7 +11,6 @@ import {
   Clock
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
-import Loader from '../components/Loader';
 
 export default function Reports() {
   const [stockInList, setStockInList] = useState([]);

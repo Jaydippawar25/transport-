@@ -28,7 +28,6 @@ import {
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
-import Loader from '../components/Loader';
 
 export default function Dashboard() {
   const [stockInList, setStockInList] = useState([]);
