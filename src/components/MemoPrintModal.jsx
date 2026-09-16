@@ -70,8 +70,8 @@ export default function MemoPrintModal({ memo, onClose }) {
         </div>
 
         {/* PRINTABLE BODY CONTENT - PHYSICAL YELLOW LR BILL SLIPS FOR STOCK OUT */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 printable-area bg-[#fef9c3] font-sans text-black">
-          <div className="space-y-6">
+        <div className={`p-4 sm:p-6 overflow-y-auto flex-1 printable-area bg-[#fef9c3] font-sans text-black print:p-0 print:bg-white`}>
+          <div className="space-y-6 print:space-y-0 print:m-0">
             {entries.length === 0 ? (
               <div className="p-12 text-center text-slate-500 bg-white rounded-xl border border-dashed border-slate-300 text-xs">
                 No LRs loaded in this dispatch memo.
@@ -87,7 +87,7 @@ export default function MemoPrintModal({ memo, onClose }) {
                 ];
 
                 return (
-                  <div key={index} className="bg-[#fef9c3] p-4 rounded-xl border-2 border-slate-900 shadow-sm space-y-4">
+                  <div key={index} className={`bg-[#fef9c3] p-4 rounded-xl border-2 border-slate-900 shadow-sm space-y-4 print:p-0 print:border-0 print:shadow-none print:space-y-0 print:m-0 print:break-after-page ${printCopiesPerLr === 3 ? 'print-3-copies' : ''}`}>
                     <div className="bg-slate-900 text-white px-3 py-1.5 rounded-lg flex items-center justify-between text-xs font-bold no-print">
                       <span>LR #{entry.lrNo} — {entry.consignor} ➔ {entry.consignee}</span>
                       <span className="bg-emerald-500 text-slate-950 px-2 py-0.5 rounded text-[11px]">

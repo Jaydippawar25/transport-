@@ -165,7 +165,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* MAIN GOODS & CHARGES GRID (SPLIT SECTION) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black divide-y md:divide-y-0 md:divide-x-2 divide-black">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 border-b-2 border-black divide-y md:divide-y-0 md:divide-x-2 divide-black">
         
         {/* Goods Table (Cols 1 & 2) */}
         <div className="md:col-span-2 flex flex-col justify-between bg-[#fef9c3]">
