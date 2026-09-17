@@ -141,9 +141,9 @@ export default function Dashboard() {
             <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-semibold uppercase tracking-wider">
               Godown Summary
             </span>
-            <span className="text-xs text-indigo-100 font-medium">SANGLI TERMINAL — ATHAHAR ROADWAYS</span>
+            <span className="text-xs text-indigo-100 font-medium">SANGLI TERMINAL — ROYAL ROADLINES</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white mt-1">ATHAHAR ROADWAYS Dashboard</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-white mt-1">ROYAL ROADLINES Dashboard</h1>
           <p className="text-xs text-indigo-100 mt-1 max-w-xl font-medium">
             Real-time tracking of incoming Lorry Receipts (LR) and outgoing Loading Truck Memos.
           </p>

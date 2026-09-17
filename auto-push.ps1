@@ -1,6 +1,6 @@
-# Auto-push watcher script for ATHAHAR ROADWAYS project
+# Auto-push watcher script for ROYAL ROADLINES project
 Write-Host "================================================" -ForegroundColor Cyan
-Write-Host "  ATHAHAR ROADWAYS - Git Auto-Push Watcher     " -ForegroundColor Cyan
+Write-Host "  ROYAL ROADLINES - Git Auto-Push Watcher     " -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "Watching for file changes every 15 seconds." -ForegroundColor Yellow
 Write-Host "Press Ctrl + C in this terminal to stop at any time.`n" -ForegroundColor Yellow

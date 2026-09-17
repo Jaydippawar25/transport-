@@ -52,7 +52,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 AR
               </div>
               <div className="overflow-hidden">
-                <h1 className="font-extrabold text-white tracking-wide text-sm leading-tight truncate">ATHAHAR ROADWAYS</h1>
+                <h1 className="font-extrabold text-white tracking-wide text-sm leading-tight truncate">ROYAL ROADLINES</h1>
                 <span className="text-[9.5px] text-cyan-400 font-semibold tracking-wider uppercase truncate block">SANGLI-416416</span>
               </div>
             </div>

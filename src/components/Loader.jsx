@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Loader({ 
   fullScreen = false, 
-  message = "Loading ATHAHAR ROADWAYS Platform...", 
+  message = "Loading ROYAL ROADLINES Platform...", 
   subMessage = "Syncing fleet dispatch, lorry receipts & godown inventory"
 }) {
   const content = (
@@ -174,7 +174,7 @@ export default function Loader({
         <div className="flex items-center justify-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping" />
           <h3 className="text-base sm:text-lg font-black tracking-wider text-slate-900 uppercase">
-            ATHAHAR ROADWAYS
+            ROYAL ROADLINES
           </h3>
           <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
         </div>

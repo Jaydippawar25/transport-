@@ -183,7 +183,7 @@ export default function Login() {
 
           {/* Copyright text */}
           <div className="text-[10px] text-slate-400 mt-8 text-center md:text-left">
-            Copyright ©2026 ATHAHAR ROADWAYS. All rights reserved.
+            Copyright ©2026 ROYAL ROADLINES. All rights reserved.
           </div>
         </div>
 
@@ -227,7 +227,7 @@ export default function Login() {
             <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mx-auto shadow-xl">
               <span className="text-2xl font-black text-cyan-300">AR</span>
             </div>
-            <h2 className="text-xl font-black tracking-wide text-white uppercase">ATHAHAR ROADWAYS</h2>
+            <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
             <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI-416416</p>
           </div>
 

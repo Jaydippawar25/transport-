@@ -65,8 +65,8 @@ export default function Header({ onToggleSidebar, onSelectSearchResult }) {
         </button>
 
         <div className="hidden sm:block">
-          <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">ATHAHAR ROADWAYS</h2>
-          <p className="text-[11px] text-slate-500 font-medium">NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI-416416 | MOB: 9370000000 / 9850000000</p>
+          <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">ROYAL ROADLINES</h2>
+          <p className="text-[11px] text-slate-500 font-medium">NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI-416416 | MOB: 9850194732 / 9370229449</p>
         </div>
       </div>
 

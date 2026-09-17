@@ -37,7 +37,7 @@ export default function SplashScreen({ onFinish }) {
       {/* Decorative Corner Badges */}
       <div className="absolute top-6 left-6 flex items-center gap-2 text-xs font-mono text-cyan-400/70">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-        <span>ATHAHAR ROADWAYS FLEET OS</span>
+        <span>ROYAL ROADLINES FLEET OS</span>
       </div>
       <div className="absolute top-6 right-6 text-xs font-mono text-slate-400/60">
         SANGLI-416416
@@ -213,14 +213,14 @@ export default function SplashScreen({ onFinish }) {
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-blue-200 uppercase">
-            ATHAHAR ROADWAYS
+            ROYAL ROADLINES
           </h1>
 
           <p className="text-xs text-slate-300 font-medium">
             NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI - 416416
           </p>
           <p className="text-[11px] font-mono text-cyan-400/80">
-            MOB NO: 9370000000 / 9850000000
+            MOB NO: 9850194732 / 9370229449
           </p>
         </div>
 
@@ -247,7 +247,7 @@ export default function SplashScreen({ onFinish }) {
 
       {/* Bottom Copyright */}
       <div className="absolute bottom-6 text-center text-[10px] text-slate-500">
-        © 2026 ATHAHAR ROADWAYS • Transport Management System
+        © 2026 ROYAL ROADLINES • Transport Management System
       </div>
 
     </div>
