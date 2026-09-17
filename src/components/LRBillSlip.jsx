@@ -80,37 +80,39 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
 
       {/* COPY TYPE TOP HEADER BADGE */}
       <div className="bg-black text-white px-3 py-1 flex justify-between items-center text-[9px] font-bold tracking-wider uppercase border-b border-black">
-        <span>ATHAHAR ROADWAYS — LR BILTY SLIP</span>
+        <span>ROYAL ROADLINES — LR BILTY SLIP</span>
         <span className="bg-yellow-400 text-black px-2 py-0.5 rounded text-[9.5px] font-black tracking-normal">
           {copyTitle || 'LR COPY'}
         </span>
+      </div>
+
+      {/* JURISDICTION HEADER */}
+      <div className="text-center text-[7.5px] font-bold uppercase border-b border-black py-0.5 tracking-widest bg-white/50">
+        SUBJECT TO ICHALKARANJI JURISDICTION
       </div>
 
       {/* TOP HEADER SECTION */}
       <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black divide-y md:divide-y-0 md:divide-x-2 divide-black">
         
         {/* Company Title & Address (Cols 1 & 2) */}
-        <div className="md:col-span-2 p-2 space-y-0.5">
-          <h1 className="text-lg sm:text-xl font-black uppercase tracking-wider text-black leading-none">
-            ATHAHAR ROADWAYS
+        <div className="md:col-span-2 p-1.5 space-y-0.5 flex flex-col justify-center text-center">
+          <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
+            ROYAL ROADLINES
           </h1>
-          <p className="text-[10px] font-bold text-slate-900 leading-tight">
-            NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI-416416
+          <p className="text-[7.5px] sm:text-[8px] font-bold text-slate-900 leading-tight">
+            MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
           </p>
-          <div className="text-[9px] font-mono font-bold leading-none pt-1 border-t border-black/40">
-            MOB NO : 9370000000 / 9850000000
-          </div>
         </div>
 
         {/* Booking Info Box (Col 3) */}
         <div className="p-2 bg-[#fff099] flex flex-col justify-between font-mono text-[10px] space-y-0.5">
-          <div className="text-[8.5px] italic text-slate-800">
-            Computer generated LR. No sign needed.
+          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center">
+            MOB : 9850194732 / 9370229449
           </div>
-          <div className="font-bold text-[9px] border-b border-black/30 pb-0.5">
-            GSTIN : 27BHVPW4606B1ZA
+          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
+            GSTIN : 27MOJPS8633C1ZC
           </div>
-          <div>
+          <div className="pt-0.5">
             <span className="font-bold">LR NO: </span> 
             <span className="font-black text-xs uppercase">{lrNo}</span>
           </div>
