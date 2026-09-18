@@ -195,8 +195,8 @@ export default function Masters() {
       </div>
 
       {/* Category Selection Tabs */}
-      <div className="bg-white rounded-2xl p-2 shadow-xs border border-slate-200 overflow-x-auto scrollbar-thin">
-        <div className="flex items-center gap-1.5 min-w-max">
+      <div className="bg-white rounded-2xl p-2 shadow-xs border border-slate-200">
+        <div className="flex flex-wrap items-center gap-2">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;
             const count = (masters[cat.key] || []).length;
