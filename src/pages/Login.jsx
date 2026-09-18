@@ -225,7 +225,7 @@ export default function Login() {
           {/* Center Brand Badge */}
           <div className="relative z-10 text-center text-white space-y-2">
             <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mx-auto shadow-xl">
-              <span className="text-2xl font-black text-cyan-300">AR</span>
+              <span className="text-2xl font-black text-cyan-300">RR</span>
             </div>
             <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
             <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003</p>

@@ -139,7 +139,7 @@ export default function SplashScreen({ onFinish }) {
               {/* AR Brand Plaque on Container */}
               <rect x="90" y="58" width="34" height="22" rx="4" fill="#2563eb" stroke="#60a5fa" strokeWidth="1" />
               <text x="107" y="73" fill="#ffffff" fontSize="12" fontWeight="900" textAnchor="middle" fontFamily="system-ui, sans-serif" letterSpacing="1">
-                AR
+                RR
               </text>
 
               {/* Truck Cabin Base */}
