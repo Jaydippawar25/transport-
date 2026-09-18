@@ -110,6 +110,37 @@ export default function StockOut() {
     }
   };
 
+  // Select or Deselect all currently filtered LRs
+  const handleSelectAllFiltered = () => {
+    const filteredIds = filteredPendingLrs.map(lr => lr.id);
+    if (filteredIds.length === 0) return;
+    
+    const allSelected = filteredIds.every(id => selectedLrIds.includes(id));
+    
+    if (allSelected) {
+      // Unselect all filtered
+      setSelectedLrIds(prev => prev.filter(id => !filteredIds.includes(id)));
+    } else {
+      // Select all filtered (that aren't already selected)
+      const newSelections = filteredIds.filter(id => !selectedLrIds.includes(id));
+      setSelectedLrIds(prev => [...prev, ...newSelections]);
+      
+      const newCustomData = { ...customLrData };
+      newSelections.forEach(id => {
+        const lr = pendingLrs.find(l => l.id === id);
+        if (lr && !newCustomData[lr.lrNo]) {
+          newCustomData[lr.lrNo] = {
+            deliveryPerson: lr.consigneeName ? `${lr.consigneeName.split(' ')[0]} Staff` : 'Local Driver',
+            toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : 0,
+            paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : 0,
+            tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : 0
+          };
+        }
+      });
+      setCustomLrData(newCustomData);
+    }
+  };
+
   // Helper to handle edits per LR in loading builder
   const handleLrDataChange = (lrNo, field, val) => {
     setCustomLrData(prev => ({
@@ -365,15 +396,24 @@ export default function StockOut() {
                 <Boxes className="w-4 h-4 text-amber-600" /> Select Pending LRs in Godown to Dispatch
               </h3>
 
-              <div className="relative w-full sm:w-64">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
-                <input
-                  type="text"
-                  value={lrSearchTerm}
-                  onChange={(e) => setLrSearchTerm(e.target.value)}
-                  placeholder="Search incoming Memo No, or LR No to select..."
-                  className="w-full pl-8 pr-3 py-1.5 bg-slate-50 text-xs rounded-lg border border-slate-200"
-                />
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleSelectAllFiltered}
+                  className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition-colors"
+                >
+                  Select All Filtered
+                </button>
+                <div className="relative w-full sm:w-64">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={lrSearchTerm}
+                    onChange={(e) => setLrSearchTerm(e.target.value)}
+                    placeholder="Search incoming Memo No, or LR No to select..."
+                    className="w-full pl-8 pr-3 py-1.5 bg-slate-50 text-xs rounded-lg border border-slate-200"
+                  />
+                </div>
               </div>
             </div>
 
