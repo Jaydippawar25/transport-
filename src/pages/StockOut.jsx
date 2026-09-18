@@ -391,29 +391,29 @@ export default function StockOut() {
 
           {/* SELECT PENDING GODOWN LRs TO LOAD */}
           <div className="space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
                 <Boxes className="w-4 h-4 text-amber-600" /> Select Pending LRs in Godown to Dispatch
               </h3>
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleSelectAllFiltered}
-                  className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition-colors"
-                >
-                  Select All Filtered
-                </button>
-                <div className="relative w-full sm:w-64">
+              <div className="flex flex-1 items-center gap-2 w-full xl:ml-4">
+                <div className="relative flex-1">
                   <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
                   <input
                     type="text"
                     value={lrSearchTerm}
                     onChange={(e) => setLrSearchTerm(e.target.value)}
                     placeholder="Search incoming Memo No, or LR No to select..."
-                    className="w-full pl-8 pr-3 py-1.5 bg-slate-50 text-xs rounded-lg border border-slate-200"
+                    className="w-full pl-8 pr-3 py-1.5 bg-slate-50 focus:bg-white text-xs rounded-lg border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all shadow-inner"
                   />
                 </div>
+                <button
+                  type="button"
+                  onClick={handleSelectAllFiltered}
+                  className="whitespace-nowrap px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition-colors shadow-sm"
+                >
+                  Select All Filtered
+                </button>
               </div>
             </div>
 
