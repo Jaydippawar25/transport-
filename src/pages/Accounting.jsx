@@ -130,15 +130,14 @@ export default function Accounting() {
 
           return (
             <div key={memo.id} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="bg-slate-900 p-3 text-center border-b border-slate-800">
-                <h3 className="text-sm font-black text-slate-100 tracking-widest uppercase">
-                  ACCOUNTING DETAILS MEMO WISE + DATE WISE
-                </h3>
-              </div>
-              
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left border-collapse">
                   <thead>
+                    <tr className="bg-slate-900 border-b border-slate-800">
+                      <th colSpan={7} className="p-3 text-center text-sm font-black text-slate-100 tracking-widest uppercase whitespace-nowrap">
+                        ACCOUNTING DETAILS MEMO WISE + DATE WISE
+                      </th>
+                    </tr>
                     <tr className="bg-slate-50 text-slate-700 font-bold text-[11px] uppercase tracking-wider border-b-2 border-slate-200">
                       <th className="p-3 border-r border-slate-200 w-32">DATE</th>
                       <th className="p-3 border-r border-slate-200 w-36">VEHICAL NO.</th>
