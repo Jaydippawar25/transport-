@@ -40,7 +40,7 @@ export default function SplashScreen({ onFinish }) {
         <span>ROYAL ROADLINES FLEET OS</span>
       </div>
       <div className="absolute top-6 right-6 text-xs font-mono text-slate-400/60">
-        SANGLI-416416
+        MUMBAI-400 003
       </div>
 
       <div className="relative z-10 flex flex-col items-center max-w-lg w-full px-6 text-center space-y-6">
@@ -217,7 +217,7 @@ export default function SplashScreen({ onFinish }) {
           </h1>
 
           <p className="text-xs text-slate-300 font-medium">
-            NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI - 416416
+            MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003
           </p>
           <p className="text-[11px] font-mono text-cyan-400/80">
             MOB NO: 9850194732 / 9370229449

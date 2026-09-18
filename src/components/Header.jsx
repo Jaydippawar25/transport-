@@ -66,7 +66,7 @@ export default function Header({ onToggleSidebar, onSelectSearchResult }) {
 
         <div className="hidden sm:block">
           <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">ROYAL ROADLINES</h2>
-          <p className="text-[11px] text-slate-500 font-medium">NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI-416416 | MOB: 9850194732 / 9370229449</p>
+          <p className="text-[11px] text-slate-500 font-medium">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 | MOB: 9850194732 / 9370229449</p>
         </div>
       </div>
 

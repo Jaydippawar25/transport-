@@ -228,7 +228,7 @@ export default function Login() {
               <span className="text-2xl font-black text-cyan-300">AR</span>
             </div>
             <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
-            <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">NEXT TO PARVATI CRANE, VAKHAR BHAG, SANGLI-416416</p>
+            <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003</p>
           </div>
 
         </div>
