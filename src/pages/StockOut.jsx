@@ -318,13 +318,35 @@ export default function StockOut() {
       {showForm && (
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-md border border-slate-200 space-y-6 animate-in slide-in-from-top-4 duration-200">
           
-          <div className="border-b border-slate-200 pb-4 flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <FileSpreadsheet className="w-4 h-4 text-emerald-600" /> Stock Out Dispatch Builder Form
-            </h2>
-            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">
-              {pendingLrs.length} LRs sitting in godown
-            </span>
+          <div className="border-b border-slate-200 pb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex items-center justify-between lg:justify-start gap-4">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                <FileSpreadsheet className="w-4 h-4 text-emerald-600" /> Stock Out Dispatch Builder Form
+              </h2>
+              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md whitespace-nowrap">
+                {pendingLrs.length} LRs sitting in godown
+              </span>
+            </div>
+
+            <div className="flex flex-1 items-center gap-2 w-full lg:max-w-xl xl:ml-4">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+                <input
+                  type="text"
+                  value={lrSearchTerm}
+                  onChange={(e) => setLrSearchTerm(e.target.value)}
+                  placeholder="Search incoming Memo No, or LR No to select..."
+                  className="w-full pl-9 pr-3 py-2 bg-slate-50 focus:bg-white text-sm rounded-lg border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all shadow-inner"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleSelectAllFiltered}
+                className="whitespace-nowrap px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-bold rounded-lg border border-indigo-200 transition-colors shadow-sm"
+              >
+                Select All Filtered
+              </button>
+            </div>
           </div>
 
           {/* STOCK OUT HEADER DETAILS (Matching Spreadsheet Layout) */}
@@ -391,30 +413,10 @@ export default function StockOut() {
 
           {/* SELECT PENDING GODOWN LRs TO LOAD */}
           <div className="space-y-3">
-            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
+            <div className="flex items-center justify-between pb-2">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                 <Boxes className="w-4 h-4 text-amber-600" /> Select Pending LRs in Godown to Dispatch
               </h3>
-
-              <div className="flex flex-1 items-center gap-2 w-full xl:ml-4">
-                <div className="relative flex-1">
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={lrSearchTerm}
-                    onChange={(e) => setLrSearchTerm(e.target.value)}
-                    placeholder="Search incoming Memo No, or LR No to select..."
-                    className="w-full pl-8 pr-3 py-1.5 bg-slate-50 focus:bg-white text-xs rounded-lg border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 transition-all shadow-inner"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={handleSelectAllFiltered}
-                  className="whitespace-nowrap px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition-colors shadow-sm"
-                >
-                  Select All Filtered
-                </button>
-              </div>
             </div>
 
             {filteredPendingLrs.length === 0 ? (
