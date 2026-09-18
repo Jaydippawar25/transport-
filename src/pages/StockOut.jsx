@@ -231,30 +231,38 @@ export default function StockOut() {
     }
   };
 
-  // Filter stock out MEMOS
-  const filteredMemos = stockOutList.filter(memo => {
-    const term = searchTerm.toLowerCase();
-    const lrs = memo.entries || [];
-    const hasLrMatch = lrs.some(lr => 
-      lr.lrNo?.toLowerCase().includes(term) ||
-      lr.consignor?.toLowerCase().includes(term) ||
-      lr.consignee?.toLowerCase().includes(term) ||
-      lr.station?.toLowerCase().includes(term)
-    );
+  // Flatten all stock out line items for detailed spreadsheet display
+  const allStockOutItems = stockOutList.flatMap(memo => {
+    return (memo.entries || []).map(entry => ({
+      ...entry,
+      memoNo: memo.memoNo,
+      date: memo.date || memo.createdAt,
+      vehicleNo: memo.lorryNo,
+      driverName: memo.driverName,
+      fromStation: memo.fromStation || 'SANGLI',
+      parentMemo: memo
+    }));
+  });
 
+  // Filter stock out items
+  const filteredStockOutItems = allStockOutItems.filter(item => {
+    const term = searchTerm.toLowerCase();
     return (
-      memo.memoNo?.toLowerCase().includes(term) ||
-      memo.lorryNo?.toLowerCase().includes(term) ||
-      memo.driverName?.toLowerCase().includes(term) ||
-      hasLrMatch
+      item.lrNo?.toLowerCase().includes(term) ||
+      item.consignor?.toLowerCase().includes(term) ||
+      item.consignee?.toLowerCase().includes(term) ||
+      item.deliveryPerson?.toLowerCase().includes(term) ||
+      item.memoNo?.toLowerCase().includes(term) ||
+      item.vehicleNo?.toLowerCase().includes(term) ||
+      item.station?.toLowerCase().includes(term)
     );
   });
 
   // Summary Totals for Stock Out Register Table
-  const regTotalPkgs = filteredMemos.reduce((sum, m) => sum + Number(m.totalPackages || 0), 0);
-  const regTotalToPay = filteredMemos.reduce((sum, m) => sum + Number(m.totalToPay || 0), 0);
-  const regTotalPaid = filteredMemos.reduce((sum, m) => sum + Number(m.totalPaid || 0), 0);
-  const regTotalTbb = filteredMemos.reduce((sum, m) => sum + Number(m.totalTbb || 0), 0);
+  const regTotalPkgs = filteredStockOutItems.reduce((sum, i) => sum + Number(i.packages || 0), 0);
+  const regTotalToPay = filteredStockOutItems.reduce((sum, i) => sum + Number(i.toPay || 0), 0);
+  const regTotalPaid = filteredStockOutItems.reduce((sum, i) => sum + Number(i.paid || 0), 0);
+  const regTotalTbb = filteredStockOutItems.reduce((sum, i) => sum + Number(i.tbb || 0), 0);
   const regGrandTotal = regTotalToPay + regTotalPaid + regTotalTbb;
 
   return (
@@ -565,8 +573,10 @@ export default function StockOut() {
                         ₹{grandTotal.toLocaleString('en-IN')}
                       </td>
                     </tr>
-                  </tfoot></table></div></div>
-      </>)}
+                  </tfoot>
+                </table>
+              </div>
+            </div>
           )}
 
           {/* Form Footer */}
@@ -609,19 +619,20 @@ export default function StockOut() {
         </form>
       )}
 
-      {!showForm && (<>
-      {/* SEARCH BAR FOR STOCK OUT REGISTER */}
-      <div className="bg-white p-4 rounded-2xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search Memo No, Vehicle, Driver, or LR No..."
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 text-xs rounded-xl border border-slate-200 focus:border-emerald-500 focus:outline-none"
-          />
-        </div>
+      {!showForm && (
+        <>
+          {/* SEARCH BAR FOR STOCK OUT REGISTER */}
+          <div className="bg-white p-4 rounded-2xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="relative w-full sm:w-80">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search Memo No, Vehicle, Driver, or LR No..."
+                className="w-full pl-9 pr-4 py-2 bg-slate-50 text-xs rounded-xl border border-slate-200 focus:border-emerald-500 focus:outline-none"
+              />
+            </div>
 
         <div className="flex items-center gap-4 text-xs font-mono">
           <span className="text-slate-600">Total PKG: <strong className="text-slate-900">{regTotalPkgs}</strong></span>
@@ -633,7 +644,7 @@ export default function StockOut() {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" /> Stock Out Register ({filteredMemos.length} Records)
+            <FileSpreadsheet className="w-4 h-4 text-emerald-600" /> Stock Out Register ({filteredStockOutItems.length} Records)
           </h2>
           <div className="flex items-center gap-4 text-xs font-mono">
             <span className="text-slate-600">Total PKG: <strong className="text-slate-900">{regTotalPkgs}</strong></span>
@@ -646,56 +657,88 @@ export default function StockOut() {
             <thead>
               <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                <th className="p-3 border-r border-slate-800">MEMO NO. & DATE</th>
-                <th className="p-3 border-r border-slate-800">VEHICLE NO.</th>
-                <th className="p-3 border-r border-slate-800">DRIVER NAME</th>
-                <th className="p-3 border-r border-slate-800 text-center">TOTAL LRs</th>
-                <th className="p-3 border-r border-slate-800 text-center w-16">TOTAL PKG</th>
-                <th className="p-3 border-r border-slate-800 text-right w-28">TOTAL AMOUNT (₹)</th>
+                <th className="p-3 border-r border-slate-800">L.R. NO. & DATE</th>
+                <th className="p-3 border-r border-slate-800 text-center w-16">PKG</th>
+                <th className="p-3 border-r border-slate-800">CONSIGNOR</th>
+                <th className="p-3 border-r border-slate-800">CONSIGNEE</th>
+                <th className="p-3 border-r border-slate-800">DELIVERY PERSON</th>
+                <th className="p-3 border-r border-slate-800 text-center">STATION</th>
+                <th className="p-3 border-r border-slate-800 text-right w-28">TO PAY (₹)</th>
+                <th className="p-3 border-r border-slate-800 text-right w-28">PAID (₹)</th>
+                <th className="p-3 border-r border-slate-800 text-right w-28">T.B.B (₹)</th>
                 <th className="p-3 text-center w-16">PRINT</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredMemos.length === 0 ? (
+              {filteredStockOutItems.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-8 text-center text-xs text-slate-400">
-                    No Stock Out Memo records match your search criteria.
+                  <td colSpan={11} className="p-8 text-center text-xs text-slate-400">
+                    No Stock Out records match your search criteria.
                   </td>
                 </tr>
               ) : (
-                filteredMemos.map((memo, idx) => (
+                filteredStockOutItems.map((item, idx) => (
                   <tr key={idx} className="hover:bg-slate-50/90 transition-colors">
                     <td className="p-3 border-r border-slate-100 text-center font-mono font-semibold text-slate-500">
                       {idx + 1}
                     </td>
                     <td className="p-3 border-r border-slate-100">
-                      <p className="font-mono font-bold text-indigo-900 text-xs">{memo.memoNo}</p>
+                      <p className="font-mono font-bold text-indigo-900 text-xs">{item.lrNo}</p>
                       <p className="text-[10px] text-slate-400 font-medium">
-                        {new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN')}
+                        {new Date(item.date).toLocaleDateString('en-IN')}
                       </p>
                     </td>
-                    <td className="p-3 border-r border-slate-100 font-semibold text-slate-900 font-mono">
-                      {memo.lorryNo}
+                    <td className="p-3 border-r border-slate-100 text-center font-mono font-bold text-slate-900">
+                      {item.packages}
                     </td>
                     <td className="p-3 border-r border-slate-100 font-semibold text-slate-900">
-                      {memo.driverName}
+                      {item.consignor}
                     </td>
-                    <td className="p-3 border-r border-slate-100 text-center font-mono font-bold text-slate-900">
-                      {(memo.entries || []).length}
+                    <td className="p-3 border-r border-slate-100 font-semibold text-slate-900">
+                      {item.consignee}
                     </td>
-                    <td className="p-3 border-r border-slate-100 text-center font-mono font-bold text-slate-900">
-                      {memo.totalPackages}
+                    <td className="p-3 border-r border-slate-100">
+                      <span className="px-2 py-1 rounded-md bg-amber-50 text-amber-900 border border-amber-200/60 font-semibold text-[11px] inline-block">
+                        {item.deliveryPerson || 'Local Driver'}
+                      </span>
+                    </td>
+                    <td className="p-3 border-r border-slate-100 text-center">
+                      <span className="font-bold text-slate-800 uppercase px-2 py-0.5 bg-slate-100 rounded text-[10px]">
+                        {item.station}
+                      </span>
                     </td>
                     <td className="p-3 border-r border-slate-100 text-right">
-                      <span className="font-mono font-bold text-emerald-700 text-xs inline-block">
-                        ₹{(memo.grandTotal || 0).toLocaleString('en-IN')}
-                      </span>
+                      {item.toPay > 0 ? (
+                        <span className="px-2 py-1 rounded bg-amber-50 text-amber-800 border border-amber-200/70 font-mono font-bold text-xs inline-block">
+                          ₹{item.toPay.toLocaleString('en-IN')}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-mono">-</span>
+                      )}
+                    </td>
+                    <td className="p-3 border-r border-slate-100 text-right">
+                      {item.paid > 0 ? (
+                        <span className="px-2 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200/70 font-mono font-bold text-xs inline-block">
+                          ₹{item.paid.toLocaleString('en-IN')}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-mono">-</span>
+                      )}
+                    </td>
+                    <td className="p-3 border-r border-slate-100 text-right">
+                      {item.tbb > 0 ? (
+                        <span className="px-2 py-1 rounded bg-blue-50 text-blue-800 border border-blue-200/70 font-mono font-bold text-xs inline-block">
+                          ₹{item.tbb.toLocaleString('en-IN')}
+                        </span>
+                      ) : (
+                        <span className="text-slate-300 font-mono">-</span>
+                      )}
                     </td>
                     <td className="p-3 text-center">
                       <button
-                        onClick={() => setSelectedMemo(memo)}
+                        onClick={() => setSelectedLr(item)}
                         className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
-                        title={`Print Memo #${memo.memoNo}`}
+                        title={`Print Bill for LR #${item.lrNo}`}
                       >
                         <Printer className="w-4 h-4" />
                       </button>
@@ -708,24 +751,34 @@ export default function StockOut() {
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
               <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                <td colSpan={4} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
-                  TOTALS:
-                </td>
-                <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-yellow-300">
-                  {filteredMemos.reduce((sum, m) => sum + (m.entries || []).length, 0)} LRs
+                <td colSpan={2} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
+                  TOTAL:
                 </td>
                 <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-yellow-300">
                   {regTotalPkgs} Pkgs
                 </td>
-                <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-emerald-300">
+                <td colSpan={4} className="p-3 border-r border-slate-800 text-right uppercase tracking-wider font-black text-slate-300">
+                  AMOUNTS TOTAL:
+                </td>
+                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-amber-300">
+                  ₹{regTotalToPay.toLocaleString('en-IN')}
+                </td>
+                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-emerald-300">
+                  ₹{regTotalPaid.toLocaleString('en-IN')}
+                </td>
+                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-blue-300">
+                  ₹{regTotalTbb.toLocaleString('en-IN')}
+                </td>
+                <td className="p-3 text-center font-mono font-black text-xs text-yellow-400">
                   ₹{regGrandTotal.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3"></td>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
+      </>
+      )}
 
       {/* Print Modal */}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
