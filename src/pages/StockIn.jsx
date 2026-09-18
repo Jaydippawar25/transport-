@@ -19,14 +19,12 @@ import {
   FileSpreadsheet
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
-import LRPrintModal from '../components/LRPrintModal';
 
 export default function StockIn() {
   const [stockInList, setStockInList] = useState([]);
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedLr, setSelectedLr] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
   // Filters & Search
@@ -207,9 +205,6 @@ export default function StockIn() {
 
       setShowForm(false);
       await loadData();
-      
-      // Show print modal for newly created LR
-      setSelectedLr(newLr);
     } catch (err) {
       console.error("Save Stock In error:", err);
       alert("Error saving Stock In Entry.");
@@ -754,8 +749,7 @@ export default function StockIn() {
                 <th className="p-3 border-r border-slate-800 text-center w-16">PKG</th>
                 <th className="p-3 border-r border-slate-800 text-right w-28">TO PAY (₹)</th>
                 <th className="p-3 border-r border-slate-800 text-right w-28">PAID (₹)</th>
-                <th className="p-3 border-r border-slate-800 text-right w-28">T.B.B (₹)</th>
-                <th className="p-3 text-center w-16">PRINT</th>
+                <th className="p-3 text-right w-28">T.B.B (₹)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -827,7 +821,7 @@ export default function StockIn() {
                           <span className="text-slate-300 font-mono">-</span>
                         )}
                       </td>
-                      <td className="p-3 border-r border-slate-100 text-right">
+                      <td className="p-3 text-right">
                         {tbbAmt > 0 ? (
                           <span className="px-2 py-1 rounded bg-blue-50 text-blue-800 border border-blue-200/70 font-mono font-bold text-xs inline-block">
                             ₹{tbbAmt.toLocaleString('en-IN')}
@@ -835,15 +829,6 @@ export default function StockIn() {
                         ) : (
                           <span className="text-slate-300 font-mono">-</span>
                         )}
-                      </td>
-                      <td className="p-3 text-center">
-                        <button
-                          onClick={() => setSelectedLr(item)}
-                          className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
-                          title="Print / View LR"
-                        >
-                          <Printer className="w-4 h-4" />
-                        </button>
                       </td>
                     </tr>
                   );
@@ -866,21 +851,14 @@ export default function StockIn() {
                 <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-emerald-300">
                   ₹{totalPaid.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-blue-300">
+                <td className="p-3 text-right font-mono font-bold text-blue-300">
                   ₹{totalTBB.toLocaleString('en-IN')}
-                </td>
-                <td className="p-3 text-center font-mono font-black text-xs text-yellow-400">
-                  ₹{grandTotal.toLocaleString('en-IN')}
                 </td>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
-
-      {/* Print Modal */}
-      {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
-
     </div>
   );
 }
