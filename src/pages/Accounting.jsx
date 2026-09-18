@@ -210,19 +210,19 @@ export default function Accounting() {
                       <td colSpan={4} rowSpan={5} className="p-3 border-r border-slate-200 bg-slate-50/50">
                         {/* Empty space for alignment */}
                       </td>
-                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right">TOTAL FREIGHT</td>
+                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right whitespace-nowrap">TOTAL FREIGHT</td>
                       <td colSpan={2} className="p-3 text-right font-mono font-bold text-emerald-700 text-sm">
                         {totalMemoFreight.toLocaleString('en-IN')}
                       </td>
                     </tr>
                     <tr>
-                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right">COMMISSION(-)</td>
+                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right whitespace-nowrap">COMMISSION(-)</td>
                       <td colSpan={2} className="p-3 text-right font-mono font-bold text-rose-600">
                         {totalCommissionAmt > 0 ? '-' : ''}{Math.round(totalCommissionAmt).toLocaleString('en-IN')}
                       </td>
                     </tr>
                     <tr>
-                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right">LOADING CHARGES(-)</td>
+                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right whitespace-nowrap">LOADING CHARGES(-)</td>
                       <td colSpan={2} className="p-2 text-right">
                         <input
                           type="number"
@@ -235,7 +235,7 @@ export default function Accounting() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right">VEHICAL FREIGHT(-)</td>
+                      <td className="p-3 border-r border-slate-200 font-bold text-slate-700 text-right whitespace-nowrap">VEHICAL FREIGHT(-)</td>
                       <td colSpan={2} className="p-2 text-right">
                         <input
                           type="number"
@@ -248,7 +248,7 @@ export default function Accounting() {
                       </td>
                     </tr>
                     <tr className="bg-indigo-50 border-t-2 border-indigo-200">
-                      <td className="p-3 border-r border-indigo-200 font-black text-indigo-900 text-right uppercase">NET BALANCE</td>
+                      <td className="p-3 border-r border-indigo-200 font-black text-indigo-900 text-right uppercase whitespace-nowrap">NET BALANCE</td>
                       <td colSpan={2} className="p-3 text-right font-mono font-black text-indigo-700 text-base">
                         ₹{Math.round(netBalance).toLocaleString('en-IN')}
                       </td>
