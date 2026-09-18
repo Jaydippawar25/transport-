@@ -142,6 +142,7 @@ export default function StockOut() {
     return (
       !term ||
       lr.lrNo?.toLowerCase().includes(term) ||
+      lr.memoNo?.toLowerCase().includes(term) ||
       lr.consignorName?.toLowerCase().includes(term) ||
       lr.consigneeName?.toLowerCase().includes(term) ||
       lr.toStation?.toLowerCase().includes(term)
@@ -370,7 +371,7 @@ export default function StockOut() {
                   type="text"
                   value={lrSearchTerm}
                   onChange={(e) => setLrSearchTerm(e.target.value)}
-                  placeholder="Search LR No to select the stock..."
+                  placeholder="Search incoming Memo No, or LR No to select..."
                   className="w-full pl-8 pr-3 py-1.5 bg-slate-50 text-xs rounded-lg border border-slate-200"
                 />
               </div>
@@ -400,6 +401,11 @@ export default function StockOut() {
                           <span className="font-bold text-[10px] uppercase px-1.5 py-0.5 bg-slate-100 rounded text-slate-700">
                             {lr.toStation}
                           </span>
+                          {lr.memoNo && (
+                            <span className="font-bold text-[10px] uppercase px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded border border-indigo-100" title="Incoming Memo No">
+                              {lr.memoNo}
+                            </span>
+                          )}
                         </div>
                         <p className="text-[11px] text-slate-600 truncate max-w-[180px]">
                           {lr.consignorName} ➔ {lr.consigneeName}
