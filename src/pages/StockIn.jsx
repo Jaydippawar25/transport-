@@ -262,7 +262,7 @@ export default function StockIn() {
       loadData();
     } catch (err) {
       console.error("Error saving stock in:", err);
-      alert("Failed to save entry. Check console for details.");
+      alert(`Failed to save entry: ${err.message || err}`);
     } finally {
       setIsSubmitting(false);
     }

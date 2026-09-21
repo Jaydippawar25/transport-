@@ -119,7 +119,8 @@ export const dataService = {
 
     // Local Storage Fallback
     initLocalStorageIfNeeded();
-    const current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    let current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    if (!Array.isArray(current)) current = INITIAL_STOCK_IN;
     const newEntry = { id: `lr-${Date.now()}`, ...formattedData };
     const updated = [newEntry, ...current];
     setLocal(STORAGE_KEYS.STOCK_IN, updated);
@@ -151,7 +152,8 @@ export const dataService = {
       }
     }
 
-    const current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    let current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    if (!Array.isArray(current)) current = INITIAL_STOCK_IN;
     const updated = current.map(item => item.id === id ? { ...item, ...formattedData } : item);
     setLocal(STORAGE_KEYS.STOCK_IN, updated);
 
