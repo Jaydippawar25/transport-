@@ -29,6 +29,7 @@ export default function StockIn() {
   const [printAfterSave, setPrintAfterSave] = useState(false);
   const [selectedLr, setSelectedLr] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
   // Filters & Search
   const [searchTerm, setSearchTerm] = useState('');
