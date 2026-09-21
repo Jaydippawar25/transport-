@@ -11,12 +11,14 @@ import {
   Clock
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
+import LRPrintModal from '../components/LRPrintModal';
 
 export default function Reports() {
   const [stockInList, setStockInList] = useState([]);
   const [stockOutList, setStockOutList] = useState([]);
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedLr, setSelectedLr] = useState(null);
 
   // Active Report Section Tab ('STOCK_IN' | 'STOCK_OUT' | 'PENDING_STOCK')
   const [activeSection, setActiveSection] = useState('STOCK_IN');
@@ -429,13 +431,14 @@ export default function Reports() {
                   <th className="p-3 border-r border-slate-800 text-right w-24">TO PAY (₹)</th>
                   <th className="p-3 border-r border-slate-800 text-right w-24">PAID (₹)</th>
                   <th className="p-3 border-r border-slate-800 text-right w-24">T.B.B (₹)</th>
-                  <th className="p-3 text-center w-24">STATUS</th>
+                  <th className="p-3 border-r border-slate-800 text-center w-24">STATUS</th>
+                  <th className="p-3 text-center w-16">PRINT</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredStockIn.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="p-8 text-center text-slate-400">
+                    <td colSpan={11} className="p-8 text-center text-slate-400">
                       No Stock In records match the selected filters.
                     </td>
                   </tr>
@@ -467,11 +470,13 @@ export default function Reports() {
                         {item.paymentType === 'T.B.B' ? `₹${item.charges?.total || 0}` : '-'}
                       </td>
                       <td className="p-3 text-center">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                          item.status === 'dispatched' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
-                        }`}>
-                          {item.status || 'in-godown'}
-                        </span>
+                        <button
+                          onClick={() => setSelectedLr(item)}
+                          className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                          title="Print / View LR"
+                        >
+                          <Printer className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -485,7 +490,7 @@ export default function Reports() {
                   <td className="p-3 border-r border-slate-800 text-right font-mono text-amber-300">₹{inTotalToPay.toLocaleString('en-IN')}</td>
                   <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">₹{inTotalPaid.toLocaleString('en-IN')}</td>
                   <td className="p-3 border-r border-slate-800 text-right font-mono text-blue-300">₹{inTotalTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 text-center font-mono font-black text-yellow-400">₹{inGrandTotal.toLocaleString('en-IN')}</td>
+                  <td className="p-3 text-center font-mono font-black text-yellow-400" colSpan={2}>₹{inGrandTotal.toLocaleString('en-IN')}</td>
                 </tr>
               </tfoot>
             </table>
@@ -568,13 +573,14 @@ export default function Reports() {
                   <th className="p-3 border-r border-slate-800 text-right w-24">TO PAY (₹)</th>
                   <th className="p-3 border-r border-slate-800 text-right w-24">PAID (₹)</th>
                   <th className="p-3 border-r border-slate-800 text-right w-24">T.B.B (₹)</th>
-                  <th className="p-3 text-center w-28">GODOWN STATUS</th>
+                  <th className="p-3 border-r border-slate-800 text-center w-28">GODOWN STATUS</th>
+                  <th className="p-3 text-center w-16">PRINT</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {pendingStockList.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="p-8 text-center text-slate-400">
+                    <td colSpan={11} className="p-8 text-center text-slate-400">
                       No pending stock sitting in godown matches the selected filters.
                     </td>
                   </tr>
@@ -608,6 +614,15 @@ export default function Reports() {
                           <Clock className="w-3 h-3 text-amber-500" /> IN GODOWN
                         </span>
                       </td>
+                      <td className="p-3 text-center">
+                        <button
+                          onClick={() => setSelectedLr(item)}
+                          className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                          title="Print / View LR"
+                        >
+                          <Printer className="w-4 h-4" />
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -620,7 +635,7 @@ export default function Reports() {
                   <td className="p-3 border-r border-slate-800 text-right font-mono text-amber-300">₹{pendingTotalToPay.toLocaleString('en-IN')}</td>
                   <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">₹{pendingTotalPaid.toLocaleString('en-IN')}</td>
                   <td className="p-3 border-r border-slate-800 text-right font-mono text-blue-300">₹{pendingTotalTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 text-center font-mono font-black text-yellow-400">₹{pendingGrandTotal.toLocaleString('en-IN')}</td>
+                  <td className="p-3 text-center font-mono font-black text-yellow-400" colSpan={2}>₹{pendingGrandTotal.toLocaleString('en-IN')}</td>
                 </tr>
               </tfoot>
             </table>
@@ -629,6 +644,8 @@ export default function Reports() {
         </div>
       </div>
 
+      {/* Print Modal */}
+      {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
     </div>
   );
 }

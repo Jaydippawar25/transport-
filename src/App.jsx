@@ -8,7 +8,6 @@ import StockIn from './pages/StockIn';
 import StockOut from './pages/StockOut';
 import Reports from './pages/Reports';
 import Masters from './pages/Masters';
-import Accounting from './pages/Accounting';
 import Login from './pages/Login';
 import LRPrintModal from './components/LRPrintModal';
 import MemoPrintModal from './components/MemoPrintModal';
@@ -76,7 +75,6 @@ export default function App() {
             <Route path="/stock-in" element={<AuthenticatedRoute><StockIn /></AuthenticatedRoute>} />
             <Route path="/stock-out" element={<AuthenticatedRoute><StockOut /></AuthenticatedRoute>} />
             <Route path="/masters" element={<AuthenticatedRoute><Masters /></AuthenticatedRoute>} />
-            <Route path="/accounting" element={<AuthenticatedRoute><Accounting /></AuthenticatedRoute>} />
             <Route path="/reports" element={<AuthenticatedRoute><Reports /></AuthenticatedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Navigate to="/" replace />} />
