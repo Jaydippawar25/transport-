@@ -91,7 +91,7 @@ export default function StockIn() {
       if (inData && inData.length > 0) {
         const maxLr = inData.reduce((max, item) => {
           if (!item.lrNo) return max;
-          const match = item.lrNo.match(/\d+/);
+          const match = String(item.lrNo).match(/\d+/);
           if (match) {
             const num = parseInt(match[0], 10);
             return num > max ? num : max;
@@ -208,16 +208,17 @@ export default function StockIn() {
       // Generate Next Sequential LR No (only if not editing, or if editing just fetch the max)
       let nextLrNo = formData.lrNo;
       if (!editingId) {
-        const currentMatch = formData.lrNo.match(/\d+/);
+        const safeLrNo = String(formData.lrNo || '');
+        const currentMatch = safeLrNo.match(/\d+/);
         const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : Math.floor(12000 + Math.random() * 9000);
-        const prefixMatch = formData.lrNo.match(/^[a-zA-Z/]+/);
+        const prefixMatch = safeLrNo.match(/^[a-zA-Z/]+/);
         const nextPrefix = prefixMatch ? prefixMatch[0] : 'SNG/';
         nextLrNo = `${nextPrefix}${nextNum}`;
       } else {
         // If we just finished editing, find the true max LR number to resume auto-increment
         const maxLr = stockInList.reduce((max, item) => {
           if (!item.lrNo) return max;
-          const match = item.lrNo.match(/\d+/);
+          const match = String(item.lrNo).match(/\d+/);
           if (match) {
             const num = parseInt(match[0], 10);
             return num > max ? num : max;
