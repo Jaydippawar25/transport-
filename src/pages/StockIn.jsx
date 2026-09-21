@@ -809,7 +809,7 @@ export default function StockIn() {
                   return (
                     <tr 
                       key={item.id || idx} 
-                      onClick={() => handleEdit(item)}
+                      onDoubleClick={() => handleEdit(item)}
                       className="hover:bg-indigo-50/50 transition-colors group cursor-pointer"
                     >
                       <td className="p-3 border-r border-slate-100 text-center font-medium text-slate-500">
