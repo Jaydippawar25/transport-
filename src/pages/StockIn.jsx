@@ -30,6 +30,7 @@ export default function StockIn() {
   const [selectedLr, setSelectedLr] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [toastMsg, setToastMsg] = useState('');
 
   // Filters & Search
   const [searchTerm, setSearchTerm] = useState('');
@@ -203,7 +204,8 @@ export default function StockIn() {
       if (printAfterSave) {
         setSelectedLr(savedLr);
       } else {
-        alert(`Stock In Entry ${formData.lrNo} ${editingId ? 'updated' : 'saved'} successfully!`);
+        setToastMsg(`Stock In Entry ${formData.lrNo} ${editingId ? 'updated' : 'saved'} successfully!`);
+        setTimeout(() => setToastMsg(''), 3000);
       }
       
       // Generate Next Sequential LR No (only if not editing, or if editing just fetch the max)
@@ -920,6 +922,14 @@ export default function StockIn() {
 
       {/* Print Modal */}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
+
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div className="fixed bottom-6 right-6 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg shadow-emerald-200 flex items-center gap-3 animate-in slide-in-from-bottom-4 duration-300 z-50">
+          <CheckCircle2 className="w-5 h-5 text-emerald-100" />
+          <span className="font-semibold text-sm">{toastMsg}</span>
+        </div>
+      )}
 
     </div>
   );
