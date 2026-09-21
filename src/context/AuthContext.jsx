@@ -11,6 +11,8 @@ import {
   browserSessionPersistence
 } from 'firebase/auth';
 
+import Loader from '../components/Loader';
+
 // Clear any legacy persistent storage keys
 try {
   localStorage.removeItem('transtrack_user');
@@ -21,15 +23,13 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check if the current browser session is active
     const isSessionActive = sessionStorage.getItem('transtrack_active_session');
 
     if (isFirebaseConfigured && auth) {
-      setLoading(true);
-
       // If browser was closed and reopened, sessionStorage was wiped.
       // Force sign-out of any residual Firebase IndexedDB local session.
       if (!isSessionActive) {
@@ -51,6 +51,8 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       });
       return unsubscribe;
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -93,7 +95,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ currentUser, login, logout, loading, isFirebaseConfigured }}>
-      {!loading && children}
+      {loading ? <Loader fullScreen={true} message="Authenticating..." subMessage="Verifying session" /> : children}
     </AuthContext.Provider>
   );
 };
