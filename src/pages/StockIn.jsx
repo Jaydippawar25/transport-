@@ -688,7 +688,7 @@ export default function StockIn() {
               <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
                 <th className="p-3 border-r border-slate-800">L.R. NO. & DATE</th>
-                <th className="p-3 border-r border-slate-800">TRANSPORTER / MEMO</th>
+                <th className="p-3 border-r border-slate-800">MEMO NO</th>
                 <th className="p-3 border-r border-slate-800">VEHICLE & DRIVER</th>
                 <th className="p-3 border-r border-slate-800">CONSIGNOR</th>
                 <th className="p-3 border-r border-slate-800">CONSIGNEE</th>
@@ -715,8 +715,8 @@ export default function StockIn() {
                   const tbbAmt = item.paymentType === 'T.B.B' ? amt : 0;
 
                   return (
-                    <tr key={item.id || idx} className="hover:bg-slate-50/90 transition-colors">
-                      <td className="p-3 border-r border-slate-100 text-center font-mono font-semibold text-slate-500">
+                    <tr key={item.id || idx} className="hover:bg-indigo-50/50 transition-colors group">
+                      <td className="p-3 border-r border-slate-100 text-center font-medium text-slate-500">
                         {idx + 1}
                       </td>
                       <td className="p-3 border-r border-slate-100">
@@ -727,10 +727,7 @@ export default function StockIn() {
                       </td>
                       <td className="p-3 border-r border-slate-100">
                         <p className="font-semibold text-slate-900">
-                          {item.transporterName || 'Self Transport'}
-                        </p>
-                        <p className="text-[10px] font-mono text-slate-500">
-                          {item.memoNo ? `Memo: ${item.memoNo}` : `From: ${item.fromStation || 'MUMBAI'}`}
+                          {item.memoNo || '-'}
                         </p>
                       </td>
                       <td className="p-3 border-r border-slate-100">
