@@ -26,6 +26,7 @@ export default function StockIn() {
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [printAfterSave, setPrintAfterSave] = useState(false);
   const [selectedLr, setSelectedLr] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
@@ -173,7 +174,12 @@ export default function StockIn() {
       };
 
       const newLr = await dataService.addStockIn(lrPayload);
-      alert(`Stock In Entry ${formData.lrNo} saved successfully!`);
+      
+      if (printAfterSave) {
+        setSelectedLr(newLr);
+      } else {
+        alert(`Stock In Entry ${formData.lrNo} saved successfully!`);
+      }
       
       // Reset form
       setFormData({
@@ -583,11 +589,20 @@ export default function StockIn() {
                 </button>
                 <button
                   type="submit"
+                  onClick={() => setPrintAfterSave(false)}
                   disabled={isSubmitting}
                   className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer flex items-center gap-2"
                 >
-                  {isSubmitting ? 'Saving...' : 'Save Stock In Entry'}
-                  <ArrowRight className="w-4 h-4" />
+                  {isSubmitting && !printAfterSave ? 'Saving...' : 'Save'}
+                </button>
+                <button
+                  type="submit"
+                  onClick={() => setPrintAfterSave(true)}
+                  disabled={isSubmitting}
+                  className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/30 cursor-pointer flex items-center gap-2"
+                >
+                  <Printer className="w-4 h-4" />
+                  {isSubmitting && printAfterSave ? 'Saving...' : 'Save & Print'}
                 </button>
               </div>
             </div>
