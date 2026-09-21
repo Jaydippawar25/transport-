@@ -11,8 +11,6 @@ import {
   browserSessionPersistence
 } from 'firebase/auth';
 
-import Loader from '../components/Loader';
-
 // Clear any legacy persistent storage keys
 try {
   localStorage.removeItem('transtrack_user');
@@ -95,7 +93,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ currentUser, login, logout, loading, isFirebaseConfigured }}>
-      {loading ? <Loader fullScreen={true} message="Authenticating..." subMessage="Verifying session" /> : children}
+      {loading ? null : children}
     </AuthContext.Provider>
   );
 };
