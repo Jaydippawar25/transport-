@@ -149,11 +149,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           <div>
             <span className="font-bold">Consignee : </span>
             <span className="font-black uppercase text-xs">{consigneeName}</span>
-            {deliveryPerson && (
-              <span className="ml-2 px-1.5 py-0.5 bg-yellow-300 border border-black/40 rounded text-[8.5px] font-bold text-slate-900">
-                Delivery: {deliveryPerson}
-              </span>
-            )}
+
           </div>
           <div className="text-[9px]">
             <span className="font-bold">GSTIN : </span>
