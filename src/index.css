@@ -44,7 +44,7 @@
 
 @media print {
   html, body {
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     margin: 0;
     padding: 0;
@@ -61,7 +61,7 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     margin: 0;
     padding: 0 !important;
     box-shadow: none !important;
@@ -86,13 +86,13 @@
   .print-3-copies > div {
     display: flex;
     flex-direction: column;
-    height: 96vh !important;
+    height: 285mm !important;
     justify-content: space-between;
     overflow: hidden;
   }
   
   .print-3-copies .printable-slip {
-    height: 31vh !important; /* Force to fit without overflowing */
+    height: 93mm !important; /* Fixed physical height to fit 3 in A4 */
   }
 
   .no-print {

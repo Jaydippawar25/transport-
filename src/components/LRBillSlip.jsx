@@ -71,10 +71,10 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
     <div className="border-2 border-black relative flex flex-col bg-[#fef9c3] text-black text-[10px] leading-tight select-none my-1 printable-slip">
       
       {/* Side Vertical Text Margins */}
-      <div className="absolute -left-4 top-1/2 -translate-y-1/2 -rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block select-none">
+      <div className="absolute -left-4 top-1/2 -translate-y-1/2 -rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block print:hidden select-none">
         OWNER'S RISK
       </div>
-      <div className="absolute -right-4 top-1/2 -translate-y-1/2 rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block select-none">
+      <div className="absolute -right-4 top-1/2 -translate-y-1/2 rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block print:hidden select-none">
         OWNER'S RISK
       </div>
 
@@ -92,10 +92,10 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* TOP HEADER SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black divide-y md:divide-y-0 md:divide-x-2 divide-black">
+      <div className="grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
         
         {/* Company Title & Address (Cols 1 & 2) */}
-        <div className="md:col-span-2 p-1.5 space-y-0.5 flex flex-col justify-center text-center">
+        <div className="col-span-2 p-1.5 space-y-0.5 flex flex-col justify-center text-center">
           <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
             ROYAL ROADLINES
           </h1>
@@ -163,10 +163,10 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* MAIN GOODS & CHARGES GRID (SPLIT SECTION) */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 border-b-2 border-black divide-y md:divide-y-0 md:divide-x-2 divide-black">
+      <div className="flex-1 grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
         
         {/* Goods Table (Cols 1 & 2) */}
-        <div className="md:col-span-2 flex flex-col justify-between bg-[#fef9c3]">
+        <div className="col-span-2 flex flex-col justify-between bg-[#fef9c3]">
           <table className="w-full text-left border-collapse text-[10px]">
             <thead>
               <tr className="border-b border-black bg-[#fff099] font-bold text-black text-[9px]">
