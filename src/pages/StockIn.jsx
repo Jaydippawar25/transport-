@@ -86,6 +86,25 @@ export default function StockIn() {
       setStockInList(inData);
       setStations(stationData);
       if (masterData) setMasters(masterData);
+
+      // Auto-generate sequential LR No.
+      if (inData && inData.length > 0) {
+        const maxLr = inData.reduce((max, item) => {
+          if (!item.lrNo) return max;
+          const match = item.lrNo.match(/\d+/);
+          if (match) {
+            const num = parseInt(match[0], 10);
+            return num > max ? num : max;
+          }
+          return max;
+        }, 12000);
+        
+        setFormData(prev => ({
+          ...prev,
+          lrNo: `SNG/${maxLr + 1}`
+        }));
+      }
+
     } catch (err) {
       console.error("Error loading stock in data:", err);
     } finally {
@@ -181,9 +200,15 @@ export default function StockIn() {
         alert(`Stock In Entry ${formData.lrNo} saved successfully!`);
       }
       
+      // Generate Next Sequential LR No
+      const currentMatch = formData.lrNo.match(/\d+/);
+      const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : Math.floor(12000 + Math.random() * 9000);
+      const prefixMatch = formData.lrNo.match(/^[a-zA-Z/]+/);
+      const nextPrefix = prefixMatch ? prefixMatch[0] : 'SNG/';
+
       // Reset form
       setFormData({
-        lrNo: `SNG/${Math.floor(12000 + Math.random() * 9000)}`,
+        lrNo: `${nextPrefix}${nextNum}`,
         date: new Date().toISOString().split('T')[0],
         transporterName: '',
         memoNo: '',
