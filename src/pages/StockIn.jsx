@@ -305,6 +305,16 @@ export default function StockIn() {
                 />
               </div>
 
+              <div>
+                <label className="text-[11px] font-bold text-slate-700">L.R. NO. *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.lrNo}
+                  onChange={(e) => setFormData({ ...formData, lrNo: e.target.value })}
+                  className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900"
+                />
+              </div>
 
               <div>
                 <label className="text-[11px] font-bold text-slate-700">FROM (Origin Station) *</label>
@@ -427,17 +437,6 @@ export default function StockIn() {
 
           {/* SECTION 3: LR NUMBER & GOODS PARTICULAR */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="text-xs font-bold text-slate-700">L.R. NO. *</label>
-              <input
-                type="text"
-                required
-                value={formData.lrNo}
-                onChange={(e) => setFormData({ ...formData, lrNo: e.target.value })}
-                className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900"
-              />
-            </div>
-
             <div>
               <label className="text-xs font-bold text-slate-700">PKG (Packages) *</label>
               <input
