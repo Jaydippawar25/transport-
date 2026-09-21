@@ -192,23 +192,44 @@ export default function StockIn() {
         paymentType: formData.paymentType
       };
 
-      const newLr = await dataService.addStockIn(lrPayload);
-      
-      if (printAfterSave) {
-        setSelectedLr(newLr);
+      let savedLr;
+      if (editingId) {
+        savedLr = await dataService.updateStockIn(editingId, lrPayload);
       } else {
-        alert(`Stock In Entry ${formData.lrNo} saved successfully!`);
+        savedLr = await dataService.addStockIn(lrPayload);
       }
       
-      // Generate Next Sequential LR No
-      const currentMatch = formData.lrNo.match(/\d+/);
-      const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : Math.floor(12000 + Math.random() * 9000);
-      const prefixMatch = formData.lrNo.match(/^[a-zA-Z/]+/);
-      const nextPrefix = prefixMatch ? prefixMatch[0] : 'SNG/';
+      if (printAfterSave) {
+        setSelectedLr(savedLr);
+      } else {
+        alert(`Stock In Entry ${formData.lrNo} ${editingId ? 'updated' : 'saved'} successfully!`);
+      }
+      
+      // Generate Next Sequential LR No (only if not editing, or if editing just fetch the max)
+      let nextLrNo = formData.lrNo;
+      if (!editingId) {
+        const currentMatch = formData.lrNo.match(/\d+/);
+        const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : Math.floor(12000 + Math.random() * 9000);
+        const prefixMatch = formData.lrNo.match(/^[a-zA-Z/]+/);
+        const nextPrefix = prefixMatch ? prefixMatch[0] : 'SNG/';
+        nextLrNo = `${nextPrefix}${nextNum}`;
+      } else {
+        // If we just finished editing, find the true max LR number to resume auto-increment
+        const maxLr = stockInList.reduce((max, item) => {
+          if (!item.lrNo) return max;
+          const match = item.lrNo.match(/\d+/);
+          if (match) {
+            const num = parseInt(match[0], 10);
+            return num > max ? num : max;
+          }
+          return max;
+        }, 12000);
+        nextLrNo = `SNG/${maxLr + 1}`;
+      }
 
       // Reset form
       setFormData({
-        lrNo: `${nextPrefix}${nextNum}`,
+        lrNo: nextLrNo,
         date: new Date().toISOString().split('T')[0],
         transporterName: '',
         memoNo: '',
@@ -229,24 +250,55 @@ export default function StockIn() {
         goodsValue: '',
         invoiceNo: '',
         ewayBillNo: '',
-        freight: 0,
-        hamali: 0,
-        other: 0,
-        stCharges: 0,
+        freight: '',
+        hamali: '',
+        other: '',
+        stCharges: '',
         paymentType: 'ToPay'
       });
-
+      setEditingId(null);
       setShowForm(false);
-      await loadData();
-      
-      // Show print modal for newly created LR
-      setSelectedLr(newLr);
+      loadData();
     } catch (err) {
-      console.error("Save Stock In error:", err);
-      alert("Error saving Stock In Entry.");
+      console.error("Error saving stock in:", err);
+      alert("Failed to save entry. Check console for details.");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleEdit = (item) => {
+    setEditingId(item.id);
+    setFormData({
+      lrNo: item.lrNo || '',
+      date: item.date || new Date().toISOString().split('T')[0],
+      transporterName: item.transporterName || '',
+      memoNo: item.memoNo || '',
+      vehicleNo: item.vehicleNo || '',
+      driverName: item.driverName || '',
+      ownerName: item.ownerName || '',
+      fromStation: item.fromStation || 'MUMBAI',
+      consignorName: item.consignorName || '',
+      consignorAddress: item.consignorAddress || '',
+      consignorGSTIN: item.consignorGSTIN || '',
+      consigneeName: item.consigneeName || '',
+      consigneeAddress: item.consigneeAddress || '',
+      consigneeGSTIN: item.consigneeGSTIN || '',
+      toStation: item.toStation || 'SANGLI',
+      packages: item.packages || 1,
+      weight: item.weight || '',
+      description: item.description || '',
+      goodsValue: item.goodsValue || '',
+      invoiceNo: item.invoiceNo || '',
+      ewayBillNo: item.ewayBillNo || '',
+      freight: item.charges?.freight || '',
+      hamali: item.charges?.hamali || '',
+      other: item.charges?.other || '',
+      stCharges: item.charges?.stCharges || '',
+      paymentType: item.paymentType || 'ToPay'
+    });
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Filter Stock In List
@@ -755,7 +807,11 @@ export default function StockIn() {
                   const tbbAmt = item.paymentType === 'T.B.B' ? amt : 0;
 
                   return (
-                    <tr key={item.id || idx} className="hover:bg-indigo-50/50 transition-colors group">
+                    <tr 
+                      key={item.id || idx} 
+                      onClick={() => handleEdit(item)}
+                      className="hover:bg-indigo-50/50 transition-colors group cursor-pointer"
+                    >
                       <td className="p-3 border-r border-slate-100 text-center font-medium text-slate-500">
                         {idx + 1}
                       </td>
@@ -817,7 +873,10 @@ export default function StockIn() {
                       </td>
                       <td className="p-3 text-center">
                         <button
-                          onClick={() => setSelectedLr(item)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedLr(item);
+                          }}
                           className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
                           title="Print / View LR"
                         >

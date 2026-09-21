@@ -127,6 +127,37 @@ export const dataService = {
     return newEntry;
   },
 
+  async updateStockIn(id, lrData) {
+    const formattedData = {
+      ...lrData,
+      packages: Number(lrData.packages || 0),
+      goodsValue: Number(lrData.goodsValue || 0),
+      charges: {
+        freight: Number(lrData.charges?.freight || 0),
+        hamali: Number(lrData.charges?.hamali || 0),
+        other: Number(lrData.charges?.other || 0),
+        stCharges: Number(lrData.charges?.stCharges || 0),
+        total: Number(lrData.charges?.total || 0)
+      }
+    };
+
+    if (isFirebaseConfigured && db) {
+      try {
+        const docRef = doc(db, 'stockIn', id);
+        await updateDoc(docRef, formattedData);
+        return { id, ...formattedData };
+      } catch (err) {
+        console.error("Firestore update stockIn error:", err);
+      }
+    }
+
+    const current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    const updated = current.map(item => item.id === id ? { ...item, ...formattedData } : item);
+    setLocal(STORAGE_KEYS.STOCK_IN, updated);
+
+    return { id, ...formattedData };
+  },
+
   // -------------------------------------------------------------
   // STOCK OUT (Loading Memos)
   // -------------------------------------------------------------
