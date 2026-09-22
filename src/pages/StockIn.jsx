@@ -573,6 +573,39 @@ export default function StockIn() {
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs"
               />
             </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-700">Invoice No.</label>
+              <input
+                type="text"
+                value={formData.invoiceNo}
+                onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })}
+                placeholder="e.g. 592"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-700">Goods Value (Rs.)</label>
+              <input
+                type="text"
+                value={formData.goodsValue}
+                onChange={(e) => setFormData({ ...formData, goodsValue: e.target.value })}
+                placeholder="e.g. 11663"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-700">E-way Bill No.</label>
+              <input
+                type="text"
+                value={formData.ewayBillNo}
+                onChange={(e) => setFormData({ ...formData, ewayBillNo: e.target.value })}
+                placeholder="e.g. 123456789012"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+              />
+            </div>
           </div>
 
           {/* SECTION 4: CHARGES BREAKDOWN & PAYMENT TYPE */}

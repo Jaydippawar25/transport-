@@ -45,9 +45,9 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
   const packages = lr.packages || 1;
   const description = lr.description || 'PLASTIC GOOD';
   const weight = lr.weight || '';
-  const invoiceNo = lr.invoiceNo || '592';
-  const goodsValue = lr.goodsValue || 11663;
-  const ewayBillNo = lr.ewayBillNo || 'N/A';
+  const invoiceNo = lr.invoiceNo !== undefined && lr.invoiceNo !== '' ? lr.invoiceNo : (lr.invoiceNo === '' ? '' : '592');
+  const goodsValue = lr.goodsValue !== undefined && lr.goodsValue !== '' ? lr.goodsValue : (lr.goodsValue === '' ? '' : 11663);
+  const ewayBillNo = lr.ewayBillNo !== undefined && lr.ewayBillNo !== '' ? lr.ewayBillNo : (lr.ewayBillNo === '' ? '' : 'N/A');
   const deliveryPerson = lr.deliveryPerson || 'Local Driver';
 
   // Amount & Payment Type Normalization
@@ -221,7 +221,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
                 </td>
                 <td className="py-0.5 px-1 border-r border-black text-center">
                   <span className="font-bold">Good Value: </span>
-                  <span className="font-bold">{Number(goodsValue).toLocaleString('en-IN')} Rs.</span>
+                  <span className="font-bold">{goodsValue ? `${Number(goodsValue).toLocaleString('en-IN')} Rs.` : ''}</span>
                 </td>
                 <td className="py-0.5 px-1 text-center">
                   <div className="font-bold">Eway Bill:</div>
