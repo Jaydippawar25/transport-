@@ -99,7 +99,7 @@ export default function LRPrintModal({ lr, onClose }) {
                     formattedDate={formattedDate}
                   />
                   {index < copiesList.length - 1 && (
-                    <div className="my-1 flex items-center justify-center gap-2 text-slate-500 text-[9px] font-mono no-print">
+                    <div className="my-1 print:my-0 flex items-center justify-center gap-2 text-slate-500 text-[9px] font-mono print:hidden">
                       <span className="border-b border-dashed border-slate-500 flex-1"></span>
                       <span className="font-bold">✂ TEAR / CUT HERE ({copyItem.title})</span>
                       <span className="border-b border-dashed border-slate-500 flex-1"></span>

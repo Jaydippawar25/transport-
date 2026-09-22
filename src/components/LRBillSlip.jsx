@@ -20,10 +20,10 @@ export function BarcodeSVG({ value }) {
   const totalWidth = pos + 10;
 
   return (
-    <svg viewBox={`0 0 ${totalWidth} 32`} className="h-7 w-full max-w-[180px] mx-auto">
-      <rect x="0" y="0" width={totalWidth} height="32" fill="transparent" />
+    <svg viewBox={`0 0 ${totalWidth} 24`} className="h-5 w-full max-w-[180px] mx-auto">
+      <rect x="0" y="0" width={totalWidth} height="24" fill="transparent" />
       {bars.map((bar, idx) => bar.filled && (
-        <rect key={idx} x={bar.pos + 5} y="0" width={bar.width} height="32" fill="#000" />
+        <rect key={idx} x={bar.pos + 5} y="0" width={bar.width} height="24" fill="#000" />
       ))}
     </svg>
   );
@@ -79,7 +79,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* COPY TYPE TOP HEADER BADGE */}
-      <div className="bg-black text-white px-3 py-[2px] flex justify-between items-center text-[8px] font-bold tracking-wider uppercase border-b border-black">
+      <div className="bg-black text-white px-3 py-0 flex justify-between items-center text-[8px] font-bold tracking-wider uppercase border-b border-black">
         <span>ROYAL ROADLINES — LR BILTY SLIP</span>
         <span className="bg-yellow-400 text-black px-2 py-0 rounded text-[8px] font-black tracking-normal">
           {copyTitle || 'LR COPY'}
@@ -87,7 +87,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* JURISDICTION HEADER */}
-      <div className="text-center text-[7px] font-bold uppercase border-b border-black py-[1px] tracking-widest bg-white/50">
+      <div className="text-center text-[7px] font-bold uppercase border-b border-black py-0 tracking-widest bg-white/50">
         SUBJECT TO ICHALKARANJI JURISDICTION
       </div>
 
@@ -98,7 +98,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="col-span-2 flex flex-col">
           
           {/* Company Title & Address */}
-          <div className="py-1 px-1.5 space-y-0 flex flex-col justify-center text-center shrink-0">
+          <div className="py-0.5 px-1.5 space-y-0 flex flex-col justify-center text-center shrink-0">
             <h1 className="text-xl sm:text-2xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
               ROYAL ROADLINES
             </h1>
@@ -109,23 +109,23 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
 
           {/* Branch Contacts Row */}
           <div className="grid grid-cols-5 border-t-2 border-black divide-x divide-black text-[5.5px] sm:text-[6.5px] font-bold shrink-0">
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>SANGLI</span>
               <span>9850194732</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>KARAD</span>
               <span>9890277299</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>ICHALKARANJI</span>
               <span>9503037898</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>ISLAMPUR</span>
               <span>9307843480</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>MADHAVNAGAR</span>
               <span>9890487014</span>
             </div>
