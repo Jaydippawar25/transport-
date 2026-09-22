@@ -393,17 +393,6 @@ export default function StockIn() {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700">L.R. NO. *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.lrNo}
-                  onChange={(e) => setFormData({ ...formData, lrNo: e.target.value })}
-                  className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900"
-                />
-              </div>
-
-              <div>
                 <label className="text-[11px] font-bold text-slate-700">FROM (Origin Station) *</label>
                 <select
                   value={formData.fromStation}
@@ -427,6 +416,17 @@ export default function StockIn() {
                     <option key={st} value={st}>{st}</option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-slate-700">L.R. NO. *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.lrNo}
+                  onChange={(e) => setFormData({ ...formData, lrNo: e.target.value })}
+                  className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900"
+                />
               </div>
             </div>
           </div>
