@@ -211,34 +211,34 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="flex flex-col justify-between bg-[#fef9c3]">
           
           {/* ToPay / Paid Banner */}
-          <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-xs uppercase border-b border-black tracking-wider">
+          <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-[13px] uppercase border-b border-black tracking-wider">
             {paymentType}
           </div>
 
           {/* Charges Table */}
-          <table className="w-full text-[9px] font-mono border-collapse h-full">
+          <table className="w-full text-[10px] font-mono border-collapse h-full">
             <thead>
-              <tr className="border-b border-black text-[8px] font-bold">
+              <tr className="border-b border-black text-[10px] font-bold">
                 <th className="py-0.5 px-1 border-r border-black text-left">Charges</th>
                 <th className="py-0.5 px-1 text-right">Amount</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/30">
               <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[9.5px]">Freight</td>
-                <td className="py-1 px-1 text-right font-bold text-[10px]">
+                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
+                <td className="py-1 px-1 text-right font-bold text-[12px]">
                   ₹{freight}
                 </td>
               </tr>
               <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[9.5px]">Hamali/St/Other</td>
-                <td className="py-1 px-1 text-right font-bold text-[10px]">
+                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Hamali/St/Other</td>
+                <td className="py-1 px-1 text-right font-bold text-[12px]">
                   {extraCharges > 0 ? `₹${extraCharges}` : '-'}
                 </td>
               </tr>
               <tr className="border-t-2 border-black bg-[#fff099]">
-                <td className="py-1 px-1 border-r border-black font-black uppercase text-[10px]">Total</td>
-                <td className="py-1 px-1 text-right font-black text-[11px]">
+                <td className="py-1 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
+                <td className="py-1 px-1 text-right font-black text-[13px]">
                   ₹{totalAmt}
                 </td>
               </tr>
