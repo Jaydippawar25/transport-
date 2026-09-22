@@ -94,14 +94,51 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       {/* TOP HEADER SECTION */}
       <div className="grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
         
-        {/* Company Title & Address (Cols 1 & 2) */}
-        <div className="col-span-2 p-1.5 space-y-0.5 flex flex-col justify-center text-center">
-          <h1 className="text-xl sm:text-2xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
-            ROYAL ROADLINES
-          </h1>
-          <p className="text-[6.5px] sm:text-[7px] font-bold text-slate-900 leading-[1.1]">
-            MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
-          </p>
+        {/* Left Side (Cols 1 & 2): Company Title & Consignor/Consignee */}
+        <div className="col-span-2 flex flex-col">
+          
+          {/* Company Title & Address */}
+          <div className="p-1.5 space-y-0.5 flex flex-col justify-center text-center shrink-0">
+            <h1 className="text-xl sm:text-2xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
+              ROYAL ROADLINES
+            </h1>
+            <p className="text-[6.5px] sm:text-[7px] font-bold text-slate-900 leading-[1.1]">
+              MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
+            </p>
+          </div>
+
+          {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
+          <div className="border-t-2 border-black py-1 px-2 space-y-0.5 text-[9px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
+            <div className="flex justify-between items-center">
+              <div>
+                <span className="font-bold">Consignor : </span>
+                <span className="font-black uppercase text-[10px]">{consignorName}</span>
+              </div>
+              <div className="text-[8px]">
+                <span className="font-bold">GSTIN : </span>
+                <span className="font-mono font-bold">{consignorGSTIN}</span>
+              </div>
+            </div>
+            <div className="text-[8px] text-slate-800">
+              <span className="font-bold">Address : </span>
+              <span>{consignorAddress}</span>
+            </div>
+
+            <div className="pt-0.5 border-t border-black/30 flex justify-between items-center mt-0.5">
+              <div>
+                <span className="font-bold">Consignee : </span>
+                <span className="font-black uppercase text-[10px]">{consigneeName}</span>
+              </div>
+              <div className="text-[8px]">
+                <span className="font-bold">GSTIN : </span>
+                <span className="font-mono font-bold">{consigneeGSTIN}</span>
+              </div>
+            </div>
+            <div className="text-[8px] text-slate-800">
+              <span className="font-bold">Address : </span>
+              <span>{consigneeAddress}</span>
+            </div>
+          </div>
         </div>
 
         {/* Booking Info Box (Col 3) */}
@@ -126,40 +163,6 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </div>
         </div>
 
-      </div>
-
-      {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-      <div className="border-b-2 border-black py-1 px-2 space-y-0.5 text-[9px] bg-[#fef9c3]">
-        <div className="flex justify-between items-center">
-          <div>
-            <span className="font-bold">Consignor : </span>
-            <span className="font-black uppercase text-[10px]">{consignorName}</span>
-          </div>
-          <div className="text-[8px]">
-            <span className="font-bold">GSTIN : </span>
-            <span className="font-mono font-bold">{consignorGSTIN}</span>
-          </div>
-        </div>
-        <div className="text-[8px] text-slate-800">
-          <span className="font-bold">Address : </span>
-          <span>{consignorAddress}</span>
-        </div>
-
-        <div className="pt-0.5 border-t border-black/30 flex justify-between items-center mt-0.5">
-          <div>
-            <span className="font-bold">Consignee : </span>
-            <span className="font-black uppercase text-[10px]">{consigneeName}</span>
-
-          </div>
-          <div className="text-[8px]">
-            <span className="font-bold">GSTIN : </span>
-            <span className="font-mono font-bold">{consigneeGSTIN}</span>
-          </div>
-        </div>
-        <div className="text-[8px] text-slate-800">
-          <span className="font-bold">Address : </span>
-          <span>{consigneeAddress}</span>
-        </div>
       </div>
 
       {/* MAIN GOODS & CHARGES GRID (SPLIT SECTION) */}
