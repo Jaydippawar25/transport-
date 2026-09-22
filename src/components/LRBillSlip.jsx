@@ -79,15 +79,15 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* COPY TYPE TOP HEADER BADGE */}
-      <div className="bg-black text-white px-3 py-1 flex justify-between items-center text-[9px] font-bold tracking-wider uppercase border-b border-black">
+      <div className="bg-black text-white px-3 py-[2px] flex justify-between items-center text-[8px] font-bold tracking-wider uppercase border-b border-black">
         <span>ROYAL ROADLINES — LR BILTY SLIP</span>
-        <span className="bg-yellow-400 text-black px-2 py-0.5 rounded text-[9.5px] font-black tracking-normal">
+        <span className="bg-yellow-400 text-black px-2 py-0 rounded text-[8px] font-black tracking-normal">
           {copyTitle || 'LR COPY'}
         </span>
       </div>
 
       {/* JURISDICTION HEADER */}
-      <div className="text-center text-[7.5px] font-bold uppercase border-b border-black py-0.5 tracking-widest bg-white/50">
+      <div className="text-center text-[7px] font-bold uppercase border-b border-black py-[2px] tracking-widest bg-white/50">
         SUBJECT TO ICHALKARANJI JURISDICTION
       </div>
 
