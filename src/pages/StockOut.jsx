@@ -63,23 +63,33 @@ const LoadingMemoView = ({ memo }) => {
               <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.memoNo}</div>
             </div>
             <div className="grid grid-cols-2 divide-x-2 divide-black">
-              <div className="p-1.5 uppercase text-center flex items-center justify-center">FROM :</div>
-              <div className="p-1.5 text-center flex items-center justify-center">{memo.fromStation || 'SANGLI'}</div>
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">VEHICAL NO.</div>
+              <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.lorryNo}</div>
+            </div>
+            <div className="grid grid-cols-2 divide-x-2 divide-black">
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">OWNER NAME</div>
+              <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.ownerName || '-'}</div>
             </div>
           </div>
 
           <div className="flex flex-col divide-y-2 divide-black">
             <div className="grid grid-cols-2 divide-x-2 divide-black">
-              <div className="p-1.5 uppercase text-center flex items-center justify-center">VEHICAL NO.</div>
-              <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.lorryNo}</div>
-            </div>
-            <div className="grid grid-cols-2 divide-x-2 divide-black">
               <div className="p-1.5 uppercase text-center flex items-center justify-center">DRIVER NAME</div>
               <div className="p-1.5 text-center flex items-center justify-center">{memo.driverName}</div>
             </div>
             <div className="grid grid-cols-2 divide-x-2 divide-black">
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">FROM :</div>
+              <div className="p-1.5 text-center flex items-center justify-center">{memo.fromStation || 'SANGLI'}</div>
+            </div>
+            <div className="grid grid-cols-2 divide-x-2 divide-black">
               <div className="p-1.5 uppercase text-center flex items-center justify-center">TO :</div>
-              <div className="p-1.5 text-center flex items-center justify-center">AS PER LRs</div>
+              <div className="p-1.5 text-center flex items-center justify-center">{memo.toStation || 'AS PER LRs'}</div>
+            </div>
+            <div className="grid grid-cols-2 divide-x-2 divide-black">
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">TIME</div>
+              <div className="p-1.5 text-center flex items-center justify-center">
+                {new Date(memo.date || memo.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+              </div>
             </div>
           </div>
         </div>
@@ -196,8 +206,10 @@ export default function StockOut() {
     memoNo: `LM-${Math.floor(8000 + Math.random() * 1000)}`,
     date: new Date().toISOString().split('T')[0],
     lorryNo: '',
+    ownerName: '',
     driverName: '',
-    fromStation: 'SANGLI'
+    fromStation: 'SANGLI',
+    toStation: ''
   });
 
   // Selected LR IDs & Editable Details (Delivery Person, Amounts)
@@ -557,6 +569,17 @@ export default function StockOut() {
             </div>
 
             <div>
+              <label className="text-[11px] font-bold text-slate-700">OWNER NAME</label>
+              <input
+                type="text"
+                value={formData.ownerName}
+                onChange={(e) => setFormData({ ...formData, ownerName: e.target.value })}
+                placeholder="e.g. Rahul Patil"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-medium"
+              />
+            </div>
+
+            <div>
               <label className="text-[11px] font-bold text-slate-700">FROM (Origin Station) *</label>
               <input
                 type="text"
@@ -564,6 +587,17 @@ export default function StockOut() {
                 value={formData.fromStation}
                 onChange={(e) => setFormData({ ...formData, fromStation: e.target.value })}
                 placeholder="e.g. SANGLI"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">TO (Destination Station)</label>
+              <input
+                type="text"
+                value={formData.toStation}
+                onChange={(e) => setFormData({ ...formData, toStation: e.target.value })}
+                placeholder="e.g. MUMBAI"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
               />
             </div>
