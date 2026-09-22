@@ -21,6 +21,15 @@ import {
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 
+const getStationPrefix = (stationName) => {
+  if (!stationName) return 'SNG';
+  const name = stationName.toUpperCase();
+  if (name === 'SANGLI') return 'SNG';
+  if (name === 'MUMBAI') return 'MUM';
+  if (name === 'PUNE') return 'PUN';
+  return name.replace(/[^A-Z]/g, '').substring(0, 3);
+};
+
 export default function StockIn() {
   const [stockInList, setStockInList] = useState([]);
   const [stations, setStations] = useState([]);
@@ -103,7 +112,7 @@ export default function StockIn() {
         
         setFormData(prev => ({
           ...prev,
-          lrNo: `SNG/${maxLr + 1}`
+          lrNo: `${getStationPrefix(prev.toStation)}/${maxLr + 1}`
         }));
       }
 
@@ -214,9 +223,7 @@ export default function StockIn() {
         const safeLrNo = String(formData.lrNo || '');
         const currentMatch = safeLrNo.match(/\d+/);
         const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : Math.floor(12000 + Math.random() * 9000);
-        const prefixMatch = safeLrNo.match(/^[a-zA-Z/]+/);
-        const nextPrefix = prefixMatch ? prefixMatch[0] : 'SNG/';
-        nextLrNo = `${nextPrefix}${nextNum}`;
+        nextLrNo = `${getStationPrefix('SANGLI')}/${nextNum}`;
       } else {
         // If we just finished editing, find the true max LR number to resume auto-increment
         const maxLr = stockInList.reduce((max, item) => {
@@ -228,7 +235,7 @@ export default function StockIn() {
           }
           return max;
         }, 12000);
-        nextLrNo = `SNG/${maxLr + 1}`;
+        nextLrNo = `${getStationPrefix('SANGLI')}/${maxLr + 1}`;
       }
 
       // Reset form
@@ -409,7 +416,16 @@ export default function StockIn() {
                 <label className="text-[11px] font-bold text-slate-700">STATION (Destination) *</label>
                 <select
                   value={formData.toStation}
-                  onChange={(e) => setFormData({ ...formData, toStation: e.target.value })}
+                  onChange={(e) => {
+                    const newStation = e.target.value;
+                    const prefix = getStationPrefix(newStation);
+                    const currentNumber = formData.lrNo.match(/\d+/) ? formData.lrNo.match(/\d+/)[0] : '0000';
+                    setFormData({ 
+                      ...formData, 
+                      toStation: newStation,
+                      lrNo: `${prefix}/${currentNumber}`
+                    });
+                  }}
                   className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
                 >
                   {stations.map(st => (
