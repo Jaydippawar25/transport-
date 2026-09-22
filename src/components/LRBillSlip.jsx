@@ -121,11 +121,11 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
               <span>ICHALKARANJI</span>
               <span>9503037898</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center sm:flex-row sm:justify-around sm:gap-1">
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
               <span>ISLAMPUR</span>
               <span>9307843480</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center sm:flex-row sm:justify-around sm:gap-1">
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
               <span>MADHAVNAGAR</span>
               <span>9890487014</span>
             </div>
