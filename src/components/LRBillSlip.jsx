@@ -211,7 +211,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="flex flex-col justify-between bg-[#fef9c3]">
           
           {/* ToPay / Paid Banner */}
-          <div className="py-1.5 px-1 bg-[#fff099] text-center font-black text-sm uppercase border-b border-black tracking-wider">
+          <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-sm uppercase border-b border-black tracking-wider">
             {paymentType}
           </div>
 
@@ -219,26 +219,26 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           <table className="w-full text-[11px] font-mono border-collapse h-full">
             <thead>
               <tr className="border-b border-black text-[10px] font-bold">
-                <th className="py-1.5 px-1 border-r border-black text-left">Charges</th>
-                <th className="py-1.5 px-1 text-right">Amount</th>
+                <th className="py-0.5 px-1 border-r border-black text-left">Charges</th>
+                <th className="py-0.5 px-1 text-right">Amount</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/30">
               <tr>
-                <td className="py-2 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
-                <td className="py-2 px-1 text-right font-bold text-[12px]">
+                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
+                <td className="py-1 px-1 text-right font-bold text-[12px]">
                   ₹{freight}
                 </td>
               </tr>
               <tr>
-                <td className="py-2 px-1 border-r border-black font-semibold text-[11px]">Hamali/St/Other</td>
-                <td className="py-2 px-1 text-right font-bold text-[12px]">
+                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Hamali/St/Other</td>
+                <td className="py-1 px-1 text-right font-bold text-[12px]">
                   {extraCharges > 0 ? `₹${extraCharges}` : '-'}
                 </td>
               </tr>
               <tr className="border-t-2 border-black bg-[#fff099]">
-                <td className="py-2 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
-                <td className="py-2 px-1 text-right font-black text-sm">
+                <td className="py-1 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
+                <td className="py-1 px-1 text-right font-black text-sm">
                   ₹{totalAmt}
                 </td>
               </tr>
@@ -246,7 +246,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </table>
 
           {/* GST Liability Footer */}
-          <div className="py-1 px-1 border-t border-black text-center font-bold text-[9px] uppercase bg-[#fff099]/80">
+          <div className="py-0.5 px-1 border-t border-black text-center font-bold text-[9px] uppercase bg-[#fff099]/80">
             GST Liability - Consignee
           </div>
 
