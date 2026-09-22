@@ -107,6 +107,30 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
             </p>
           </div>
 
+          {/* Branch Contacts Row */}
+          <div className="grid grid-cols-5 border-t-2 border-black divide-x divide-black text-[5.5px] sm:text-[6.5px] font-bold shrink-0">
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+              <span>SANGLI</span>
+              <span>9850194732</span>
+            </div>
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+              <span>KARAD</span>
+              <span>9890277299</span>
+            </div>
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+              <span>ICHALKARANJI</span>
+              <span>9503037898</span>
+            </div>
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center sm:flex-row sm:justify-around sm:gap-1">
+              <span>ISLAMPUR</span>
+              <span>9307843480</span>
+            </div>
+            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center sm:flex-row sm:justify-around sm:gap-1">
+              <span>MADHAVNAGAR</span>
+              <span>9890487014</span>
+            </div>
+          </div>
+
           {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
           <div className="border-t-2 border-black py-1 px-2 space-y-0.5 text-[9px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
