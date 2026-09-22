@@ -105,24 +105,24 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         </div>
 
         {/* Booking Info Box (Col 3) */}
-        <div className="p-2 bg-[#fff099] flex flex-col justify-between font-mono text-[10px] space-y-0.5">
-          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center">
+        <div className="p-1.5 bg-[#fff099] flex flex-col justify-between font-mono text-[8px] space-y-0.5">
+          <div className="text-[8px] font-bold border-b border-black/30 pb-0.5 text-center">
             MOB : 9850194732 / 9370229449
           </div>
-          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
+          <div className="text-[8px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
             GSTIN : 27MOJPS8633C1ZC
           </div>
           <div className="pt-0.5">
             <span className="font-bold">LR NO: </span> 
-            <span className="font-black text-xs uppercase">{lrNo}</span>
+            <span className="font-black text-[10px] uppercase">{lrNo}</span>
           </div>
           <div>
             <span className="font-bold">Date: </span>
-            <span className="text-[9px]">{dateDisplay}</span>
+            <span className="text-[8px]">{dateDisplay}</span>
           </div>
           <div className="border-t border-black/30 pt-0.5">
             <span className="font-bold">To: </span>
-            <span className="font-black uppercase text-xs">{toStation}</span>
+            <span className="font-black uppercase text-[10px]">{toStation}</span>
           </div>
         </div>
 
