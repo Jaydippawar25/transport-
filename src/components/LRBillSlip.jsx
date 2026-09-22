@@ -96,10 +96,10 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         
         {/* Company Title & Address (Cols 1 & 2) */}
         <div className="col-span-2 p-1.5 space-y-0.5 flex flex-col justify-center text-center">
-          <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
+          <h1 className="text-xl sm:text-2xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
             ROYAL ROADLINES
           </h1>
-          <p className="text-[7.5px] sm:text-[8px] font-bold text-slate-900 leading-tight">
+          <p className="text-[6.5px] sm:text-[7px] font-bold text-slate-900 leading-[1.1]">
             MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
           </p>
         </div>
