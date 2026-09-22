@@ -129,18 +129,18 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-      <div className="border-b-2 border-black p-2 space-y-0.5 text-[10px] bg-[#fef9c3]">
+      <div className="border-b-2 border-black p-2 space-y-0.5 text-[9px] bg-[#fef9c3]">
         <div className="flex justify-between items-center">
           <div>
             <span className="font-bold">Consignor : </span>
-            <span className="font-black uppercase text-xs">{consignorName}</span>
+            <span className="font-black uppercase text-[10px]">{consignorName}</span>
           </div>
-          <div className="text-[9px]">
+          <div className="text-[8px]">
             <span className="font-bold">GSTIN : </span>
             <span className="font-mono font-bold">{consignorGSTIN}</span>
           </div>
         </div>
-        <div className="text-[9px] text-slate-800">
+        <div className="text-[8px] text-slate-800">
           <span className="font-bold">Address : </span>
           <span>{consignorAddress}</span>
         </div>
@@ -148,15 +148,15 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="pt-1 border-t border-black/30 flex justify-between items-center">
           <div>
             <span className="font-bold">Consignee : </span>
-            <span className="font-black uppercase text-xs">{consigneeName}</span>
+            <span className="font-black uppercase text-[10px]">{consigneeName}</span>
 
           </div>
-          <div className="text-[9px]">
+          <div className="text-[8px]">
             <span className="font-bold">GSTIN : </span>
             <span className="font-mono font-bold">{consigneeGSTIN}</span>
           </div>
         </div>
-        <div className="text-[9px] text-slate-800">
+        <div className="text-[8px] text-slate-800">
           <span className="font-bold">Address : </span>
           <span>{consigneeAddress}</span>
         </div>
@@ -167,9 +167,9 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         
         {/* Goods Table (Cols 1 & 2) */}
         <div className="col-span-2 flex flex-col justify-between bg-[#fef9c3]">
-          <table className="w-full text-left border-collapse text-[10px]">
+          <table className="w-full text-left border-collapse text-[9px]">
             <thead>
-              <tr className="border-b border-black bg-[#fff099] font-bold text-black text-[9px]">
+              <tr className="border-b border-black bg-[#fff099] font-bold text-black text-[8px]">
                 <th className="p-1 border-r border-black w-14 text-center">PKGS</th>
                 <th className="p-1 border-r border-black">Description</th>
                 <th className="p-1 w-20 text-right">Weight</th>
@@ -177,13 +177,13 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
             </thead>
             <tbody>
               <tr>
-                <td className="p-1 border-r border-black font-mono font-bold text-center align-top text-xs">
+                <td className="p-1 border-r border-black font-mono font-bold text-center align-top text-[10px]">
                   {packages}
                 </td>
-                <td className="p-1 border-r border-black font-bold uppercase align-top text-xs">
+                <td className="p-1 border-r border-black font-bold uppercase align-top text-[10px]">
                   {description}
                 </td>
-                <td className="p-1 font-mono font-bold text-right align-top text-xs">
+                <td className="p-1 font-mono font-bold text-right align-top text-[10px]">
                   {weight}
                 </td>
               </tr>
@@ -191,7 +191,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </table>
 
           {/* Invoice / Note Bottom Row inside Goods Box */}
-          <div className="p-1 border-t border-black text-[9px] font-mono leading-tight bg-[#fff099]/60 flex justify-between items-center flex-wrap gap-1">
+          <div className="p-1 border-t border-black text-[8px] font-mono leading-tight bg-[#fff099]/60 flex justify-between items-center flex-wrap gap-1">
             <div>
               <span className="font-bold">Inv No: </span>
               <span className="font-bold">{invoiceNo}</span>
@@ -211,34 +211,34 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="flex flex-col justify-between bg-[#fef9c3]">
           
           {/* ToPay / Paid Banner */}
-          <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-sm uppercase border-b border-black tracking-wider">
+          <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-xs uppercase border-b border-black tracking-wider">
             {paymentType}
           </div>
 
           {/* Charges Table */}
-          <table className="w-full text-[11px] font-mono border-collapse h-full">
+          <table className="w-full text-[9px] font-mono border-collapse h-full">
             <thead>
-              <tr className="border-b border-black text-[10px] font-bold">
+              <tr className="border-b border-black text-[8px] font-bold">
                 <th className="py-0.5 px-1 border-r border-black text-left">Charges</th>
                 <th className="py-0.5 px-1 text-right">Amount</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/30">
               <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
-                <td className="py-1 px-1 text-right font-bold text-[12px]">
+                <td className="py-1 px-1 border-r border-black font-semibold text-[9.5px]">Freight</td>
+                <td className="py-1 px-1 text-right font-bold text-[10px]">
                   ₹{freight}
                 </td>
               </tr>
               <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Hamali/St/Other</td>
-                <td className="py-1 px-1 text-right font-bold text-[12px]">
+                <td className="py-1 px-1 border-r border-black font-semibold text-[9.5px]">Hamali/St/Other</td>
+                <td className="py-1 px-1 text-right font-bold text-[10px]">
                   {extraCharges > 0 ? `₹${extraCharges}` : '-'}
                 </td>
               </tr>
               <tr className="border-t-2 border-black bg-[#fff099]">
-                <td className="py-1 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
-                <td className="py-1 px-1 text-right font-black text-sm">
+                <td className="py-1 px-1 border-r border-black font-black uppercase text-[10px]">Total</td>
+                <td className="py-1 px-1 text-right font-black text-[11px]">
                   ₹{totalAmt}
                 </td>
               </tr>
@@ -246,9 +246,10 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </table>
 
           {/* GST Liability Footer */}
-          <div className="py-0.5 px-1 border-t border-black text-center font-bold text-[9px] uppercase bg-[#fff099]/80">
+          <div className="py-0.5 px-1 border-t border-black text-center font-bold text-[8px] uppercase bg-[#fff099]/80">
             GST Liability - Consignee
           </div>
+
 
         </div>
 
