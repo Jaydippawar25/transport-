@@ -81,7 +81,7 @@ export default function MemoPrintModal({ memo, onClose }) {
                 const copiesList = printCopiesPerLr === 3 ? [
                   { id: 1, title: 'CONSIGNOR COPY' },
                   { id: 2, title: 'CONSIGNEE COPY' },
-                  { id: 3, title: 'DRIVER / GODOWN COPY' }
+                  { id: 3, title: 'DRIVER / BOOKING COPY' }
                 ] : [
                   { id: 1, title: `STOCK OUT LR COPY (${entry.lrNo})` }
                 ];

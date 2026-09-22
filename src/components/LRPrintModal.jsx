@@ -28,7 +28,7 @@ export default function LRPrintModal({ lr, onClose }) {
   const copiesList = [
     { id: 1, title: 'CONSIGNOR COPY' },
     { id: 2, title: 'CONSIGNEE COPY' },
-    { id: 3, title: 'DRIVER / GODOWN COPY' }
+    { id: 3, title: 'DRIVER / BOOKING COPY' }
   ];
 
   return (
