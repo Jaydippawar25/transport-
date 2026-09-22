@@ -68,7 +68,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
   const dateDisplay = formattedDate || (lr.date ? new Date(lr.date).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN'));
 
   return (
-    <div className="border-2 border-black relative flex flex-col bg-[#fef9c3] text-black text-[10px] leading-tight select-none my-1 printable-slip">
+    <div className="border-2 border-black relative flex flex-col bg-[#fef9c3] text-black text-[10px] leading-tight select-none my-1 print:my-0 printable-slip">
       
       {/* Side Vertical Text Margins */}
       <div className="absolute -left-4 top-1/2 -translate-y-1/2 -rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block print:hidden select-none">
@@ -87,7 +87,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* JURISDICTION HEADER */}
-      <div className="text-center text-[7px] font-bold uppercase border-b border-black py-[2px] tracking-widest bg-white/50">
+      <div className="text-center text-[7px] font-bold uppercase border-b border-black py-[1px] tracking-widest bg-white/50">
         SUBJECT TO ICHALKARANJI JURISDICTION
       </div>
 
@@ -98,11 +98,11 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="col-span-2 flex flex-col">
           
           {/* Company Title & Address */}
-          <div className="p-1.5 space-y-0.5 flex flex-col justify-center text-center shrink-0">
+          <div className="py-1 px-1.5 space-y-0 flex flex-col justify-center text-center shrink-0">
             <h1 className="text-xl sm:text-2xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
               ROYAL ROADLINES
             </h1>
-            <p className="text-[6.5px] sm:text-[7px] font-bold text-slate-900 leading-[1.1]">
+            <p className="text-[6px] sm:text-[7px] font-bold text-slate-900 leading-[1.1]">
               MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
             </p>
           </div>
@@ -132,7 +132,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </div>
 
           {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-          <div className="border-t-2 border-black py-1 px-2 space-y-0.5 text-[9px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
+          <div className="border-t-2 border-black py-0.5 px-2 space-y-0 text-[9px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <div>
                 <span className="font-bold">Consignor : </span>
