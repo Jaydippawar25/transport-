@@ -616,7 +616,7 @@ export default function StockOut() {
                 No pending LRs sitting in godown. Receive Stock In entries first.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-60 overflow-y-auto p-1 border border-slate-200 rounded-xl bg-slate-50/50">
+              <div className="flex flex-col gap-2 max-h-60 overflow-y-auto p-1 border border-slate-200 rounded-xl bg-slate-50/50">
                 {filteredPendingLrs.map((lr) => {
                   const isSelected = selectedLrIds.includes(lr.id);
                   return (
@@ -629,7 +629,7 @@ export default function StockOut() {
                           : 'bg-white border-slate-200 hover:border-slate-300'
                       }`}
                     >
-                      <div className="space-y-1">
+                      <div className="space-y-1 w-full overflow-hidden">
                         <div className="flex items-center gap-2">
                           <span className="font-mono font-bold text-xs text-indigo-900">{lr.lrNo}</span>
                           <span className="font-bold text-[10px] uppercase px-1.5 py-0.5 bg-slate-100 rounded text-slate-700">
@@ -641,7 +641,7 @@ export default function StockOut() {
                             </span>
                           )}
                         </div>
-                        <p className="text-[11px] text-slate-600 truncate max-w-[180px]">
+                        <p className="text-[11px] text-slate-600 truncate">
                           {lr.consignorName} ➔ {lr.consigneeName}
                         </p>
                         <div className="flex items-center gap-3 text-[10px] text-slate-500 font-mono">
