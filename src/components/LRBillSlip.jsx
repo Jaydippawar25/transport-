@@ -98,52 +98,52 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="col-span-2 flex flex-col">
           
           {/* Company Title & Address */}
-          <div className="py-0.5 px-1 space-y-0 flex flex-col justify-center text-center shrink-0">
-            <h1 className="text-[26px] sm:text-[28px] font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
+          <div className="py-0 px-1 space-y-0 flex flex-col justify-center text-center shrink-0">
+            <h1 className="text-[20px] sm:text-[22px] font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm mt-0.5" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
               ROYAL ROADLINES
             </h1>
-            <p className="text-[7px] sm:text-[7.5px] font-bold text-slate-900 leading-[1.1] px-1">
+            <p className="text-[6px] sm:text-[6.5px] font-bold text-slate-900 leading-[1.1] px-1 mt-0.5">
               MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
             </p>
           </div>
 
           {/* Branch Contacts Row */}
-          <div className="grid grid-cols-5 border-t-2 border-black divide-x divide-black text-[7px] sm:text-[7.5px] font-bold shrink-0">
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+          <div className="grid grid-cols-5 border-t border-black divide-x divide-black text-[6px] sm:text-[6.5px] font-bold shrink-0 mt-0.5">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>SANGLI</span>
               <span>9850194732</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>KARAD</span>
               <span>9890277299</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>ICHALKARANJI</span>
               <span>9503037898</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>ISLAMPUR</span>
               <span>9307843480</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-0 px-0.5 text-center">
               <span>MADHAVNAGAR</span>
               <span>9890487014</span>
             </div>
           </div>
 
           {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-          <div className="border-t-2 border-black py-0.5 px-1.5 space-y-0 text-[10px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
+          <div className="border-t-2 border-black py-0 px-1.5 space-y-0 text-[9px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <div>
                 <span className="font-bold">Consignor : </span>
-                <span className="font-black uppercase text-[11px]">{consignorName}</span>
+                <span className="font-black uppercase text-[10px]">{consignorName}</span>
               </div>
-              <div className="text-[9px]">
+              <div className="text-[8px]">
                 <span className="font-bold">GSTIN : </span>
                 <span className="font-mono font-bold">{consignorGSTIN}</span>
               </div>
             </div>
-            <div className="text-[9px] text-slate-800 leading-tight">
+            <div className="text-[8px] text-slate-800 leading-tight">
               <span className="font-bold">Address : </span>
               <span>{consignorAddress}</span>
             </div>
@@ -151,14 +151,14 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
             <div className="pt-0 border-t border-black/30 flex justify-between items-center mt-0.5">
               <div>
                 <span className="font-bold">Consignee : </span>
-                <span className="font-black uppercase text-[11px]">{consigneeName}</span>
+                <span className="font-black uppercase text-[10px]">{consigneeName}</span>
               </div>
-              <div className="text-[9px]">
+              <div className="text-[8px]">
                 <span className="font-bold">GSTIN : </span>
                 <span className="font-mono font-bold">{consigneeGSTIN}</span>
               </div>
             </div>
-            <div className="text-[9px] text-slate-800 leading-tight">
+            <div className="text-[8px] text-slate-800 leading-tight">
               <span className="font-bold">Address : </span>
               <span>{consigneeAddress}</span>
             </div>
