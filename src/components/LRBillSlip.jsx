@@ -132,7 +132,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </div>
 
           {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-          <div className="border-t-2 border-black py-2 px-2 space-y-1 text-[10px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
+          <div className="border-t-2 border-black py-1 px-2 space-y-0.5 text-[10px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <div>
                 <span className="font-bold">Consignor : </span>
@@ -148,7 +148,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
               <span>{consignorAddress}</span>
             </div>
 
-            <div className="pt-0.5 border-t border-black/30 flex justify-between items-center mt-1">
+            <div className="pt-0.5 border-t border-black/30 flex justify-between items-center mt-0.5">
               <div>
                 <span className="font-bold">Consignee : </span>
                 <span className="font-black uppercase text-[11px]">{consigneeName}</span>
@@ -166,22 +166,22 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         </div>
 
         {/* Booking Info Box (Col 3) */}
-        <div className="p-3 bg-[#fff099] flex flex-col justify-between font-mono text-[9px] space-y-1">
-          <div className="text-[9px] font-bold border-b border-black/30 pb-1 text-center">
+        <div className="p-1.5 bg-[#fff099] flex flex-col justify-start font-mono text-[9px] space-y-0.5">
+          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center">
             MOB : 9850194732 / 9370229449
           </div>
-          <div className="text-[9px] font-bold border-b border-black/30 pb-1 text-center pt-1">
+          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
             GSTIN : 27MOJPS8633C1ZC
           </div>
-          <div className="pt-2">
+          <div className="pt-1">
             <span className="font-bold">LR NO: </span> 
             <span className="font-black text-[11px] uppercase">{lrNo}</span>
           </div>
-          <div className="pt-1">
+          <div>
             <span className="font-bold">Date: </span>
             <span className="text-[9px]">{dateDisplay}</span>
           </div>
-          <div className="border-t border-black/30 pt-2 pb-1">
+          <div className="border-t border-black/30 pt-1 mt-auto">
             <span className="font-bold">To: </span>
             <span className="font-black uppercase text-[11px]">{toStation}</span>
           </div>
