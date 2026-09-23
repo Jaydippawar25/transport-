@@ -247,18 +247,28 @@ export const dataService = {
   // STATIONS
   // -------------------------------------------------------------
   async getStations() {
+    let legacyStations = [];
     if (isFirebaseConfigured && db) {
       try {
         const snap = await getDocs(collection(db, 'stations'));
         if (!snap.empty) {
-          return snap.docs.map(d => d.data().name);
+          legacyStations = snap.docs.map(d => d.data().name);
         }
       } catch (err) {
         console.warn("Firestore fetch stations error:", err);
       }
     }
-    initLocalStorageIfNeeded();
-    return getLocal(STORAGE_KEYS.STATIONS, INITIAL_STATIONS);
+    
+    if (legacyStations.length === 0) {
+      initLocalStorageIfNeeded();
+      legacyStations = getLocal(STORAGE_KEYS.STATIONS, INITIAL_STATIONS);
+    }
+
+    // Merge with new Drop Box stations
+    const mastersData = await this.getMasters();
+    const dropBoxStations = (mastersData?.stations || []).map(s => s.name);
+    
+    return [...new Set([...legacyStations, ...dropBoxStations])].filter(Boolean);
   },
 
   // -------------------------------------------------------------
