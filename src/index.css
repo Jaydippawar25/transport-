@@ -39,13 +39,11 @@
 /* Print specific rules for generating physical receipts & manifests */
 @page {
   size: A4 portrait;
-  margin: 0; /* Removing page margin to let the browser use the full sheet without forcing a spill */
 }
 
 @media print {
   html, body {
     height: 100%;
-    overflow: hidden;
     margin: 0;
     padding: 0;
   }
@@ -61,19 +59,16 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0 !important;
     box-shadow: none !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    overflow: hidden !important;
   }
 
   /* Reset outer spacing for print */
   .printable-area > div {
-    margin: 0 !important;
-    height: 100%;
+    margin: 0 auto !important;
   }
 
   .printable-slip {
@@ -82,19 +77,17 @@
     margin: 0 !important;
   }
 
-  /* Force 3 copies to fit on exactly one page using dynamic viewport scaling */
+  /* Force 3 copies to fit on exactly one page comfortably within default margins */
   .print-3-copies > div {
     display: flex;
     flex-direction: column;
-    height: 98vh !important; /* Slightly under 100 to avoid arbitrary browser header pushes */
+    height: 260mm !important; /* Very safe height well under A4's 297mm to survive default margins */
     justify-content: space-between;
     overflow: hidden;
-    padding-top: 5mm; /* Safe print margins added manually inside the viewport */
-    padding-bottom: 5mm;
   }
   
   .print-3-copies .printable-slip {
-    height: 31.5% !important; /* Scaled dynamically to allow 3 copies + dashed cut lines */
+    height: 85mm !important; /* 85 * 3 = 255mm. Plenty of room for page margins! */
   }
 
   .no-print {
