@@ -98,8 +98,8 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="col-span-2 flex flex-col">
           
           {/* Company Title & Address */}
-          <div className="py-2.5 px-1.5 space-y-1 flex flex-col justify-center text-center shrink-0">
-            <h1 className="text-3xl sm:text-[36px] font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
+          <div className="py-1.5 px-1.5 space-y-0.5 flex flex-col justify-center text-center shrink-0">
+            <h1 className="text-3xl sm:text-[30px] font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
               ROYAL ROADLINES
             </h1>
             <p className="text-[7.5px] sm:text-[8px] font-bold text-slate-900 leading-[1.3] px-2">
