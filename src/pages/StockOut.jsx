@@ -675,17 +675,15 @@ export default function StockOut() {
                 <table className="w-full text-xs sm:text-sm text-left border-collapse table-fixed">
                   <thead>
                     <tr className="bg-emerald-900 text-white font-bold text-[10px] sm:text-xs">
-                      <th className="px-1.5 py-3 border-r border-emerald-800 text-center w-[3.5%]">SR.</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[10%]">L.R.NO.</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[4.5%]">PKG</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[12%] truncate">CONSIGNOR</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[12%] truncate">CONSIGNEE</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 bg-emerald-950/60 text-yellow-300 w-[14%]">DELIVERY PERSON</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[7.5%]">STATION</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-right bg-amber-950/60 text-amber-300 w-[7.5%]">TO PAY</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-right bg-emerald-950/60 text-emerald-300 w-[7.5%]">PAID</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-right bg-blue-950/60 text-blue-300 w-[7.5%]">T.B.B</th>
-                      <th className="px-1 py-3 text-center w-[16.5%]">PAYMENT BASIS</th>
+                      <th className="px-1.5 py-3 border-r border-emerald-800 text-center w-[4%]">SR.</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[12%]">L.R.NO.</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[6%]">PKG</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[20%] truncate">CONSIGNOR</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[20%] truncate">CONSIGNEE</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[11%]">STATION</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-right bg-amber-950/60 text-amber-300 w-[9%]">TO PAY</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-right bg-emerald-950/60 text-emerald-300 w-[9%]">PAID</th>
+                      <th className="px-1 py-3 text-right bg-blue-950/60 text-blue-300 w-[9%]">T.B.B</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-emerald-200/60 bg-white">
@@ -698,19 +696,6 @@ export default function StockOut() {
                           <td className="px-1 py-3.5 border-r border-slate-200 text-center font-mono font-bold">{e.packages}</td>
                           <td className="px-2 py-3.5 border-r border-slate-200 truncate" title={e.consignor}>{e.consignor}</td>
                           <td className="px-2 py-3.5 border-r border-slate-200 truncate" title={e.consignee}>{e.consignee}</td>
-                          
-                          {/* EDITABLE DELIVERY PERSON INPUT */}
-                          <td className="px-1.5 py-2 border-r border-slate-200 bg-yellow-50/40">
-                            <input
-                              type="text"
-                              list="stockout-delivery-datalist"
-                              value={e.deliveryPerson}
-                              onChange={(evt) => handleLrDataChange(e.lrNo, 'deliveryPerson', evt.target.value)}
-                              className="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                              placeholder="Delivery Person"
-                            />
-                          </td>
-
                           <td className="px-1 py-3.5 border-r border-slate-200 text-center font-bold uppercase text-xs truncate">{e.station}</td>
                           
                           {/* Editable ToPay */}
@@ -736,7 +721,7 @@ export default function StockOut() {
                           </td>
 
                           {/* Editable T.B.B */}
-                          <td className="px-1 py-2 border-r border-slate-200 text-right bg-blue-50/30">
+                          <td className="px-1 py-2 text-right bg-blue-50/30">
                             <input
                               type="number"
                               min="0"
@@ -744,39 +729,6 @@ export default function StockOut() {
                               onChange={(evt) => handleLrDataChange(e.lrNo, 'tbb', evt.target.value)}
                               className="w-full text-right px-1 py-1.5 bg-white border border-blue-300 rounded-lg font-mono font-bold text-blue-900 text-xs focus:outline-none"
                             />
-                          </td>
-
-                          {/* Quick Payment Mode Selector Pill Buttons */}
-                          <td className="px-1 py-2 text-center">
-                            <div className="inline-flex rounded-lg border border-slate-300 overflow-hidden shadow-2xs text-[9.5px] font-bold w-full">
-                              <button
-                                type="button"
-                                onClick={() => quickSetPaymentMode(origLr, 'ToPay')}
-                                className={`flex-1 py-1 text-center cursor-pointer transition-colors ${
-                                  e.toPay > 0 ? 'bg-amber-600 text-white font-black' : 'bg-white text-slate-700 hover:bg-slate-50'
-                                }`}
-                              >
-                                TO PAY
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => quickSetPaymentMode(origLr, 'Paid')}
-                                className={`flex-1 py-1 text-center border-x border-slate-200 cursor-pointer transition-colors ${
-                                  e.paid > 0 ? 'bg-emerald-600 text-white font-black' : 'bg-white text-slate-700 hover:bg-slate-50'
-                                }`}
-                              >
-                                PAID
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => quickSetPaymentMode(origLr, 'T.B.B')}
-                                className={`flex-1 py-1 text-center cursor-pointer transition-colors ${
-                                  e.tbb > 0 ? 'bg-blue-600 text-white font-black' : 'bg-white text-slate-700 hover:bg-slate-50'
-                                }`}
-                              >
-                                TBB
-                              </button>
-                            </div>
                           </td>
                         </tr>
                       );
@@ -790,7 +742,7 @@ export default function StockOut() {
                       <td className="px-1 py-3 text-center font-mono font-black text-xs sm:text-sm text-yellow-300">
                         {totalPackages}
                       </td>
-                      <td colSpan={4} className="px-2 py-3 text-right uppercase tracking-wider font-black text-slate-300">
+                      <td colSpan={3} className="px-2 py-3 text-right uppercase tracking-wider font-black text-slate-300">
                         AMOUNTS TOTAL:
                       </td>
                       <td className="px-1 py-3 text-right font-mono font-black text-xs text-amber-300 truncate">
@@ -801,9 +753,6 @@ export default function StockOut() {
                       </td>
                       <td className="px-1 py-3 text-right font-mono font-black text-xs text-blue-300 truncate">
                         ₹{totalTbb.toLocaleString('en-IN')}
-                      </td>
-                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-yellow-400 bg-emerald-950 truncate">
-                        ₹{grandTotal.toLocaleString('en-IN')}
                       </td>
                     </tr>
                   </tfoot>
