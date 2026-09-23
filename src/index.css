@@ -81,13 +81,13 @@
   .print-3-copies > div {
     display: flex;
     flex-direction: column;
-    height: 260mm !important; /* Very safe height well under A4's 297mm to survive default margins */
+    height: 250mm !important; /* Extra safe height well under A4's 297mm to survive ANY default margins */
     justify-content: space-between;
     overflow: hidden;
   }
   
   .print-3-copies .printable-slip {
-    height: 85mm !important; /* 85 * 3 = 255mm. Plenty of room for page margins! */
+    height: 82mm !important; /* 82 * 3 = 246mm. Plenty of room for page margins! */
   }
 
   .no-print {

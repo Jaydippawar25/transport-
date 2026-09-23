@@ -190,10 +190,10 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </div>
 
       {/* MAIN GOODS & CHARGES GRID (SPLIT SECTION) */}
-      <div className="flex-1 grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
+      <div className="flex-1 min-h-0 grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
         
         {/* Goods Table (Cols 1 & 2) */}
-        <div className="col-span-2 flex flex-col justify-between bg-[#fef9c3]">
+        <div className="col-span-2 flex flex-col justify-between bg-[#fef9c3] min-h-0">
           <table className="w-full text-left border-collapse text-[9px] h-full flex-1">
             <thead>
               <tr className="border-b border-black bg-[#fff099] font-bold text-black text-[8px]">
@@ -233,7 +233,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         </div>
 
         {/* Charges Tally Box (Col 3) */}
-        <div className="flex flex-col justify-between bg-[#fef9c3]">
+        <div className="flex flex-col justify-between bg-[#fef9c3] min-h-0">
           
           {/* ToPay / Paid Banner */}
           <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-[13px] uppercase border-b border-black tracking-wider">
