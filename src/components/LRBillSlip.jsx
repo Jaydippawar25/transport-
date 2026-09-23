@@ -70,14 +70,6 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
   return (
     <div className="border-2 border-black relative flex flex-col bg-[#fef9c3] text-black text-[10px] leading-tight select-none my-1 print:my-0 printable-slip">
       
-      {/* Side Vertical Text Margins */}
-      <div className="absolute -left-4 top-1/2 -translate-y-1/2 -rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block print:hidden select-none">
-        OWNER'S RISK
-      </div>
-      <div className="absolute -right-4 top-1/2 -translate-y-1/2 rotate-90 text-[8px] font-bold tracking-widest text-slate-800 whitespace-nowrap hidden sm:block print:hidden select-none">
-        OWNER'S RISK
-      </div>
-
       {/* COPY TYPE TOP HEADER BADGE */}
       <div className="bg-black text-white px-3 py-0 flex justify-between items-center text-[8px] font-bold tracking-wider uppercase border-b border-black">
         <span>ROYAL ROADLINES — LR BILTY SLIP</span>
