@@ -677,10 +677,11 @@ export default function StockOut() {
                     <tr className="bg-emerald-900 text-white font-bold text-[10px] sm:text-xs">
                       <th className="px-1.5 py-3 border-r border-emerald-800 text-center w-[4%]">SR.</th>
                       <th className="px-2 py-3 border-r border-emerald-800 w-[12%]">L.R.NO.</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[6%]">PKG</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[20%] truncate">CONSIGNOR</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[20%] truncate">CONSIGNEE</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[11%]">STATION</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[5%]">PKG</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[6%]">WEIGHT</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[18%] truncate">CONSIGNOR</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[18%] truncate">CONSIGNEE</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[10%]">STATION</th>
                       <th className="px-1 py-3 border-r border-emerald-800 text-center bg-amber-950/60 text-amber-300 w-[9%]">TO PAY</th>
                       <th className="px-1 py-3 border-r border-emerald-800 text-center bg-emerald-950/60 text-emerald-300 w-[9%]">PAID</th>
                       <th className="px-1 py-3 text-center bg-blue-950/60 text-blue-300 w-[9%]">T.B.B</th>
@@ -694,6 +695,7 @@ export default function StockOut() {
                           <td className="px-1 py-3.5 border-r border-slate-200 text-center font-mono font-semibold text-slate-500">{e.srNo}</td>
                           <td className="px-2 py-3.5 border-r border-slate-200 font-mono font-bold text-indigo-900 truncate">{e.lrNo}</td>
                           <td className="px-1 py-3.5 border-r border-slate-200 text-center font-mono font-bold">{e.packages}</td>
+                          <td className="px-1 py-3.5 border-r border-slate-200 text-center font-mono font-bold">{origLr?.weight || e.weight || '-'}</td>
                           <td className="px-2 py-3.5 border-r border-slate-200 truncate" title={e.consignor}>{e.consignor}</td>
                           <td className="px-2 py-3.5 border-r border-slate-200 truncate" title={e.consignee}>{e.consignee}</td>
                           <td className="px-1 py-3.5 border-r border-slate-200 text-center font-bold uppercase text-xs truncate">{e.station}</td>
