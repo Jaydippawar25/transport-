@@ -83,11 +83,11 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         SUBJECT TO ICHALKARANJI JURISDICTION
       </div>
 
-      {/* TOP HEADER SECTION */}
-      <div className="grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
+            {/* MAIN VERTICAL COLUMNS SECTION */}
+      <div className="flex-1 min-h-0 grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
         
-        {/* Left Side (Cols 1 & 2): Company Title & Consignor/Consignee */}
-        <div className="col-span-2 flex flex-col">
+        {/* LEFT COLUMN (Cols 1 & 2) */}
+        <div className="col-span-2 flex flex-col min-h-0">
           
           {/* Company Title & Address */}
           <div className="py-0 px-1 space-y-0 flex flex-col justify-center text-center shrink-0">
@@ -124,7 +124,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
           </div>
 
           {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-          <div className="border-t-2 border-black py-0 px-1.5 space-y-0 text-[9px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
+          <div className="border-t-2 border-black py-0 px-1.5 space-y-0 text-[9px] bg-[#fef9c3] shrink-0 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <div>
                 <span className="font-bold">Consignor : </span>
@@ -155,131 +155,126 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
               <span>{consigneeAddress}</span>
             </div>
           </div>
+
+          {/* Goods Table (Cols 1 & 2) */}
+          <div className="flex-1 flex flex-col justify-between bg-[#fef9c3] border-t-2 border-black min-h-0">
+            <table className="w-full text-left border-collapse text-[9px] h-full flex-1">
+              <thead>
+                <tr className="border-b border-black bg-[#fff099] font-bold text-black text-[8px]">
+                  <th className="py-0.5 px-1 border-r border-black w-14 text-center">PKGS</th>
+                  <th className="py-0.5 px-1 border-r border-black">Description</th>
+                  <th className="py-0.5 px-1 w-20 text-center">Weight</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="h-full">
+                  <td className="py-0.5 px-1 border-r border-black font-mono font-bold text-center align-top text-[10px]">
+                    {packages}
+                  </td>
+                  <td className="py-0.5 px-1 border-r border-black font-bold uppercase align-top text-[10px]">
+                    {description}
+                  </td>
+                  <td className="py-0.5 px-1 font-mono font-bold text-center align-top text-[10px]">
+                    {weight}
+                  </td>
+                </tr>
+                <tr className="border-t border-black bg-[#fff099]/60 text-[8px] font-mono leading-tight">
+                  <td className="py-0.5 px-1 border-r border-black text-center">
+                    <div className="font-bold">Inv No:</div>
+                    <div className="font-bold">{invoiceNo}</div>
+                  </td>
+                  <td className="py-0.5 px-1 border-r border-black text-center">
+                    <span className="font-bold">Good Value: </span>
+                    <span className="font-bold">{goodsValue ? `{Number(goodsValue).toLocaleString('en-IN')} Rs.` : ''}</span>
+                  </td>
+                  <td className="py-0.5 px-1 text-center">
+                    <div className="font-bold">Eway Bill:</div>
+                    <div className="font-bold">{ewayBillNo}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Booking Info Box (Col 3) */}
-        <div className="p-1 bg-[#fff099] flex flex-col justify-start font-mono text-[9px] space-y-0">
-          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center">
-            MOB : 9850194732 / 9370229449
-          </div>
-          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
-            GSTIN : 27MOJPS8633C1ZC
-          </div>
-          <div className="pt-1">
-            <span className="font-bold">LR NO: </span> 
-            <span className="font-black text-[11px] uppercase">{lrNo}</span>
-          </div>
-          <div>
-            <span className="font-bold">Date: </span>
-            <span className="text-[9px]">{dateDisplay}</span>
-          </div>
-          <div className="border-t border-black/30 pt-1 mt-auto">
-            <span className="font-bold">To: </span>
-            <span className="font-black uppercase text-[11px]">{toStation}</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* MAIN GOODS & CHARGES GRID (SPLIT SECTION) */}
-      <div className="flex-1 min-h-0 grid grid-cols-3 border-b-2 border-black divide-x-2 divide-black">
-        
-        {/* Goods Table (Cols 1 & 2) */}
-        <div className="col-span-2 flex flex-col justify-between bg-[#fef9c3] min-h-0">
-          <table className="w-full text-left border-collapse text-[9px] h-full flex-1">
-            <thead>
-              <tr className="border-b border-black bg-[#fff099] font-bold text-black text-[8px]">
-                <th className="py-0.5 px-1 border-r border-black w-14 text-center">PKGS</th>
-                <th className="py-0.5 px-1 border-r border-black">Description</th>
-                <th className="py-0.5 px-1 w-20 text-center">Weight</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="h-full">
-                <td className="py-0.5 px-1 border-r border-black font-mono font-bold text-center align-top text-[10px]">
-                  {packages}
-                </td>
-                <td className="py-0.5 px-1 border-r border-black font-bold uppercase align-top text-[10px]">
-                  {description}
-                </td>
-                <td className="py-0.5 px-1 font-mono font-bold text-center align-top text-[10px]">
-                  {weight}
-                </td>
-              </tr>
-              <tr className="border-t border-black bg-[#fff099]/60 text-[8px] font-mono leading-tight">
-                <td className="py-0.5 px-1 border-r border-black text-center">
-                  <div className="font-bold">Inv No:</div>
-                  <div className="font-bold">{invoiceNo}</div>
-                </td>
-                <td className="py-0.5 px-1 border-r border-black text-center">
-                  <span className="font-bold">Good Value: </span>
-                  <span className="font-bold">{goodsValue ? `${Number(goodsValue).toLocaleString('en-IN')} Rs.` : ''}</span>
-                </td>
-                <td className="py-0.5 px-1 text-center">
-                  <div className="font-bold">Eway Bill:</div>
-                  <div className="font-bold">{ewayBillNo}</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Charges Tally Box (Col 3) */}
-        <div className="flex flex-col justify-between bg-[#fef9c3] min-h-0">
+        {/* RIGHT COLUMN (Col 3) */}
+        <div className="col-span-1 flex flex-col min-h-0 bg-[#fff099]">
           
-          {/* ToPay / Paid Banner */}
-          <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-[13px] uppercase border-b border-black tracking-wider">
-            {paymentType}
+          {/* Booking Info Box (Col 3) */}
+          <div className="p-1 flex flex-col justify-start font-mono text-[9px] space-y-0 shrink-0">
+            <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center">
+              MOB : 9850194732 / 9370229449
+            </div>
+            <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
+              GSTIN : 27MOJPS8633C1ZC
+            </div>
+            <div className="pt-1">
+              <span className="font-bold">LR NO: </span> 
+              <span className="font-black text-[11px] uppercase">{lrNo}</span>
+            </div>
+            <div>
+              <span className="font-bold">Date: </span>
+              <span className="text-[9px]">{dateDisplay}</span>
+            </div>
+            <div className="border-t border-black/30 pt-1 mt-auto">
+              <span className="font-bold">To: </span>
+              <span className="font-black uppercase text-[11px]">{toStation}</span>
+            </div>
           </div>
 
-          {/* Charges Table */}
-          <table className="w-full text-[10px] font-mono border-collapse h-full">
-            <thead>
-              <tr className="border-b border-black text-[10px] font-bold">
-                <th className="py-0.5 px-1 border-r border-black text-left">Charges</th>
-                <th className="py-0.5 px-1 text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-black/30">
-              <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
-                <td className="py-1 px-1 text-right font-bold text-[12px]">
-                  ₹{freight}
-                </td>
-              </tr>
-              <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Hamali</td>
-                <td className="py-1 px-1 text-right font-bold text-[12px]">
-                  {hamali > 0 ? `₹${hamali}` : '-'}
-                </td>
-              </tr>
-              <tr>
-                <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">St/Other Chges</td>
-                <td className="py-1 px-1 text-right font-bold text-[12px]">
-                  {(other + stCharges) > 0 ? `₹${other + stCharges}` : '-'}
-                </td>
-              </tr>
-              <tr className="border-t-2 border-black bg-[#fff099]">
-                <td className="py-1 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
-                <td className="py-1 px-1 text-right font-black text-[13px]">
-                  ₹{totalAmt}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {/* Charges Tally Box (Col 3) */}
+          <div className="flex-1 flex flex-col justify-between bg-[#fef9c3] border-t-2 border-black min-h-0">
+            
+            {/* ToPay / Paid Banner */}
+            <div className="py-0.5 px-1 bg-[#fff099] text-center font-black text-[13px] uppercase border-b border-black tracking-wider">
+              {paymentType}
+            </div>
 
-          {/* GST Liability Footer */}
-          <div className="py-0.5 px-1 border-t border-black text-center font-bold text-[8px] uppercase bg-[#fff099]/80">
-            GST Liability - Consignee
+            {/* Charges Table */}
+            <table className="w-full text-[10px] font-mono border-collapse h-full">
+              <thead>
+                <tr className="border-b border-black text-[10px] font-bold">
+                  <th className="py-0.5 px-1 border-r border-black text-left">Charges</th>
+                  <th className="py-0.5 px-1 text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-black/30">
+                <tr>
+                  <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
+                  <td className="py-1 px-1 text-right font-bold text-[12px]">
+                    ?{freight}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Hamali</td>
+                  <td className="py-1 px-1 text-right font-bold text-[12px]">
+                    {hamali > 0 ? `?{hamali}` : '-'}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">St/Other Chges</td>
+                  <td className="py-1 px-1 text-right font-bold text-[12px]">
+                    {(other + stCharges) > 0 ? `?{other + stCharges}` : '-'}
+                  </td>
+                </tr>
+                <tr className="border-t-2 border-black bg-[#fff099]">
+                  <td className="py-1 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
+                  <td className="py-1 px-1 text-right font-black text-[13px]">
+                    ?{totalAmt}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {/* GST Liability Footer */}
+            <div className="py-0.5 px-1 border-t border-black text-center font-bold text-[8px] uppercase bg-[#fff099]/80">
+              GST Liability - Consignee
+            </div>
           </div>
-
-
-
         </div>
-
       </div>
 
-      {/* BARCODE & TERMS / SIGNATURE FOOTER SECTION */}
+{/* BARCODE & TERMS / SIGNATURE FOOTER SECTION */}
       <div className="p-1 bg-[#fef9c3] space-y-0.5 text-[8.5px]">
         
         <div className="flex justify-between items-center gap-1">
