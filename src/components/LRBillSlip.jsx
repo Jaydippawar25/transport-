@@ -98,41 +98,41 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         <div className="col-span-2 flex flex-col">
           
           {/* Company Title & Address */}
-          <div className="py-1 px-1.5 space-y-0.5 flex flex-col justify-center text-center shrink-0">
-            <h1 className="text-2xl sm:text-3xl font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
+          <div className="py-2.5 px-1.5 space-y-1 flex flex-col justify-center text-center shrink-0">
+            <h1 className="text-3xl sm:text-[36px] font-serif font-black uppercase tracking-wider text-black leading-none drop-shadow-sm" style={{ textShadow: '0.5px 0.5px 0px #ea580c, -0.5px -0.5px 0px #0284c7' }}>
               ROYAL ROADLINES
             </h1>
-            <p className="text-[7.5px] sm:text-[8px] font-bold text-slate-900 leading-[1.1]">
+            <p className="text-[7.5px] sm:text-[8px] font-bold text-slate-900 leading-[1.3] px-2">
               MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272
             </p>
           </div>
 
           {/* Branch Contacts Row */}
           <div className="grid grid-cols-5 border-t-2 border-black divide-x divide-black text-[7px] sm:text-[8px] font-bold shrink-0">
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-1 px-0.5 text-center">
               <span>SANGLI</span>
               <span>9850194732</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-1 px-0.5 text-center">
               <span>KARAD</span>
               <span>9890277299</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-1 px-0.5 text-center">
               <span>ICHALKARANJI</span>
               <span>9503037898</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-1 px-0.5 text-center">
               <span>ISLAMPUR</span>
               <span>9307843480</span>
             </div>
-            <div className="flex flex-col items-center justify-center py-0.5 px-0.5 text-center">
+            <div className="flex flex-col items-center justify-center py-1 px-0.5 text-center">
               <span>MADHAVNAGAR</span>
               <span>9890487014</span>
             </div>
           </div>
 
           {/* CONSIGNOR & CONSIGNEE DETAILS ROW */}
-          <div className="border-t-2 border-black py-1 px-2 space-y-0.5 text-[10px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
+          <div className="border-t-2 border-black py-2 px-2 space-y-1 text-[10px] bg-[#fef9c3] flex-1 flex flex-col justify-center">
             <div className="flex justify-between items-center">
               <div>
                 <span className="font-bold">Consignor : </span>
@@ -166,22 +166,22 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         </div>
 
         {/* Booking Info Box (Col 3) */}
-        <div className="p-2 bg-[#fff099] flex flex-col justify-between font-mono text-[9px] space-y-0.5">
-          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center">
+        <div className="p-3 bg-[#fff099] flex flex-col justify-between font-mono text-[9px] space-y-1">
+          <div className="text-[9px] font-bold border-b border-black/30 pb-1 text-center">
             MOB : 9850194732 / 9370229449
           </div>
-          <div className="text-[9px] font-bold border-b border-black/30 pb-0.5 text-center pt-0.5">
+          <div className="text-[9px] font-bold border-b border-black/30 pb-1 text-center pt-1">
             GSTIN : 27MOJPS8633C1ZC
           </div>
-          <div className="pt-1">
+          <div className="pt-2">
             <span className="font-bold">LR NO: </span> 
             <span className="font-black text-[11px] uppercase">{lrNo}</span>
           </div>
-          <div>
+          <div className="pt-1">
             <span className="font-bold">Date: </span>
             <span className="text-[9px]">{dateDisplay}</span>
           </div>
-          <div className="border-t border-black/30 pt-0.5">
+          <div className="border-t border-black/30 pt-2 pb-1">
             <span className="font-bold">To: </span>
             <span className="font-black uppercase text-[11px]">{toStation}</span>
           </div>
