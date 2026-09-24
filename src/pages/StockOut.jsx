@@ -254,7 +254,8 @@ export default function StockOut() {
     const matched = (masters.vehicles || []).find(v => v.vehicleNo.toLowerCase() === val.toLowerCase());
     setFormData(prev => ({
       ...prev,
-      lorryNo: val
+      lorryNo: val,
+      ...(matched && matched.ownerName ? { ownerName: matched.ownerName } : {})
     }));
   };
 
