@@ -866,8 +866,7 @@ export default function StockOut() {
                       {idx + 1}
                     </td>
                     <td className="p-3 border-r border-slate-100">
-                      <p className="font-mono font-bold text-indigo-900 text-xs">{memo.memoNo}</p>
-                      <p className="text-[10px] text-slate-400 font-medium">
+                      <p className="text-xs font-semibold text-slate-800">
                         {new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN')}
                       </p>
                     </td>
