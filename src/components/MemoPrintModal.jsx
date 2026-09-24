@@ -74,6 +74,7 @@ export default function MemoPrintModal({ memo, onClose }) {
               </div>
               <div className="space-y-1 text-center">
                 <div>Owner Name: {memo.ownerName || '_______________'}</div>
+                <div>To Station: {memo.toStation || '_______________'}</div>
               </div>
               <div className="space-y-1 text-right">
                 <div>Date: {(new Date(memo.date || memo.createdAt)).toLocaleDateString('en-IN')}</div>
