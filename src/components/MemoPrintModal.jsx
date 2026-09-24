@@ -12,20 +12,149 @@ export default function MemoPrintModal({ memo, onClose }) {
   
   const calcTotalWeight = entries.reduce((acc, curr) => acc + Number(curr.weight || 0), 0);
 
-  // Fill up to 10 rows minimum for the grid
-  
-
   return (
     <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
-      <div className="bg-white rounded-2xl shadow-2xlܵ�ձ�����ܴ�ᰁ��ൠ�l��١t���������്����ٕə��ܵ��������䵅�Ѽ���ɑ�ȁ��ɑ�ȵͱ�є������(��������(��������켨�5�����
-���ɽ�́	�Ȁ�!���������Aɥ�Ф����(���������؁�����9������̸ԁʹ���Ё���ͱ�є�����ѕ�еݡ�є�����������Ʌ���ѕ�̵���ѕȁ���ѥ�䵉��ݕ�������́͡ɥ�����͡���ܵ�������ɥ�Ё�����(�����������؁�����9���􉙱����ѕ�̵���ѕȁ����̈�(�������������؁�����9���􉙱����ѕ�̵���ѕȁ����Ȉ�(���������������Q�Ս�������9����ܴԁ��ԁѕ�е��������������(�������������������������9���􉙽�е�����ѕ�еʹ�ʹ�ѕ�е��͔��Mѽ���=�ЁAɥ��������(�������������������������9���􉉜���������������ѕ�е��������������е�����ѕ�е�́��ȸԁ����ԁɽչ�������е�������ɑ�ȁ��ɑ�ȵ���������������(��������������������������9��(��������������������(������������𽑥��(����������𽑥��(�����������؁�����9���􉙱����ѕ�̵���ѕȁ����ȸԈ�(���������������ѽ�(����������������
-������������Aɥ���(�������������������9���􉙱����ѕ�̵���ѕȁ����ȁ��Ё��ȁ������Ʌ���������ٕ�鉜����Ʌ�������ѕ�еݡ�є����е�����ɽչ�������ѕ�е�́ʹ�ѕ�еʹ��Ʌ�ͥѥ�������͡���ܵ�����ѥٔ�͍�����ԁ���ͽȵ����ѕȁ���Ȉ(�������������(���������������Aɥ�ѕȁ�����9����ܴЁ��Ј����Aɥ��(���������������ѽ��(���������������ѽ�(����������������
-��������
-��͕�(�������������������9������ĸԁʹ���ȁɽչ�������ѕ�еͱ�є�������ٕ��ѕ�еݡ�є���ٕ�鉜�ͱ�є������Ʌ�ͥѥ��������́���ͽȵ����ѕȈ(�������������(���������������`������9����ܴԁ��Ԉ���(���������������ѽ��(����������𽑥��(��������𽑥��((��������켨�AI%9Q	1�	=d�
-=9Q9P����(���������؁�����9������Ёʹ���؁�ٕə��ܵ䵅�Ѽ�����ā�ɥ�х�����ɕ�����еͅ�́ѕ�е���������ݡ�є��(�����������؁�����9����ܵ�ձ�����ܵl�����t��൅�Ѽ��ɥ���ܵ��Ѽ��ɥ��鵅�ܵ������ɥ��鴴���ɥ��������(������������(������������켨�!����Ȁ���(�������������؁�����9���􉙱������ѥ�䵉��ݕ����ѕ�̵�х�Ё��ɑ�ȵ��ȁ��ɑ�ȵ���������ȁ���Ȉ�(���������������؁�����9����ܴļ̈�(�����������������؁�����9����ѕ�еl����t�����ɍ�͔����е�����ѕ�еͱ�є������MU	)
-P�Q<�%
-!1-I9)$�)UI%M%
-Q%=8𽑥��(��������������𽑥��(���������������؁�����9����ܴļ́ѕ�е���ѕȈ�(�����������������ā�����9����ѕ�д�ᰁ���е�������Ʌ������ݥ��ȁ����ɍ�͔�ѕ�е���������屔���ѕ��M�����耜���������������������������������������ьܜ����(������������������I=e0�I=1%9L(�������������������(��������������𽑥��(���������������؁�����9����ܴļ́ѕ�еl���t�ѕ�еɥ��Ё��������ѥ��Ј�(�����������������؁�����9���􉙽�е�����ѕ�еl����t������Ԉ�MQ%8����5=)AP�����i𽑥��(�������������������5M)%�	U9H���<����M���ѥ����QɅ�����Ё�$�P�	�����9��̰�	�����ɤ�M�ɕ�а�9��ȁ��ͩ���	չ��ȁMхѥ���\��9��ȁ	�����ɤ�A������
-��ݭ���5յ����������́5������������丁M-%9-������9��ܰ�M�ɥф��хє��=����Mи�)Ց�́M������!��ɽ���!�ѕ����1�����QɅ�����а�M���������5�������������𽑥��(��������������𽑥��(������������𽑥��(������������(������������켨�MՈ�!����Ȁ���(�������������؁�����9���􉙱������ѥ�䵉��ݕ���ѕ�еl����t����е��������Ȉ�(���������������؁�����9�����������Ĉ�(�������������������5����9�������������9��𽑥��(�������������������ɥٕȁ9�����������ɥٕ�9����𽑥��(��������������𽑥��(���������������؁�����9�����������āѕ�е���ѕȈ�(�������������������=ݹ�ȁ9����}}}}}}}}}}}}}}}}}|𽑥��(��������������𽑥��(���������������؁�����9�����������āѕ�еɥ��Ј�(��������������������є�졹�܁�є��������є����������ɕ�ѕ�Ф��ѽ1������ѕM�ɥ�������%8���𽑥��(�������������������1����9��������������9��𽑥��(��������������𽑥��(������������𽑥��((������������켨�Q��������(�������������х���������9����ܵ�ձ����ɑ�ȵ������͔���ɑ�ȴȁ��ɑ�ȵ������ѕ�еl����t�ʹ�ѕ�е�̈�(���������������ѡ����(������������������ȁ�����9���􉉽ɑ�ȵ����ɑ�ȵ������ѕ�е���ѕȁѕ�еl����t����е���������ɍ�͔��(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������āܴ���ɽ�M��������MH�9<��Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������āܴ�؈�ɽ�M��������0�H�9<��Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������āܴ����ɽ�M��������A-�Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������Ĉ�ɽ�M��������
-=9M%9=H�Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������Ĉ�ɽ�M��������
-=9M%9�Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������āܴ����ɽ�M��������MQQ%=8�Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������āܴ�Ȉ�ɽ�M��������]%!P�Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵ��������ā��ɑ�ȵ������M��������5=U9P�Ѡ�(��������������������(������������������ȁ�����9���􉉽ɑ�ȵ����ɑ�ȵ������ѕ�е���ѕȁѕ�еl���t����е���������ɍ�͔��(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ����ɑ�ȵ��������āܴ�Ј�Q=Ad�Ѡ�(�������������������Ѡ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������āܴ�Ј�A%�Ѡ�(�������������������Ѡ������9������āܴ�Ј�P���Ѡ�(��������������������(���������������ѡ����(���������������щ����(����������������푥�������ɥ�̹����������ऀ����(��������������������ȁ��������􁍱���9���􉉽ɑ�ȵ����ɑ�ȵ��������l����t��(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ��Ĉ�����������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ���е�������Ĉ�픹��9���������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ���е�������Ĉ�픹�������́�������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������ā����ɍ�͔���չ��є����ܵl�����t��픹���ͥ���ȁ�������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������ā����ɍ�͔���չ��є����ܵl�����t��픹���ͥ������������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ��������ā����ɍ�͔�ѕ�е���ѕȈ�픹�хѥ��������ѽMхѥ����������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ���е�������Ĉ�픹ݕ���Ё�������ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�еɥ��Ё���е�������Ĉ�픹ѽA����������ѽA��耜���ѐ�(���������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�еɥ��Ё���е�������Ĉ�픹������������������耜���ѐ�(���������������������ѐ������9����ѕ�еɥ��Ё���е�������Ĉ�픹щ����������щ��耜���ѐ�(����������������������(�������������������(���������������щ����(���������������љ����(������������������ȁ�����9���􉉽ɑ�ȵ����ɑ�ȵ���������е�����ѕ�еl����t��(�������������������ѐ����M������􁍱���9���􉉽ɑ�ȵȁ��ɑ�ȵ��������Ĉ��ѐ�(�������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ��Ĉ�������ѽх�A������́�������ѐ�(�������������������ѐ����M������􁍱���9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ��ā����ɍ�͔��Ʌ������ݥ���Ј�Q=Q0�ѐ�(�������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�е���ѕȁ��Ĉ�퍅��Q�х�]����Ѐ����������Q�х�]����Ѐ耜���ѐ�(�������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�еɥ��Ё��Ĉ�������ѽх�Q�A�������������ѽх�Q�A��耜���ѐ�(�������������������ѐ������9���􉉽ɑ�ȵȁ��ɑ�ȵ������ѕ�з&�v�B�#��V���F�F��B���V���F�F��B�rw���FC��FB6�74��S�'FW�B�&�v�B�#��V���F�F�F&"���V���F�F�F&"�rw���FC���G#��G"6�74��S�&&�&FW"�"&�&FW"�&�6�f��B�&��BFW�Bճ���ճ#'��#��FB6��7◳7�6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6��7◳7�6�74��S�&&�&FW"�"&�&FW"�&�6�FW�B�6V�FW"�WW&66RG&6���r�v�FW7B#�e$T�t�C��FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�'�#���FC���G#��G"6�74��S�&&�&FW"�"&�&FW"�&�6�f��B�&��BFW�Bճ���ճ#'��#��FB6��7�׳7�6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6��7�׳7�6�74��S�&&�&FW"�"&�&FW"�&�6�FW�B�6V�FW"�WW&66RG&6���r�v�FW7B#���D��r4�$tU3��FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�'�#���FC���G#��G"6�74��S�&&�&FW"�"&�&FW"�&�6�f��B�&��BFW�Bճ���ճ#'��#��FB6��7◳7�6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6��7◳7�6�74��S�&&�&FW"�"&�&FW"�&�6�FW�B�6V�FW"�WW&66RG&6���r�v�FW7B#�r�D�D���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�&&�&FW"�"&�&FW"�&�6��#���FC��FB6�74��S�'�#���FC���G#��G"6�74��S�&f��B�&��BFW�Bճ����B#��FB6��7�׳7�6�74��S�&&�&FW"�"&�&FW"�&�6�FW�B�6V�FW"Ɩv��&�GF��"�"#�E$�dU"4�t���FC��FB6��7�׳w�6�74��S�'FW�B�6V�FW"Ɩv��&�GF��"�"#�d�"$���$�DĔ�U3��FC���G#���Ff��C���F&�S���F�c���F�c���F�c���F�c����Р
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[94vh] flex flex-col overflow-hidden my-auto border border-slate-300">
+        
+        {/* Modal Controls Bar (Hidden in Print) */}
+        <div className="p-3.5 sm:p-4 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-md print:hidden z-20">
+          
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Truck className="w-5 h-5 text-indigo-400" />
+              <span className="font-bold text-sm sm:text-base">Stock Out Print</span>
+              <span className="bg-indigo-500/20 text-indigo-300 font-mono text-xs px-2.5 py-0.5 rounded font-bold border border-indigo-500/30">
+                {memo.memoNo}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer ml-2"
+            >
+              <Printer className="w-4 h-4" /> Print
+            </button>
+            
+            <button
+              onClick={onClose}
+              className="p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* PRINTABLE BODY CONTENT */}
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 printable-area font-sans text-black bg-white">
+          <div className="w-full max-w-[210mm] mx-auto print:wmauto print:max-w-none print:m-0 print:p-0">
+            
+            {/* Header */}
+            <div className="flex justify-between items-start border-b-2 border-black pb-2 mb-2">
+              <div className="w-1/3">
+                <div className="text-[10px] uppercase font-bold text-slate-700">SUBJECT TO ICHALKARANJI JURISDICTION</div>
+              </div>
+              <div className="w-1/3 text-center">
+                <h1 className="text-3xl font-black tracking-wider uppercase text-black" style={{ textShadow: '1px 1px 0px #ea580c, -1px -1px 0px #0284c7' }}>
+                  ROYAL ROADLINES
+                </h1>
+              </div>
+              <div className="w-1/3 text-[9px] text-right leading-tight">
+                <div className="font-bold text-[11px] mb-0.5">GSTIN : 27MOJPS8633C1ZC</div>
+                <div>MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272</div>
+              </div>
+            </div>
+            
+            {/* Sub Header */}
+            <div className="flex justify-between text-xs font-bold mb-2">
+              <div className="space-y-1">
+                <div>Memo No.: {memo.memoNo}</div>
+                <div>Driver Name: {memo.driverName}</div>
+              </div>
+              <div className="space-y-1 text-center">
+                <div>Owner Name: ______________</div>
+              </div>
+              <div className="space-y-1 text-right">
+                <div>Date: {(new Date(memo.date || memo.createdAt)).toLocaleDateString('en-IN')}</div>
+                <div>Lorry No.: {memo.lorryNo}</div>
+              </div>
+            </div>
+
+            {/* Table */}
+            <table className="w-full border-collapse border-2 border-black text-[10px] sm:text-xs">
+              <thead>
+                <tr className="border-b-2 border-black font-bold bg-slate-100/50">
+                  <th rowSpan{2} className="border-r border-black py-1 px-1 text-center w-8">SR.NO.</th>
+                  <th rowSpan={2} className="border-r border-black py-1 px-1">L.R.NO.</th>
+                  <th rowSpan={2} className="border-r border-black py-1 px-1 text-center w-10">PKG</th>
+                  <th rowSpan={2} className="border-r border-black py-1 px-1 text-left">CONSIGNOR</th>
+                  <th rowSpan={2} className="border-r border-black py-1 px-1 text-left">CONSIGNEE</th>
+                  <th rowSpan{2} className="border-r border-black py-1 px-1 text-left">STATION</th>
+                  <th rowSpan={2} className="border-r border-black py-1 px-1 text-center w-12">WEIGHT</th>
+                  <th colSpan={3} className="border-b border-black py-1 px-1 text-center">AMOUNT</th>
+                </tr>
+                <tr className="border-b-2 border-black font-bold bg-slate-100/50">
+                  <th className="border-r border-black py-1 px-1 text-right w-16">TOPAY</th>
+                  <th className="border-r border-black py-1 px-1 text-right w-16">PAID</th>
+                  <th className="py-1 px-1 text-right w-16">T.B.B</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map((e, idx) => (
+                  <tr key={idx} className="border-b border-black">
+                    <td className="border-r border-black py-1 px-1 text-center">{idx + 1}</td>
+                    <td className="border-r border-black py-1 px-1 font-bold">{e.lrNo}</td>
+                    <td className="border-r border-black py-1 px-1 text-center font-bold">{e.packages}</td>
+                    <td className="border-r border-black py-1 px-1 uppercase truncate max-w-[120px]" title={e.consignor}>{e.consignor}</td>
+                    <td className="border-r border-black py-1 px-1 uppercase truncate max-w-[120px]" title={e.consignee}>{e.consignee}</td>
+                    <td className="border-r border-black py-1 px-1 uppercase">{e.station || e.toStation}</td>
+                    <td className="border-r border-black py-1 px-1 text-center font-bold">{e.weight || '-'}</td>
+                    <td className="border-r border-black py-1 px-1 text-right font-bold">{e.toPay > 0 ? e.toPay : ''}</td>
+                    <td className="border-r border-black py-1 px-1 text-right font-bold">{e.paid > 0 ? e.paid : ''}</td>
+                    <td className="py-1 px-1 text-right font-bold">{e.tbb > 0 ? e.tbb : ''}</td>
+                  </tr>
+                d))}
+              </tbody>
+              <tfoot>
+                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                  <td colSpan{2} className="border-r border-black py-1.5 px-2 text-right">TOTAL</td>
+                  <td className="border-r border-black py-1.5 px-1 text-center">{memo.totalPackages}</td>
+                  <td colSpan={3} className="border-r border-black py-1.5 px-1"></td>
+                  <td className="border-r border-black py-1.5 px-1 text-center">{calcTotalWeight > 0 ? calcTotalWeight : ''}</td>
+                  <td className="border-r border-black py-1.5 px-1 text-right text-[11px]">{memo.totalToPay > 0 ? memo.totalToPay.toLocaleString('en-IN') : ''}</td>
+                  <td className="border-r border-black py-1.5 px-1 text-right text-[11px]">{memo.totalPaid > 0 ? memo.totalPaid.toLocaleString('en-IN') : ''}</td>
+                  <td className="py-1.5 px-1 text-right text-[11px]">{memo.totalTbb > 0 ? memo.totalTbb.toLocaleString('en-IN') : ''}</td>
+                </tr>
+                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                  <td colSpan{7} className="border-r border-black py-1.5 px-2 text-center">FREIGHT</td>
+                  <td colSpan{3} className="py-1.5 px-1"></td>
+                </tr>
+                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                  <td colSpan={7} className="border-r border-black py-1.5 px-2 text-center">LOADING CHARGES</td>
+                  <td colSpan{3} className="py-1.5 px-1"></td>
+                </tr>
+                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                  <td colSpan={7} className="border-r border-black py-1.5 px-2 text-center">G. TOTAL</td>
+                  <td colSpan={3} className="py-1.5 px-1"></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            {/* Footer Section */}
+            <div className="flex justify-between items-end mt-20 mb-4">
+              <div className="w-1/3 text-left font-bold">
+                DRIVER SIGN
+              </div>
+              <div className="w-1/3 text-center flex flex-col items-center">
+                <div className="font-bold">
+                  FOR ROYAL ROADLINES
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
