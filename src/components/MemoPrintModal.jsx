@@ -128,15 +128,23 @@ export default function MemoPrintModal({ memo, onClose }) {
                 </tr>
                 <tr className="font-bold border-t-2 border-black bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-center">FREIGHT</td>
-                  <td colSpan={3} className="py-1.5 px-1"></td>
+                  <td colSpan={3} className="py-1.5 px-1 text-center">{memo.freight ? Number(memo.freight).toLocaleString('en-IN') : ''}</td>
                 </tr>
                 <tr className="font-bold border-t-2 border-black bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-center">LOADING CHARGES</td>
-                  <td colSpan={3} className="py-1.5 px-1"></td>
+                  <td colSpan={3} className="py-1.5 px-1 text-center">{memo.loadingCharges ? Number(memo.loadingCharges).toLocaleString('en-IN') : ''}</td>
+                </tr>
+                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                  <td colSpan={7} className="border-r border-black py-1.5 px-2 text-center">OTHER CHARGES</td>
+                  <td colSpan={3} className="py-1.5 px-1 text-center">{memo.otherCharges ? Number(memo.otherCharges).toLocaleString('en-IN') : ''}</td>
                 </tr>
                 <tr className="font-bold border-t-2 border-black bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-center">G. TOTAL</td>
-                  <td colSpan={3} className="py-1.5 px-1"></td>
+                  <td colSpan={3} className="py-1.5 px-1 text-center">
+                    { (Number(memo.freight || 0) + Number(memo.loadingCharges || 0) + Number(memo.otherCharges || 0)) > 0 
+                      ? (Number(memo.freight || 0) + Number(memo.loadingCharges || 0) + Number(memo.otherCharges || 0)).toLocaleString('en-IN') 
+                      : '' }
+                  </td>
                 </tr>
               </tfoot>
             </table>

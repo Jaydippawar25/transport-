@@ -209,7 +209,10 @@ export default function StockOut() {
     ownerName: '',
     driverName: '',
     fromStation: 'SANGLI',
-    toStation: ''
+    toStation: '',
+    freight: '',
+    loadingCharges: '',
+    otherCharges: ''
   });
 
   // Selected LR IDs & Editable Details (Delivery Person, Amounts)
@@ -398,8 +401,13 @@ export default function StockOut() {
         memoNo: formData.memoNo,
         date: formData.date,
         lorryNo: formData.lorryNo.toUpperCase(),
+        ownerName: formData.ownerName,
         driverName: formData.driverName,
         fromStation: formData.fromStation,
+        toStation: formData.toStation,
+        freight: formData.freight,
+        loadingCharges: formData.loadingCharges,
+        otherCharges: formData.otherCharges,
         entries: memoEntries,
         totalPackages,
         totalToPay,
@@ -416,8 +424,13 @@ export default function StockOut() {
         memoNo: `LM-${Math.floor(8000 + Math.random() * 1000)}`,
         date: new Date().toISOString().split('T')[0],
         lorryNo: '',
+        ownerName: '',
         driverName: '',
-        fromStation: 'SANGLI'
+        fromStation: 'SANGLI',
+        toStation: '',
+        freight: '',
+        loadingCharges: '',
+        otherCharges: ''
       });
       setSelectedLrIds([]);
       setCustomLrData({});
@@ -579,6 +592,37 @@ export default function StockOut() {
                 onChange={(e) => setFormData({ ...formData, toStation: e.target.value })}
                 placeholder="e.g. MUMBAI"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">FREIGHT</label>
+              <input
+                type="number"
+                value={formData.freight}
+                onChange={(e) => setFormData({ ...formData, freight: e.target.value })}
+                placeholder="e.g. 5000"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold"
+              />
+            </div>
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">LOADING CHARGES</label>
+              <input
+                type="number"
+                value={formData.loadingCharges}
+                onChange={(e) => setFormData({ ...formData, loadingCharges: e.target.value })}
+                placeholder="e.g. 500"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold"
+              />
+            </div>
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">OTHER CHARGES</label>
+              <input
+                type="number"
+                value={formData.otherCharges}
+                onChange={(e) => setFormData({ ...formData, otherCharges: e.target.value })}
+                placeholder="e.g. 200"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold"
               />
             </div>
           </div>
