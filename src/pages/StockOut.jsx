@@ -777,7 +777,7 @@ export default function StockOut() {
               disabled={isSubmitting || memoEntries.length === 0}
               className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/30 cursor-pointer flex items-center gap-2"
             >
-              {isSubmitting ? 'Dispatching...' : 'Save & Dispatch Stock Out'}
+              {isSubmitting ? 'Saving...' : 'Save & Print'}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
