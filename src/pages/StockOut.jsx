@@ -843,7 +843,7 @@ export default function StockOut() {
             <thead>
               <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                <th className="p-3 border-r border-slate-800">MEMO NO. & DATE</th>
+                <th className="p-3 border-r border-slate-800">Date</th>
                 <th className="p-3 border-r border-slate-800">VEHICLE NO.</th>
                 <th className="p-3 border-r border-slate-800">DRIVER NAME</th>
                 <th className="p-3 border-r border-slate-800 text-center">TOTAL LRs</th>
