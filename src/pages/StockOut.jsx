@@ -251,11 +251,12 @@ export default function StockOut() {
   };
 
   const handleVehicleChange = (val) => {
-    const matched = (masters.vehicles || []).find(v => v.vehicleNo.toLowerCase() === val.toLowerCase());
+    const normalize = (str) => (str || '').replace(/\s+/g, '').toLowerCase();
+    const matched = (masters.vehicles || []).find(v => normalize(v.vehicleNo) === normalize(val));
     setFormData(prev => ({
       ...prev,
       lorryNo: val,
-      ...(matched && matched.ownerName ? { ownerName: matched.ownerName } : {})
+      ownerName: matched && matched.ownerName ? matched.ownerName : prev.ownerName
     }));
   };
 
