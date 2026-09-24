@@ -576,27 +576,31 @@ export default function StockOut() {
 
             <div>
               <label className="text-[11px] font-bold text-slate-700">FROM (Origin Station) *</label>
-              <input
-                type="text"
+              <select
                 required
-                list="stockout-stations-datalist"
                 value={formData.fromStation}
                 onChange={(e) => setFormData({ ...formData, fromStation: e.target.value })}
-                placeholder="e.g. SANGLI"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
-              />
+              >
+                <option value="">Select Station</option>
+                {(masters.stations || []).map(st => (
+                  <option key={st.id} value={st.name}>{st.name}</option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="text-[11px] font-bold text-slate-700">TO (Destination Station)</label>
-              <input
-                type="text"
-                list="stockout-stations-datalist"
+              <select
                 value={formData.toStation}
                 onChange={(e) => setFormData({ ...formData, toStation: e.target.value })}
-                placeholder="e.g. MUMBAI"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
-              />
+              >
+                <option value="">Select Station</option>
+                {(masters.stations || []).map(st => (
+                  <option key={st.id} value={st.name}>{st.name}</option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -831,12 +835,6 @@ export default function StockOut() {
           </div>
 
           {/* MASTERS DATALISTS FOR STOCK OUT */}
-          <datalist id="stockout-stations-datalist">
-            {(masters.stations || []).map(s => (
-              <option key={s.id} value={s.name}>{s.name}</option>
-            ))}
-          </datalist>
-
           <datalist id="stockout-vehicles-datalist">
             {(masters.vehicles || []).map(v => (
               <option key={v.id} value={v.vehicleNo}>{v.ownerName ? `${v.vehicleNo} - ${v.ownerName}` : v.vehicleNo}</option>
