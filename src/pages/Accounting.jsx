@@ -7,6 +7,7 @@ export default function Accounting() {
   const [loading, setLoading] = useState(true);
   const [viewType, setViewType] = useState('memo'); // 'memo' or 'station'
   const [selectedStation, setSelectedStation] = useState('ALL');
+  const [dateFilter, setDateFilter] = useState('ALL');
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
@@ -29,6 +30,33 @@ export default function Accounting() {
 
   const filteredMemos = memos.filter(m => {
     if (selectedStation !== 'ALL' && m.toStation !== selectedStation) return false;
+    
+    if (dateFilter !== 'ALL') {
+      const d = new Date(m.date || m.createdAt);
+      if (isNaN(d.getTime())) return false;
+
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+
+      if (dateFilter === 'THIS_MONTH') {
+        if (d.getMonth() !== currentMonth || d.getFullYear() !== currentYear) return false;
+      } else if (dateFilter === 'LAST_MONTH') {
+        const lastMonth = new Date(currentYear, currentMonth - 1, 1);
+        if (d.getMonth() !== lastMonth.getMonth() || d.getFullYear() !== lastMonth.getFullYear()) return false;
+      } else if (dateFilter === 'THIS_FY') {
+        const fyStartYear = currentMonth >= 3 ? currentYear : currentYear - 1;
+        const fyStart = new Date(fyStartYear, 3, 1);
+        const fyEnd = new Date(fyStartYear + 1, 2, 31, 23, 59, 59);
+        if (d < fyStart || d > fyEnd) return false;
+      } else if (dateFilter === 'LAST_FY') {
+        const fyStartYear = currentMonth >= 3 ? currentYear - 1 : currentYear - 2;
+        const fyStart = new Date(fyStartYear, 3, 1);
+        const fyEnd = new Date(fyStartYear + 1, 2, 31, 23, 59, 59);
+        if (d < fyStart || d > fyEnd) return false;
+      }
+    }
+
     return true;
   });
 
@@ -118,6 +146,18 @@ export default function Accounting() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="border-2 border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 bg-white shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+          >
+            <option value="ALL">All Time</option>
+            <option value="THIS_MONTH">This Month</option>
+            <option value="LAST_MONTH">Last Month</option>
+            <option value="THIS_FY">This Financial Year (Apr-Mar)</option>
+            <option value="LAST_FY">Last Financial Year</option>
+          </select>
+
           <select
             value={selectedStation}
             onChange={(e) => setSelectedStation(e.target.value)}
