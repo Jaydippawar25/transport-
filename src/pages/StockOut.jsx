@@ -195,6 +195,13 @@ const LoadingMemoView = ({ memo, onClose }) => {
   );
 };
 
+const getMemoPrefix = (station) => {
+  const s = (station || '').toUpperCase();
+  if (s === 'SANGLI') return 'SNGM-';
+  if (s === 'PUNE') return 'PUNM-';
+  return s ? (s.substring(0, 3).toUpperCase() + 'M-') : 'LM-';
+};
+
 export default function StockOut() {
   const [stockOutList, setStockOutList] = useState([]);
   const [pendingLrs, setPendingLrs] = useState([]);
@@ -213,7 +220,7 @@ export default function StockOut() {
 
   // Form state (Matching spreadsheet header fields)
   const [formData, setFormData] = useState({
-    memoNo: `LM-${Math.floor(8000 + Math.random() * 1000)}`,
+    memoNo: `${getMemoPrefix('SANGLI')}${Math.floor(10000 + Math.random() * 90000)}`,
     date: new Date().toISOString().split('T')[0],
     lorryNo: '',
     ownerName: '',
@@ -426,6 +433,18 @@ export default function StockOut() {
     setShowForm(true);
   };
 
+  const handleFromStationChange = (station) => {
+    if (!editingMemoId) {
+      // Keep existing numeric part if it exists, or generate a new one
+      const currentParts = formData.memoNo.split('-');
+      const currentNum = currentParts.length > 1 ? currentParts[1] : Math.floor(10000 + Math.random() * 90000);
+      const prefix = getMemoPrefix(station);
+      setFormData({ ...formData, fromStation: station, memoNo: `${prefix}${currentNum}` });
+    } else {
+      setFormData({ ...formData, fromStation: station });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.memoNo || !formData.lorryNo || !formData.driverName) {
@@ -469,7 +488,7 @@ export default function StockOut() {
 
       // Reset form
       setFormData({
-        memoNo: `LM-${Math.floor(8000 + Math.random() * 1000)}`,
+        memoNo: `${getMemoPrefix('SANGLI')}${Math.floor(10000 + Math.random() * 90000)}`,
         date: new Date().toISOString().split('T')[0],
         lorryNo: '',
         ownerName: '',
@@ -627,7 +646,7 @@ export default function StockOut() {
               <select
                 required
                 value={formData.fromStation}
-                onChange={(e) => setFormData({ ...formData, fromStation: e.target.value })}
+                onChange={(e) => handleFromStationChange(e.target.value)}
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
               >
                 <option value="">Select Station</option>
