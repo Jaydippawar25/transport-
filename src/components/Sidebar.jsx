@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose }) {
           <div className="h-16 px-5 flex items-center justify-between border-b border-slate-800 shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-blue-700 flex items-center justify-center text-white shadow-lg shadow-blue-700/30 font-black text-sm">
-                AR
+                RR
               </div>
               <div className="overflow-hidden">
                 <h1 className="font-extrabold text-white tracking-wide text-sm leading-tight truncate">ROYAL ROADLINES</h1>
