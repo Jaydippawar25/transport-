@@ -23,7 +23,7 @@ import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
 
 
-const LoadingMemoView = ({ memo }) => {
+const LoadingMemoView = ({ memo, onClose }) => {
   const entries = memo.entries || [];
   const totalPackages = entries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
   const totalToPay = entries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
@@ -34,13 +34,23 @@ const LoadingMemoView = ({ memo }) => {
 
   return (
     <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-200 font-serif text-black relative print:p-0 print:border-none print:shadow-none">
-      <button 
-        onClick={() => window.print()}
-        className="absolute top-4 right-4 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 print:hidden"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
-        Print Loading Memo
-      </button>
+      <div className="absolute top-4 right-4 flex items-center gap-3 print:hidden">
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors"
+          >
+            Close
+          </button>
+        )}
+        <button 
+          onClick={() => window.print()}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm flex items-center gap-2 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+          Print Loading Memo
+        </button>
+      </div>
       <div className="overflow-x-auto">
       <div className="min-w-[800px] max-w-[1000px] mx-auto border-2 border-black p-1 print:min-w-0 print:w-full print:border-none">
         {/* Header section */}
@@ -919,7 +929,7 @@ export default function StockOut() {
 
             {/* STOCK OUT CONTENT AREA */}
       {filteredMemos.length === 1 && searchTerm.trim() !== '' ? (
-        <LoadingMemoView memo={filteredMemos[0]} />
+        <LoadingMemoView memo={filteredMemos[0]} onClose={() => setSearchTerm('')} />
       ) : (
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
