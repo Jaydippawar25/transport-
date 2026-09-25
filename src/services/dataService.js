@@ -457,5 +457,30 @@ export const dataService = {
     setLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
     setLocal(STORAGE_KEYS.SEEDED, true);
     return true;
+  },
+
+  async clearDatabase() {
+    if (isFirebaseConfigured && db) {
+      try {
+        const collectionsToClear = ['stockIn', 'stockOut'];
+        for (const collName of collectionsToClear) {
+          const querySnapshot = await getDocs(collection(db, collName));
+          const batch = writeBatch(db);
+          querySnapshot.forEach((docSnap) => {
+            batch.delete(docSnap.ref);
+          });
+          if (!querySnapshot.empty) {
+            await batch.commit();
+          }
+        }
+      } catch (err) {
+        console.error("Error clearing Firestore database:", err);
+      }
+    }
+    
+    // Clear local storage
+    setLocal(STORAGE_KEYS.STOCK_IN, []);
+    setLocal(STORAGE_KEYS.STOCK_OUT, []);
+    return true;
   }
 };

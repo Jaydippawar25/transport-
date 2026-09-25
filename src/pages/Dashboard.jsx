@@ -13,7 +13,8 @@ import {
   Printer,
   Calendar,
   Layers,
-  Search
+  Search,
+  Trash2
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -36,6 +37,7 @@ export default function Dashboard() {
   const [selectedLr, setSelectedLr] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [isSeeding, setIsSeeding] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
@@ -62,6 +64,15 @@ export default function Dashboard() {
     await dataService.seedDatabase();
     await loadData();
     setIsSeeding(false);
+  };
+
+  const handleClearData = async () => {
+    if (window.confirm("Are you sure you want to delete ALL Stock In and Stock Out records? This cannot be undone.")) {
+      setIsClearing(true);
+      await dataService.clearDatabase();
+      await loadData();
+      setIsClearing(false);
+    }
   };
 
   // Helper date matching (Today)
@@ -150,6 +161,14 @@ export default function Dashboard() {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleClearData}
+            disabled={isClearing}
+            className="flex items-center gap-2 px-3.5 py-2 bg-red-600/90 hover:bg-red-600 text-white text-xs font-semibold rounded-xl border border-red-400/30 transition-all shadow-md cursor-pointer"
+          >
+            <Trash2 className="w-4 h-4" />
+            {isClearing ? 'Clearing...' : 'Clear All Data'}
+          </button>
           <button
             onClick={handleSeedData}
             disabled={isSeeding}
