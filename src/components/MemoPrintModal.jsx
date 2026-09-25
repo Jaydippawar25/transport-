@@ -135,19 +135,19 @@ export default function MemoPrintModal({ memo, onClose }) {
                         : '' }
                   </td>
                 </tr>
-                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                <tr className="font-bold bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-right">FREIGHT</td>
                   <td colSpan={3} className="py-1.5 px-1 text-center">{memo.freight ? Number(memo.freight).toLocaleString('en-IN') : ''}</td>
                 </tr>
-                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                <tr className="font-bold bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-right">LOADING CHARGES</td>
                   <td colSpan={3} className="py-1.5 px-1 text-center">{memo.loadingCharges ? Number(memo.loadingCharges).toLocaleString('en-IN') : ''}</td>
                 </tr>
-                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                <tr className="font-bold bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-right">OTHER CHARGES</td>
                   <td colSpan={3} className="py-1.5 px-1 text-center">{memo.otherCharges ? Number(memo.otherCharges).toLocaleString('en-IN') : ''}</td>
                 </tr>
-                <tr className="font-bold border-t-2 border-black bg-slate-100">
+                <tr className="font-bold bg-slate-100">
                   <td colSpan={7} className="border-r border-black py-1.5 px-2 text-right">G. TOTAL</td>
                   <td colSpan={3} className="py-1.5 px-1 text-center">
                     { (Number(memo.freight || 0) + Number(memo.loadingCharges || 0) + Number(memo.otherCharges || 0)) > 0 
