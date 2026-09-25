@@ -439,9 +439,9 @@ export default function StockIn() {
                 <input
                   type="text"
                   required
+                  readOnly
                   value={formData.lrNo}
-                  onChange={(e) => setFormData({ ...formData, lrNo: e.target.value })}
-                  className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900"
+                  className="w-full mt-1 p-2 bg-slate-100 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900 cursor-not-allowed"
                 />
               </div>
             </div>
