@@ -33,8 +33,9 @@ const LoadingMemoView = ({ memo, onClose }) => {
   const formattedDate = new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN');
 
   return (
-    <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-200 font-serif text-black relative print:p-0 print:border-none print:shadow-none">
-      <div className="absolute top-4 right-4 flex items-center gap-3 print:hidden">
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto print:static print:bg-transparent print:backdrop-blur-none print:z-auto print:p-0">
+      <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-200 font-serif text-black relative w-full max-w-5xl my-auto print:p-0 print:border-none print:shadow-none">
+        <div className="absolute top-4 right-4 flex items-center gap-3 print:hidden">
         {onClose && (
           <button 
             onClick={onClose}
@@ -197,6 +198,7 @@ const LoadingMemoView = ({ memo, onClose }) => {
       </div>
       </div>
     </div>
+    </div>
   );
 };
 
@@ -210,6 +212,7 @@ export default function StockOut() {
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [editingMemoId, setEditingMemoId] = useState(null);
   const [originalLinkedLrNos, setOriginalLinkedLrNos] = useState([]);
+  const [viewMemoData, setViewMemoData] = useState(null);
 
   // Search & Filter for stock out table
   const [searchTerm, setSearchTerm] = useState('');
@@ -928,9 +931,6 @@ export default function StockOut() {
       </div>
 
             {/* STOCK OUT CONTENT AREA */}
-      {filteredMemos.length === 1 && searchTerm.trim() !== '' ? (
-        <LoadingMemoView memo={filteredMemos[0]} onClose={() => setSearchTerm('')} />
-      ) : (
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
@@ -994,7 +994,7 @@ export default function StockOut() {
                     <td className="p-3 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <button
-                          onClick={() => setSearchTerm(memo.memoNo)}
+                          onClick={() => setViewMemoData(memo)}
                           className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors cursor-pointer"
                           title={`View Memo #${memo.memoNo}`}
                         >
@@ -1042,13 +1042,13 @@ export default function StockOut() {
           </table>
         </div>
       </div>
-      )}
       </>
       )}
 
 
 
       {/* Print Modal */}
+      {viewMemoData && <LoadingMemoView memo={viewMemoData} onClose={() => setViewMemoData(null)} />}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
       {selectedMemo && <MemoPrintModal memo={selectedMemo} onClose={() => setSelectedMemo(null)} />}
 
