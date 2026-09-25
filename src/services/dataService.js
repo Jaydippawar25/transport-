@@ -243,6 +243,77 @@ export const dataService = {
     return newMemo;
   },
 
+  async updateStockOut(id, memoData, originalLinkedLrNos = []) {
+    const formattedData = {
+      ...memoData,
+      totalPackages: Number(memoData.totalPackages || 0),
+      totalToPay: Number(memoData.totalToPay || 0),
+      totalPaid: Number(memoData.totalPaid || 0),
+      updatedAt: new Date().toISOString()
+    };
+
+    const newLinkedLrNos = memoData.entries.map(e => e.lrNo);
+
+    if (isFirebaseConfigured && db) {
+      try {
+        const batch = writeBatch(db);
+        const memoDocRef = doc(db, 'stockOut', id);
+        batch.update(memoDocRef, formattedData);
+
+        // Reset removed LRs
+        const removedLrNos = originalLinkedLrNos.filter(lrNo => !newLinkedLrNos.includes(lrNo));
+        for (const lrNo of removedLrNos) {
+          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
+          const snap = await getDocs(q);
+          snap.forEach(document => {
+            batch.update(document.ref, { status: 'godown', memoNo: '' });
+          });
+        }
+
+        // Add new LRs
+        const addedLrNos = newLinkedLrNos.filter(lrNo => !originalLinkedLrNos.includes(lrNo));
+        for (const lrNo of addedLrNos) {
+          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
+          const snap = await getDocs(q);
+          snap.forEach(document => {
+            batch.update(document.ref, { status: 'dispatched', memoNo: formattedData.memoNo });
+          });
+        }
+
+        await batch.commit();
+        return { id, ...formattedData };
+      } catch (err) {
+        console.error("Firestore update stockOut batch error:", err);
+      }
+    }
+
+    // Local Storage Fallback
+    const currentMemos = getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
+    const idx = currentMemos.findIndex(m => m.id === id);
+    if (idx !== -1) {
+      currentMemos[idx] = { ...currentMemos[idx], ...formattedData };
+      setLocal(STORAGE_KEYS.STOCK_OUT, currentMemos);
+    }
+
+    // Update stockIn status locally
+    const currentStockIn = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    const removedLrNos = originalLinkedLrNos.filter(lrNo => !newLinkedLrNos.includes(lrNo));
+    const addedLrNos = newLinkedLrNos.filter(lrNo => !originalLinkedLrNos.includes(lrNo));
+    
+    const updatedStockIn = currentStockIn.map(item => {
+      if (removedLrNos.includes(item.lrNo)) {
+        return { ...item, status: 'godown', memoNo: '' };
+      }
+      if (addedLrNos.includes(item.lrNo)) {
+        return { ...item, status: 'dispatched', memoNo: formattedData.memoNo };
+      }
+      return item;
+    });
+    setLocal(STORAGE_KEYS.STOCK_IN, updatedStockIn);
+
+    return { id, ...formattedData };
+  },
+
   // -------------------------------------------------------------
   // STATIONS
   // -------------------------------------------------------------

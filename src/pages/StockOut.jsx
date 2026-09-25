@@ -14,7 +14,9 @@ import {
   ArrowRight,
   Boxes,
   UserCheck,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Edit,
+  Eye
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
@@ -196,6 +198,8 @@ export default function StockOut() {
   const [showForm, setShowForm] = useState(true);
   const [selectedLr, setSelectedLr] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
+  const [editingMemoId, setEditingMemoId] = useState(null);
+  const [originalLinkedLrNos, setOriginalLinkedLrNos] = useState([]);
 
   // Search & Filter for stock out table
   const [searchTerm, setSearchTerm] = useState('');
@@ -385,6 +389,37 @@ export default function StockOut() {
   const totalTbb = memoEntries.reduce((sum, e) => sum + (e.tbb || 0), 0);
   const grandTotal = totalToPay + totalPaid + totalTbb;
 
+  const handleEditMemo = (memo) => {
+    setEditingMemoId(memo.id);
+    setFormData({
+      memoNo: memo.memoNo || '',
+      date: memo.date || new Date().toISOString().split('T')[0],
+      lorryNo: memo.lorryNo || '',
+      ownerName: memo.ownerName || '',
+      driverName: memo.driverName || '',
+      fromStation: memo.fromStation || 'SANGLI',
+      toStation: memo.toStation || '',
+      freight: memo.freight || '',
+      loadingCharges: memo.loadingCharges || '',
+      otherCharges: memo.otherCharges || ''
+    });
+    const lrIds = (memo.entries || []).map(e => e.id || e.lrNo);
+    setSelectedLrIds(lrIds);
+    setOriginalLinkedLrNos(memo.entries.map(e => e.lrNo));
+    
+    // Build customLrData from memo entries
+    const customData = {};
+    (memo.entries || []).forEach(e => {
+      customData[e.id || e.lrNo] = {
+        deliveryPerson: e.deliveryPerson || '',
+        paid: e.paid || 0,
+        toPay: e.toPay || 0
+      };
+    });
+    setCustomLrData(customData);
+    setShowForm(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.memoNo || !formData.lorryNo || !formData.driverName) {
@@ -418,8 +453,13 @@ export default function StockOut() {
         grandTotal
       };
 
-      const newMemo = await dataService.addStockOut(memoPayload);
-      alert(`Stock Out Memo ${formData.memoNo} created! Linked LRs marked as dispatched.`);
+      if (editingMemoId) {
+        await dataService.updateStockOut(editingMemoId, memoPayload, originalLinkedLrNos);
+        alert(`Stock Out Memo ${formData.memoNo} updated!`);
+      } else {
+        await dataService.addStockOut(memoPayload);
+        alert(`Stock Out Memo ${formData.memoNo} created! Linked LRs marked as dispatched.`);
+      }
 
       // Reset form
       setFormData({
@@ -436,6 +476,8 @@ export default function StockOut() {
       });
       setSelectedLrIds([]);
       setCustomLrData({});
+      setEditingMemoId(null);
+      setOriginalLinkedLrNos([]);
       setShowForm(false);
 
       await loadData();
@@ -829,7 +871,7 @@ export default function StockOut() {
               disabled={isSubmitting || memoEntries.length === 0}
               className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/30 cursor-pointer flex items-center gap-2"
             >
-              {isSubmitting ? 'Saving...' : 'Save & Print'}
+              {isSubmitting ? 'Saving...' : editingMemoId ? 'Update Memo' : 'Save & Print'}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -901,7 +943,7 @@ export default function StockOut() {
                 <th className="p-3 border-r border-slate-800 text-center">TOTAL LRs</th>
                 <th className="p-3 border-r border-slate-800 text-center w-16">TOTAL PKG</th>
                 <th className="p-3 border-r border-slate-800 text-right w-28">TOTAL AMOUNT (₹)</th>
-                <th className="p-3 text-center w-16">PRINT</th>
+                <th className="p-3 text-center w-24">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -940,13 +982,29 @@ export default function StockOut() {
                       </span>
                     </td>
                     <td className="p-3 text-center">
-                      <button
-                        onClick={() => setSelectedMemo(memo)}
-                        className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
-                        title={`Print Memo #${memo.memoNo}`}
-                      >
-                        <Printer className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => setSearchTerm(memo.memoNo)}
+                          className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors cursor-pointer"
+                          title={`View Memo #${memo.memoNo}`}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleEditMemo(memo)}
+                          className="p-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-lg transition-colors cursor-pointer"
+                          title={`Edit Memo #${memo.memoNo}`}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setSelectedMemo(memo)}
+                          className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                          title={`Print Memo #${memo.memoNo}`}
+                        >
+                          <Printer className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
