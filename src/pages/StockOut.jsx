@@ -478,11 +478,12 @@ export default function StockOut() {
         grandTotal
       };
 
+      let savedMemo;
       if (editingMemoId) {
-        await dataService.updateStockOut(editingMemoId, memoPayload, originalLinkedLrNos);
+        savedMemo = await dataService.updateStockOut(editingMemoId, memoPayload, originalLinkedLrNos);
         alert(`Stock Out Memo ${formData.memoNo} updated!`);
       } else {
-        await dataService.addStockOut(memoPayload);
+        savedMemo = await dataService.addStockOut(memoPayload);
         alert(`Stock Out Memo ${formData.memoNo} created! Linked LRs marked as dispatched.`);
       }
 
@@ -506,7 +507,7 @@ export default function StockOut() {
       setShowForm(false);
 
       await loadData();
-      setSelectedMemo(newMemo);
+      if (savedMemo) setSelectedMemo(savedMemo);
     } catch (err) {
       console.error("Save Stock Out error:", err);
       alert("Error saving Stock Out Memo.");
