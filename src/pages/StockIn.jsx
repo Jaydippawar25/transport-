@@ -48,7 +48,7 @@ export default function StockIn() {
 
   // Form State matching spreadsheet input fields
   const [formData, setFormData] = useState({
-    lrNo: `SNG/${Math.floor(12000 + Math.random() * 9000)}`,
+    lrNo: `SNG/${1}`,
     date: new Date().toISOString().split('T')[0],
     transporterName: '',
     memoNo: '',
@@ -108,7 +108,7 @@ export default function StockIn() {
             return num > max ? num : max;
           }
           return max;
-        }, 12000);
+        }, 0);
         
         setFormData(prev => ({
           ...prev,
@@ -222,7 +222,7 @@ export default function StockIn() {
       if (!editingId) {
         const safeLrNo = String(formData.lrNo || '');
         const currentMatch = safeLrNo.match(/\d+/);
-        const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : Math.floor(12000 + Math.random() * 9000);
+        const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : 1;
         nextLrNo = `${getStationPrefix('SANGLI')}/${nextNum}`;
       } else {
         // If we just finished editing, find the true max LR number to resume auto-increment
@@ -234,7 +234,7 @@ export default function StockIn() {
             return num > max ? num : max;
           }
           return max;
-        }, 12000);
+        }, 0);
         nextLrNo = `${getStationPrefix('SANGLI')}/${maxLr + 1}`;
       }
 
