@@ -52,15 +52,15 @@ export default function MemoPrintModal({ memo, onClose }) {
             
             {/* Header */}
             <div className="flex justify-between items-start border-b-2 border-black pb-2 mb-2">
-              <div className="w-1/3">
-                <div className="text-[10px] uppercase font-bold text-slate-700">SUBJECT TO ICHALKARANJI JURISDICTION</div>
+              <div className="w-1/4">
+                <div className="text-[10px] uppercase font-bold text-slate-700 pr-2">SUBJECT TO ICHALKARANJI JURISDICTION</div>
               </div>
-              <div className="w-1/3 text-center">
-                <h1 className="text-3xl font-black tracking-wider uppercase text-black" style={{ textShadow: '1px 1px 0px #ea580c, -1px -1px 0px #0284c7' }}>
+              <div className="w-2/4 text-center">
+                <h1 className="text-3xl font-serif font-black tracking-wider uppercase text-black whitespace-nowrap" style={{ textShadow: '1.5px 1.5px 0px #ea580c, -1.5px -1.5px 0px #0284c7' }}>
                   ROYAL ROADLINES
                 </h1>
               </div>
-              <div className="w-1/3 text-[9px] text-right leading-tight">
+              <div className="w-1/4 text-[8.5px] text-right leading-tight pl-2">
                 <div className="font-bold text-[11px] mb-0.5">GSTIN : 27MOJPS8633C1ZC</div>
                 <div>MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449. SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School,Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272</div>
               </div>
