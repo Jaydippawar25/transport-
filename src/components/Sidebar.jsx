@@ -8,7 +8,8 @@ import {
   BarChart3, 
   LogOut,
   Boxes,
-  X
+  X,
+  Calculator
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -26,6 +27,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { label: 'Stock In (LR Entry)', path: '/stock-in', icon: PackagePlus },
     { label: 'Stock Out (Memo)', path: '/stock-out', icon: Truck },
     { label: 'Masters (Drop Box)', path: '/masters', icon: FolderKanban },
+    { label: 'Accounting', path: '/accounting', icon: Calculator },
     { label: 'Reports', path: '/reports', icon: BarChart3 }
   ];
 

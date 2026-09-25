@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import StockIn from './pages/StockIn';
 import StockOut from './pages/StockOut';
 import Reports from './pages/Reports';
+import Accounting from './pages/Accounting';
 import Masters from './pages/Masters';
 import Login from './pages/Login';
 import LRPrintModal from './components/LRPrintModal';
@@ -76,6 +77,7 @@ export default function App() {
             <Route path="/stock-out" element={<AuthenticatedRoute><StockOut /></AuthenticatedRoute>} />
             <Route path="/masters" element={<AuthenticatedRoute><Masters /></AuthenticatedRoute>} />
             <Route path="/reports" element={<AuthenticatedRoute><Reports /></AuthenticatedRoute>} />
+            <Route path="/accounting" element={<AuthenticatedRoute><Accounting /></AuthenticatedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
