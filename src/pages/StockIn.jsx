@@ -817,7 +817,7 @@ export default function StockIn() {
           />
         </div>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Date:</span>
             <select
