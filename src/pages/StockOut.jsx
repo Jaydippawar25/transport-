@@ -481,10 +481,8 @@ export default function StockOut() {
       let savedMemo;
       if (editingMemoId) {
         savedMemo = await dataService.updateStockOut(editingMemoId, memoPayload, originalLinkedLrNos);
-        alert(`Stock Out Memo ${formData.memoNo} updated!`);
       } else {
         savedMemo = await dataService.addStockOut(memoPayload);
-        alert(`Stock Out Memo ${formData.memoNo} created! Linked LRs marked as dispatched.`);
       }
 
       // Reset form
