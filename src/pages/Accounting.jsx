@@ -37,7 +37,8 @@ export default function Accounting() {
     reportData = filteredMemos.map(m => {
       const income = Number(m.grandTotal || 0);
       const expense = Number(m.freight || 0) + Number(m.loadingCharges || 0) + Number(m.otherCharges || 0);
-      const profit = income - expense;
+      const commission = Math.round(income * 0.17);
+      const profit = income - expense - commission;
       return {
         id: m.id || m.memoNo,
         label: m.memoNo,
@@ -51,7 +52,7 @@ export default function Accounting() {
         loading: Number(m.loadingCharges || 0),
         other: Number(m.otherCharges || 0),
         totalExpense: expense,
-        commission: profit,
+        commission: commission,
         profit: profit
       };
     });
@@ -73,7 +74,8 @@ export default function Accounting() {
       }
       const income = Number(m.grandTotal || 0);
       const expense = Number(m.freight || 0) + Number(m.loadingCharges || 0) + Number(m.otherCharges || 0);
-      const profit = income - expense;
+      const commission = Math.round(income * 0.17);
+      const profit = income - expense - commission;
 
       stationMap[st].memoCount += 1;
       stationMap[st].toPay += Number(m.totalToPay || 0);
@@ -84,7 +86,7 @@ export default function Accounting() {
       stationMap[st].loading += Number(m.loadingCharges || 0);
       stationMap[st].other += Number(m.otherCharges || 0);
       stationMap[st].totalExpense += expense;
-      stationMap[st].commission += profit;
+      stationMap[st].commission += commission;
       stationMap[st].profit += profit;
     });
     reportData = Object.values(stationMap).sort((a,b) => a.label.localeCompare(b.label));
@@ -95,6 +97,7 @@ export default function Accounting() {
   const gtPaid = reportData.reduce((sum, r) => sum + r.paid, 0);
   const gtIncome = reportData.reduce((sum, r) => sum + r.totalIncome, 0);
   const gtExpense = reportData.reduce((sum, r) => sum + r.totalExpense, 0);
+  const gtCommission = reportData.reduce((sum, r) => sum + r.commission, 0);
   const gtProfit = reportData.reduce((sum, r) => sum + r.profit, 0);
 
   if (loading) {
@@ -147,7 +150,7 @@ export default function Accounting() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Income (Total Amount)</h3>
           <div className="text-3xl font-black text-emerald-600 flex items-center">
@@ -167,11 +170,19 @@ export default function Accounting() {
           </div>
         </div>
 
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Commission (17%)</h3>
+          <div className="text-3xl font-black text-orange-600 flex items-center">
+            <IndianRupee className="w-6 h-6 mr-1 opacity-50" />
+            {gtCommission.toLocaleString('en-IN')}
+          </div>
+        </div>
+
         <div className="bg-slate-900 p-6 rounded-2xl shadow-lg border border-slate-800 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <Calculator className="w-24 h-24" />
           </div>
-          <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-2 relative z-10">Total Profit / Commission</h3>
+          <h3 className="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-2 relative z-10">Total Profit / Loss</h3>
           <div className="text-4xl font-black text-white flex items-center relative z-10">
             <IndianRupee className="w-8 h-8 mr-1 opacity-70" />
             {gtProfit.toLocaleString('en-IN')}
@@ -194,13 +205,14 @@ export default function Accounting() {
                 <th className="p-3 border-r border-slate-800 text-right bg-rose-900/30 text-rose-300">Freight</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-rose-900/30 text-rose-300">Loading/Other</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-rose-900/50 text-rose-300 font-black">TOTAL EXPENSE</th>
-                <th className="p-3 text-right text-indigo-300 font-black">PROFIT / COMMISSION</th>
+                <th className="p-3 border-r border-slate-800 text-right text-orange-300 font-black">COMMISSION</th>
+                <th className="p-3 text-right text-indigo-300 font-black">PROFIT / LOSS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {reportData.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="p-8 text-center text-slate-500 font-medium">No records found.</td>
+                  <td colSpan={12} className="p-8 text-center text-slate-500 font-medium">No records found.</td>
                 </tr>
               ) : (
                 reportData.map((row, idx) => (
@@ -220,6 +232,7 @@ export default function Accounting() {
                     <td className="p-3 border-r border-slate-100 text-right font-mono text-rose-700">{(row.loading + row.other).toLocaleString('en-IN')}</td>
                     <td className="p-3 border-r border-slate-100 text-right font-mono font-black text-rose-600 bg-rose-50/50">{row.totalExpense.toLocaleString('en-IN')}</td>
                     
+                    <td className="p-3 border-r border-slate-100 text-right font-mono font-black text-orange-600 bg-orange-50/50">{row.commission.toLocaleString('en-IN')}</td>
                     <td className={`p-3 text-right font-mono font-black ${row.profit >= 0 ? 'text-indigo-600 bg-indigo-50/50' : 'text-rose-600 bg-rose-50'}`}>
                       {row.profit >= 0 ? '+' : ''}{row.profit.toLocaleString('en-IN')}
                     </td>
@@ -246,6 +259,7 @@ export default function Accounting() {
                   </td>
                   <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-rose-400">{gtExpense.toLocaleString('en-IN')}</td>
                   
+                  <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-orange-400">{gtCommission.toLocaleString('en-IN')}</td>
                   <td className={`p-3 text-right font-mono font-black ${gtProfit >= 0 ? 'text-indigo-300' : 'text-rose-400'}`}>
                     {gtProfit >= 0 ? '+' : ''}{gtProfit.toLocaleString('en-IN')}
                   </td>
