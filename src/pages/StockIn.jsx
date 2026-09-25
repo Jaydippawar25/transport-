@@ -45,6 +45,7 @@ export default function StockIn() {
   const [searchTerm, setSearchTerm] = useState('');
   const [stationFilter, setStationFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [dateFilter, setDateFilter] = useState('TODAY');
 
   // Form State matching spreadsheet input fields
   const [formData, setFormData] = useState({
@@ -325,7 +326,38 @@ export default function StockIn() {
     const matchesStation = stationFilter === 'ALL' || item.toStation === stationFilter || item.fromStation === stationFilter;
     const matchesStatus = statusFilter === 'ALL' || item.status === statusFilter;
 
-    return matchesSearch && matchesStation && matchesStatus;
+    let matchesDate = true;
+    if (dateFilter !== 'ALL') {
+      const d = new Date(item.date || item.createdAt);
+      if (!isNaN(d.getTime())) {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        const currentDate = now.getDate();
+
+        if (dateFilter === 'TODAY') {
+          if (d.getDate() !== currentDate || d.getMonth() !== currentMonth || d.getFullYear() !== currentYear) {
+            matchesDate = false;
+          }
+        } else if (dateFilter === 'THIS_MONTH') {
+          if (d.getMonth() !== currentMonth || d.getFullYear() !== currentYear) {
+            matchesDate = false;
+          }
+        } else if (dateFilter === 'LAST_MONTH') {
+          const lastMonth = new Date(currentYear, currentMonth - 1, 1);
+          if (d.getMonth() !== lastMonth.getMonth() || d.getFullYear() !== lastMonth.getFullYear()) {
+            matchesDate = false;
+          }
+        } else if (dateFilter === 'THIS_FY') {
+          const fyStartYear = currentMonth >= 3 ? currentYear : currentYear - 1;
+          const fyStart = new Date(fyStartYear, 3, 1);
+          const fyEnd = new Date(fyStartYear + 1, 2, 31, 23, 59, 59);
+          if (d < fyStart || d > fyEnd) matchesDate = false;
+        }
+      }
+    }
+
+    return matchesSearch && matchesStation && matchesStatus && matchesDate;
   });
 
   // Calculate Table Summary Totals
@@ -785,9 +817,24 @@ export default function StockIn() {
           />
         </div>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto overflow-x-auto">
+        <div className="flex items-center gap-3 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-slate-500">Station:</span>
+            <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Date:</span>
+            <select
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800"
+            >
+              <option value="TODAY">Today</option>
+              <option value="THIS_MONTH">This Month</option>
+              <option value="LAST_MONTH">Last Month</option>
+              <option value="THIS_FY">This Financial Year</option>
+              <option value="ALL">All Time</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Station:</span>
             <select
               value={stationFilter}
               onChange={(e) => setStationFilter(e.target.value)}
