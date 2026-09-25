@@ -16,7 +16,9 @@ import {
   Truck,
   User,
   MapPin,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Edit,
+  Eye
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
@@ -889,7 +891,7 @@ export default function StockIn() {
                 <th className="p-3 border-r border-slate-800 text-right w-28">TO PAY (₹)</th>
                 <th className="p-3 border-r border-slate-800 text-right w-28">PAID (₹)</th>
                 <th className="p-3 border-r border-slate-800 text-right w-28">T.B.B (₹)</th>
-                <th className="p-3 text-center w-16">PRINT</th>
+                <th className="p-3 text-center w-28">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -972,16 +974,38 @@ export default function StockIn() {
                         )}
                       </td>
                       <td className="p-3 text-center">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedLr(item);
-                          }}
-                          className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
-                          title="Print / View LR"
-                        >
-                          <Printer className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedLr(item);
+                            }}
+                            className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors cursor-pointer"
+                            title="View LR"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEdit(item);
+                            }}
+                            className="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg transition-colors cursor-pointer"
+                            title="Edit LR"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedLr(item);
+                            }}
+                            className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                            title="Print LR"
+                          >
+                            <Printer className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
