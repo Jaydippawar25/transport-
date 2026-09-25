@@ -197,9 +197,9 @@ const LoadingMemoView = ({ memo, onClose }) => {
 
 const getMemoPrefix = (station) => {
   const s = (station || '').toUpperCase();
-  if (s === 'SANGLI') return 'SNGM-';
-  if (s === 'PUNE') return 'PUNM-';
-  return s ? (s.substring(0, 3).toUpperCase() + 'M-') : 'LM-';
+  if (s === 'SANGLI') return 'SNG-';
+  if (s === 'PUNE') return 'PUN-';
+  return s ? (s.substring(0, 3).toUpperCase() + '-') : 'LM-';
 };
 
 export default function StockOut() {
@@ -220,7 +220,7 @@ export default function StockOut() {
 
   // Form state (Matching spreadsheet header fields)
   const [formData, setFormData] = useState({
-    memoNo: `${getMemoPrefix('SANGLI')}${Math.floor(10000 + Math.random() * 90000)}`,
+    memoNo: `${getMemoPrefix('')}${Math.floor(10000 + Math.random() * 90000)}`,
     date: new Date().toISOString().split('T')[0],
     lorryNo: '',
     ownerName: '',
@@ -433,15 +433,15 @@ export default function StockOut() {
     setShowForm(true);
   };
 
-  const handleFromStationChange = (station) => {
+  const handleToStationChange = (station) => {
     if (!editingMemoId) {
       // Keep existing numeric part if it exists, or generate a new one
       const currentParts = formData.memoNo.split('-');
       const currentNum = currentParts.length > 1 ? currentParts[1] : Math.floor(10000 + Math.random() * 90000);
       const prefix = getMemoPrefix(station);
-      setFormData({ ...formData, fromStation: station, memoNo: `${prefix}${currentNum}` });
+      setFormData({ ...formData, toStation: station, memoNo: `${prefix}${currentNum}` });
     } else {
-      setFormData({ ...formData, fromStation: station });
+      setFormData({ ...formData, toStation: station });
     }
   };
 
@@ -488,7 +488,7 @@ export default function StockOut() {
 
       // Reset form
       setFormData({
-        memoNo: `${getMemoPrefix('SANGLI')}${Math.floor(10000 + Math.random() * 90000)}`,
+        memoNo: `${getMemoPrefix('')}${Math.floor(10000 + Math.random() * 90000)}`,
         date: new Date().toISOString().split('T')[0],
         lorryNo: '',
         ownerName: '',
@@ -646,7 +646,7 @@ export default function StockOut() {
               <select
                 required
                 value={formData.fromStation}
-                onChange={(e) => handleFromStationChange(e.target.value)}
+                onChange={(e) => setFormData({ ...formData, fromStation: e.target.value })}
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
               >
                 <option value="">Select Station</option>
@@ -660,7 +660,7 @@ export default function StockOut() {
               <label className="text-[11px] font-bold text-slate-700">TO (Destination Station)</label>
               <select
                 value={formData.toStation}
-                onChange={(e) => setFormData({ ...formData, toStation: e.target.value })}
+                onChange={(e) => handleToStationChange(e.target.value)}
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
               >
                 <option value="">Select Station</option>
