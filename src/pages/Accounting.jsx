@@ -8,6 +8,8 @@ export default function Accounting() {
   const [viewType, setViewType] = useState('memo'); // 'memo' or 'station'
   const [selectedStation, setSelectedStation] = useState('ALL');
   const [dateFilter, setDateFilter] = useState('ALL');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
@@ -39,7 +41,19 @@ export default function Accounting() {
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth();
 
-      if (dateFilter === 'THIS_MONTH') {
+      if (dateFilter === 'CUSTOM') {
+        if (!customStartDate && !customEndDate) return true;
+        const targetTime = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+        let startMatch = true;
+        let endMatch = true;
+        if (customStartDate) {
+          startMatch = targetTime >= new Date(customStartDate).getTime();
+        }
+        if (customEndDate) {
+          endMatch = targetTime <= new Date(customEndDate).getTime();
+        }
+        if (!startMatch || !endMatch) return false;
+      } else if (dateFilter === 'THIS_MONTH') {
         if (d.getMonth() !== currentMonth || d.getFullYear() !== currentYear) return false;
       } else if (dateFilter === 'LAST_MONTH') {
         const lastMonth = new Date(currentYear, currentMonth - 1, 1);
@@ -156,7 +170,26 @@ export default function Accounting() {
             <option value="LAST_MONTH">Last Month</option>
             <option value="THIS_FY">This Financial Year (Apr-Mar)</option>
             <option value="LAST_FY">Last Financial Year</option>
+            <option value="CUSTOM">Custom Date</option>
           </select>
+
+          {dateFilter === 'CUSTOM' && (
+            <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border-2 border-slate-200 shadow-sm">
+              <input
+                type="date"
+                value={customStartDate}
+                onChange={(e) => setCustomStartDate(e.target.value)}
+                className="text-sm font-bold text-slate-700 outline-none bg-transparent"
+              />
+              <span className="text-xs text-slate-400 font-bold">to</span>
+              <input
+                type="date"
+                value={customEndDate}
+                onChange={(e) => setCustomEndDate(e.target.value)}
+                className="text-sm font-bold text-slate-700 outline-none bg-transparent"
+              />
+            </div>
+          )}
 
           <select
             value={selectedStation}
