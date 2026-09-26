@@ -46,7 +46,8 @@ export default function Masters() {
     { key: 'consignees', label: 'Consignees', icon: Store, color: 'indigo' },
     { key: 'vehicles', label: 'Vehicles / Lorry No', icon: Truck, color: 'emerald' },
     { key: 'stations', label: 'Stations', icon: MapPin, color: 'amber' },
-    { key: 'drivers', label: 'Drivers', icon: User, color: 'violet' }
+    { key: 'drivers', label: 'Drivers', icon: User, color: 'violet' },
+    { key: 'transportAgents', label: 'Transport Agents', icon: ShieldCheck, color: 'cyan' }
   ];
 
   const loadMasters = async () => {
@@ -288,7 +289,7 @@ export default function Masters() {
                       <th className="py-3.5 px-4 sm:px-6">Name</th>
                       <th className="py-3.5 px-4 sm:px-6">Address</th>
                       <th className="py-3.5 px-4 sm:px-6">Mobile No</th>
-                      {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transporters') && (
+                      {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transportAgents') && (
                         <th className="py-3.5 px-4 sm:px-6">GSTIN No</th>
                       )}
                     </>
@@ -321,7 +322,7 @@ export default function Masters() {
                         </td>
                         <td className="py-4 px-4 sm:px-6 text-slate-600 text-xs max-w-xs truncate">{item.address || '-'}</td>
                         <td className="py-4 px-4 sm:px-6 font-mono text-xs text-slate-600">{item.mobile || '-'}</td>
-                        {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transporters') && (
+                        {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transportAgents') && (
                           <td className="py-4 px-4 sm:px-6 font-mono text-xs text-blue-700 font-medium">
                             {item.gstin || '-'}
                           </td>
@@ -458,7 +459,7 @@ export default function Masters() {
                     />
                   </div>
 
-                  {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transporters') && (
+                  {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transportAgents') && (
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                         GSTIN No
