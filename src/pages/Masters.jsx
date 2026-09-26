@@ -46,9 +46,7 @@ export default function Masters() {
     { key: 'consignees', label: 'Consignees', icon: Store, color: 'indigo' },
     { key: 'vehicles', label: 'Vehicles / Lorry No', icon: Truck, color: 'emerald' },
     { key: 'stations', label: 'Stations', icon: MapPin, color: 'amber' },
-    { key: 'deliveryPersons', label: 'Delivery Persons', icon: UserCheck, color: 'cyan' },
-    { key: 'drivers', label: 'Drivers', icon: User, color: 'violet' },
-    { key: 'transporters', label: 'Transporters', icon: ShieldCheck, color: 'rose' }
+    { key: 'drivers', label: 'Drivers', icon: User, color: 'violet' }
   ];
 
   const loadMasters = async () => {
