@@ -281,13 +281,13 @@ export default function StockOut() {
   }, []);
 
   // Toggle selection of pending LR & initialize custom amounts + delivery person
-  const toggleLrSelection = (id) => {
-    if (selectedLrIds.includes(id)) {
-      setSelectedLrIds(selectedLrIds.filter(item => item !== id));
+  const toggleLrSelection = (lr) => {
+    const isSelected = selectedLrIds.includes(lr.id) || selectedLrIds.includes(lr.lrNo);
+    if (isSelected) {
+      setSelectedLrIds(selectedLrIds.filter(item => item !== lr.id && item !== lr.lrNo));
     } else {
-      setSelectedLrIds([...selectedLrIds, id]);
-      const lr = pendingLrs.find(l => l.id === id);
-      if (lr && !customLrData[lr.lrNo]) {
+      setSelectedLrIds([...selectedLrIds, lr.id]);
+      if (!customLrData[lr.lrNo]) {
         setCustomLrData(prev => ({
           ...prev,
           [lr.lrNo]: {
@@ -422,7 +422,10 @@ export default function StockOut() {
       loadingCharges: memo.loadingCharges || '',
       otherCharges: memo.otherCharges || ''
     });
-    const lrIds = (memo.entries || []).map(e => e.id || e.lrNo);
+    const lrIds = (memo.entries || []).map(e => {
+      const match = allStockIn.find(l => l.lrNo === e.lrNo);
+      return match ? match.id : (e.id || e.lrNo);
+    });
     setSelectedLrIds(lrIds);
     setOriginalLinkedLrNos(memo.entries.map(e => e.lrNo));
     
@@ -743,11 +746,11 @@ export default function StockOut() {
             ) : (
               <div className="flex flex-col gap-2 max-h-60 overflow-y-auto p-1 border border-slate-200 rounded-xl bg-slate-50/50">
                 {filteredPendingLrs.map((lr) => {
-                  const isSelected = selectedLrIds.includes(lr.id);
+                  const isSelected = selectedLrIds.includes(lr.id) || selectedLrIds.includes(lr.lrNo);
                   return (
                     <div
                       key={lr.id}
-                      onClick={() => toggleLrSelection(lr.id)}
+                      onClick={() => toggleLrSelection(lr)}
                       className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                         isSelected 
                           ? 'bg-emerald-50 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20' 
