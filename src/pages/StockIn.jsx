@@ -108,6 +108,7 @@ export default function StockIn() {
           const match = String(item.lrNo).match(/\d+/);
           if (match) {
             const num = parseInt(match[0], 10);
+            if (num >= 10000) return max; // Ignore legacy series to allow fresh start
             return num > max ? num : max;
           }
           return max;
@@ -234,6 +235,7 @@ export default function StockIn() {
           const match = String(item.lrNo).match(/\d+/);
           if (match) {
             const num = parseInt(match[0], 10);
+            if (num >= 10000) return max; // Ignore legacy series to allow fresh start
             return num > max ? num : max;
           }
           return max;
