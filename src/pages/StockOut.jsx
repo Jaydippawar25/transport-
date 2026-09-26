@@ -204,7 +204,7 @@ const getMemoPrefix = (station) => {
 
 export default function StockOut() {
   const [stockOutList, setStockOutList] = useState([]);
-  const [pendingLrs, setPendingLrs] = useState([]);
+  const [allStockIn, setAllStockIn] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(true);
@@ -257,9 +257,8 @@ export default function StockOut() {
       setStockOutList(outData);
       if (masterData) setMasters(masterData);
       
-      // LRs sitting in godown available for stock out
-      const inGodown = inData.filter(item => item.status === 'in-godown');
-      setPendingLrs(inGodown);
+      // LRs sitting in godown + previously dispatched LRs for edit mode
+      setAllStockIn(inData);
     } catch (err) {
       console.error("Error loading stock out data:", err);
     } finally {
@@ -359,6 +358,13 @@ export default function StockOut() {
     }));
   };
 
+  // Determine available LRs for dispatch: 'in-godown' plus any currently linked to the memo being edited
+  const pendingLrs = allStockIn.filter(lr => {
+    if (lr.status === 'in-godown') return true;
+    if (editingMemoId && originalLinkedLrNos.includes(lr.lrNo)) return true;
+    return false;
+  });
+
   // Filter pending LRs by search term
   const filteredPendingLrs = pendingLrs.filter(lr => {
     const term = lrSearchTerm.toLowerCase();
@@ -373,10 +379,10 @@ export default function StockOut() {
   });
 
   // Compile selected LRs into memo entries & compute running totals
-  const selectedLrObjects = pendingLrs.filter(l => selectedLrIds.includes(l.id));
+  const selectedLrObjects = pendingLrs.filter(l => selectedLrIds.includes(l.id) || selectedLrIds.includes(l.lrNo));
 
   const memoEntries = selectedLrObjects.map((lr, index) => {
-    const custom = customLrData[lr.lrNo] || {
+    const custom = customLrData[lr.id] || customLrData[lr.lrNo] || {
       deliveryPerson: 'Local Driver',
       toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : 0,
       paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : 0,
