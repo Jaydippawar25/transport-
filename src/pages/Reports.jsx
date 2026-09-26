@@ -23,8 +23,10 @@ export default function Reports() {
   // Active Report Section Tab ('STOCK_IN' | 'STOCK_OUT' | 'PENDING_STOCK')
   const [activeSection, setActiveSection] = useState('STOCK_IN');
 
-  // Date Range Filter ('ALL' | 'TODAY' | 'WEEK' | 'MONTH')
+  // Date Range Filter ('ALL' | 'TODAY' | 'WEEK' | 'MONTH' | 'CUSTOM')
   const [dateRange, setDateRange] = useState('ALL');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
 
   // Search filter
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,6 +58,23 @@ export default function Reports() {
     if (dateRange === 'ALL' || !dateStr) return true;
     const itemDate = new Date(dateStr);
     const now = new Date();
+
+    if (dateRange === 'CUSTOM') {
+      if (!customStartDate && !customEndDate) return true;
+      const d = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate()).getTime();
+      let startMatch = true;
+      let endMatch = true;
+      
+      if (customStartDate) {
+        const start = new Date(customStartDate).getTime();
+        startMatch = d >= start;
+      }
+      if (customEndDate) {
+        const end = new Date(customEndDate).getTime();
+        endMatch = d <= end;
+      }
+      return startMatch && endMatch;
+    }
 
     if (dateRange === 'TODAY') {
       return itemDate.toDateString() === now.toDateString();
@@ -288,7 +307,7 @@ export default function Reports() {
           <div className="flex flex-wrap items-center gap-3">
             {/* DATE RANGE SELECTOR */}
             <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
-              {['ALL', 'TODAY', 'WEEK', 'MONTH'].map((mode) => (
+              {['ALL', 'TODAY', 'WEEK', 'MONTH', 'CUSTOM'].map((mode) => (
                 <button
                   key={mode}
                   onClick={() => setDateRange(mode)}
@@ -298,10 +317,29 @@ export default function Reports() {
                       : 'text-slate-600 hover:text-slate-900 font-medium'
                   }`}
                 >
-                  {mode === 'ALL' ? 'All Time' : mode === 'TODAY' ? 'Today' : mode === 'WEEK' ? 'Last 7 Days' : 'This Month'}
+                  {mode === 'ALL' ? 'All Time' : mode === 'TODAY' ? 'Today' : mode === 'WEEK' ? 'Last 7 Days' : mode === 'MONTH' ? 'This Month' : 'Custom'}
                 </button>
               ))}
             </div>
+
+            {/* CUSTOM DATE INPUTS */}
+            {dateRange === 'CUSTOM' && (
+              <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="px-2 py-1.5 bg-white text-slate-900 text-xs font-medium rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-500"
+                />
+                <span className="text-xs text-slate-500 font-medium">to</span>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="px-2 py-1.5 bg-white text-slate-900 text-xs font-medium rounded-lg border border-slate-200 focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+            )}
 
             {/* SEARCH BAR */}
             <div className="relative w-full sm:w-64">
