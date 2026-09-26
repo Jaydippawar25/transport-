@@ -105,6 +105,20 @@ export default function Dashboard() {
     return sum;
   }, 0);
 
+  const todayFreightPaid = todayStockIn.reduce((sum, item) => {
+    if (item.paymentType === 'Paid') {
+      return sum + Number(item.charges?.total || 0);
+    }
+    return sum;
+  }, 0);
+
+  const todayFreightTBB = todayStockIn.reduce((sum, item) => {
+    if (item.paymentType === 'T.B.B') {
+      return sum + Number(item.charges?.total || 0);
+    }
+    return sum;
+  }, 0);
+
   // Compute 7-day Stock In vs Stock Out chart data
   const generate7DayData = () => {
     const days = [];
@@ -180,8 +194,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* 4 Metric Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 6 Metric Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         
         {/* Today's Stock In */}
         <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
@@ -260,6 +274,42 @@ export default function Dashboard() {
             </div>
             <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
               <TrendingUp className="w-3.5 h-3.5 text-purple-500" /> Receivable on delivery
+            </p>
+          </div>
+        </div>
+
+        {/* Today's Total Paid Freight */}
+        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Paid Freight</span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <IndianRupee className="w-5 h-5" />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 font-mono">₹{todayFreightPaid.toLocaleString('en-IN')}</span>
+            </div>
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Received at booking
+            </p>
+          </div>
+        </div>
+
+        {/* Today's Total T.B.B Freight */}
+        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's T.B.B Freight</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <IndianRupee className="w-5 h-5" />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 font-mono">₹{todayFreightTBB.toLocaleString('en-IN')}</span>
+            </div>
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <TrendingUp className="w-3.5 h-3.5 text-blue-500" /> Billed to company
             </p>
           </div>
         </div>
