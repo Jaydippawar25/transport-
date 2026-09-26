@@ -266,7 +266,7 @@ export const dataService = {
           const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
           const snap = await getDocs(q);
           snap.forEach(document => {
-            batch.update(document.ref, { status: 'godown', memoNo: '' });
+            batch.update(document.ref, { status: 'in-godown', memoNo: '' });
           });
         }
 
@@ -302,7 +302,7 @@ export const dataService = {
     
     const updatedStockIn = currentStockIn.map(item => {
       if (removedLrNos.includes(item.lrNo)) {
-        return { ...item, status: 'godown', memoNo: '' };
+        return { ...item, status: 'in-godown', memoNo: '' };
       }
       if (addedLrNos.includes(item.lrNo)) {
         return { ...item, status: 'dispatched', memoNo: formattedData.memoNo };

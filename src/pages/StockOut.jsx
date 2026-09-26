@@ -360,7 +360,7 @@ export default function StockOut() {
 
   // Determine available LRs for dispatch: 'in-godown' plus any currently linked to the memo being edited
   const pendingLrs = allStockIn.filter(lr => {
-    if (lr.status === 'in-godown') return true;
+    if (lr.status === 'in-godown' || lr.status === 'godown') return true;
     if (editingMemoId && originalLinkedLrNos.includes(lr.lrNo)) return true;
     return false;
   });
