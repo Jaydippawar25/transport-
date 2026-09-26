@@ -141,7 +141,7 @@ export default function Accounting() {
             Accounting & Profit/Loss Report
           </h1>
           <p className="text-sm text-slate-500 font-medium mt-1">
-            Track income (To Pay + Paid + T.B.B), expenses, and commission/profit
+            Track booking (To Pay + Paid + T.B.B), expenses, and commission/profit
           </p>
         </div>
 
@@ -192,7 +192,7 @@ export default function Accounting() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Income (Total Amount)</h3>
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Booking (Total Amount)</h3>
           <div className="text-3xl font-black text-emerald-600 flex items-center">
             <IndianRupee className="w-6 h-6 mr-1 opacity-50" />
             {gtIncome.toLocaleString('en-IN')}
@@ -241,7 +241,7 @@ export default function Accounting() {
                 <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/30 text-emerald-300">To Pay</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/30 text-emerald-300">Paid</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/30 text-emerald-300">T.B.B</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/50 text-emerald-300 font-black">TOTAL INCOME</th>
+                <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/50 text-emerald-300 font-black">TOTAL BOOKING</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-rose-900/30 text-rose-300">Freight</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-rose-900/30 text-rose-300">Loading/Other</th>
                 <th className="p-3 border-r border-slate-800 text-right bg-rose-900/50 text-rose-300 font-black">TOTAL EXPENSE</th>
