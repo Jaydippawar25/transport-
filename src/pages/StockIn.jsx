@@ -51,7 +51,7 @@ export default function StockIn() {
 
   // Form State matching spreadsheet input fields
   const [formData, setFormData] = useState({
-    lrNo: `SNG/${1}`,
+    lrNo: `SNG/00001`,
     date: new Date().toISOString().split('T')[0],
     transporterName: '',
     memoNo: '',
@@ -115,7 +115,7 @@ export default function StockIn() {
         
         setFormData(prev => ({
           ...prev,
-          lrNo: `${getStationPrefix(prev.toStation)}/${maxLr + 1}`
+          lrNo: `${getStationPrefix(prev.toStation)}/${String(maxLr + 1).padStart(5, '0')}`
         }));
       }
 
@@ -226,7 +226,7 @@ export default function StockIn() {
         const safeLrNo = String(formData.lrNo || '');
         const currentMatch = safeLrNo.match(/\d+/);
         const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : 1;
-        nextLrNo = `${getStationPrefix('SANGLI')}/${nextNum}`;
+        nextLrNo = `${getStationPrefix('SANGLI')}/${String(nextNum).padStart(5, '0')}`;
       } else {
         // If we just finished editing, find the true max LR number to resume auto-increment
         const maxLr = stockInList.reduce((max, item) => {
@@ -238,7 +238,7 @@ export default function StockIn() {
           }
           return max;
         }, 0);
-        nextLrNo = `${getStationPrefix('SANGLI')}/${maxLr + 1}`;
+        nextLrNo = `${getStationPrefix('SANGLI')}/${String(maxLr + 1).padStart(5, '0')}`;
       }
 
       // Reset form
@@ -453,7 +453,8 @@ export default function StockIn() {
                   onChange={(e) => {
                     const newStation = e.target.value;
                     const prefix = getStationPrefix(newStation);
-                    const currentNumber = formData.lrNo.match(/\d+/) ? formData.lrNo.match(/\d+/)[0] : '0000';
+                    const currentMatch = formData.lrNo.match(/\d+/);
+                    const currentNumber = currentMatch ? String(parseInt(currentMatch[0], 10)).padStart(5, '0') : '00001';
                     setFormData({ 
                       ...formData, 
                       toStation: newStation,
