@@ -968,6 +968,7 @@ export default function StockOut() {
               <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
                 <th className="p-3 border-r border-slate-800">Date</th>
+                <th className="p-3 border-r border-slate-800">MEMO NO.</th>
                 <th className="p-3 border-r border-slate-800">VEHICLE NO.</th>
                 <th className="p-3 border-r border-slate-800">DRIVER NAME</th>
                 <th className="p-3 border-r border-slate-800 text-center">TOTAL LRs</th>
@@ -979,7 +980,7 @@ export default function StockOut() {
             <tbody className="divide-y divide-slate-100">
               {filteredMemos.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-8 text-center text-xs text-slate-400">
+                  <td colSpan={9} className="p-8 text-center text-xs text-slate-400">
                     No Stock Out Memo records match your search criteria.
                   </td>
                 </tr>
@@ -993,6 +994,9 @@ export default function StockOut() {
                       <p className="text-xs font-semibold text-slate-800">
                         {new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN')}
                       </p>
+                    </td>
+                    <td className="p-3 border-r border-slate-100 font-semibold text-indigo-700 font-mono">
+                      {memo.memoNo}
                     </td>
                     <td className="p-3 border-r border-slate-100 font-semibold text-slate-900 font-mono">
                       {memo.lorryNo}
@@ -1044,7 +1048,7 @@ export default function StockOut() {
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
               <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                <td colSpan={4} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
+                <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
                   TOTALS:
                 </td>
                 <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-yellow-300">
