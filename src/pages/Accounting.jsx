@@ -148,10 +148,10 @@ export default function Accounting() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-            <Calculator className="w-8 h-8 text-indigo-600" />
+            <Calculator className="w-8 h-8 text-indigo-600 shrink-0" />
             Accounting & Profit/Loss Report
           </h1>
           <p className="text-sm text-slate-500 font-medium mt-1">
@@ -159,7 +159,7 @@ export default function Accounting() {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
