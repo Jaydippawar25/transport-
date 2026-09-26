@@ -802,13 +802,14 @@ export default function StockOut() {
                       <th className="px-1.5 py-3 border-r border-emerald-800 text-center w-[4%]">SR.</th>
                       <th className="px-2 py-3 border-r border-emerald-800 w-[12%]">L.R.NO.</th>
                       <th className="px-1 py-3 border-r border-emerald-800 text-center w-[5%]">PKG</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[18%] truncate">CONSIGNOR</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[18%] truncate">CONSIGNEE</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[6%]">WEIGHT</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[16%] truncate">CONSIGNOR</th>
+                      <th className="px-2 py-3 border-r border-emerald-800 w-[16%] truncate">CONSIGNEE</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[5%]">WEIGHT</th>
                       <th className="px-1 py-3 border-r border-emerald-800 text-center w-[10%]">STATION</th>
                       <th className="px-1 py-3 border-r border-emerald-800 text-center bg-amber-950/60 text-amber-300 w-[9%]">TO PAY</th>
                       <th className="px-1 py-3 border-r border-emerald-800 text-center bg-emerald-950/60 text-emerald-300 w-[9%]">PAID</th>
-                      <th className="px-1 py-3 text-center bg-blue-950/60 text-blue-300 w-[9%]">T.B.B</th>
+                      <th className="px-1 py-3 border-r border-emerald-800 text-center bg-blue-950/60 text-blue-300 w-[9%]">T.B.B</th>
+                      <th className="px-1 py-3 text-center bg-rose-950/60 text-rose-300 w-[5%]"><X className="w-3.5 h-3.5 mx-auto"/></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-emerald-200/60 bg-white">
@@ -847,7 +848,7 @@ export default function StockOut() {
                           </td>
 
                           {/* Editable T.B.B */}
-                          <td className="px-1 py-2 text-center bg-blue-50/30">
+                          <td className="px-1 py-2 border-r border-slate-200 text-center bg-blue-50/30">
                             <input
                               type="number"
                               min="0"
@@ -855,6 +856,18 @@ export default function StockOut() {
                               onChange={(evt) => handleLrDataChange(e.lrNo, 'tbb', evt.target.value)}
                               className="w-full text-center px-1 py-1.5 bg-white border border-blue-300 rounded-lg font-mono font-bold text-blue-900 text-xs focus:outline-none"
                             />
+                          </td>
+
+                          {/* NEW ACTION COLUMN */}
+                          <td className="px-1 py-2 text-center bg-rose-50/30">
+                            <button
+                              type="button"
+                              onClick={() => origLr && toggleLrSelection(origLr.id)}
+                              className="p-1.5 bg-white border border-rose-200 hover:bg-rose-100 text-rose-600 rounded-md transition-colors cursor-pointer mx-auto block shadow-sm"
+                              title="Remove LR from Memo"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
                           </td>
                         </tr>
                       );
@@ -868,7 +881,7 @@ export default function StockOut() {
                       <td className="px-1 py-3 text-center font-mono font-black text-xs sm:text-sm text-yellow-300">
                         {totalPackages}
                       </td>
-                      <td colSpan={3} className="px-2 py-3 text-right uppercase tracking-wider font-black text-slate-300">
+                      <td colSpan={4} className="px-2 py-3 text-right uppercase tracking-wider font-black text-slate-300">
                         AMOUNTS TOTAL:
                       </td>
                       <td className="px-1 py-3 text-center font-mono font-black text-xs text-amber-300 truncate">
@@ -877,9 +890,10 @@ export default function StockOut() {
                       <td className="px-1 py-3 text-center font-mono font-black text-xs text-emerald-300 truncate">
                         ₹{totalPaid.toLocaleString('en-IN')}
                       </td>
-                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-blue-300 truncate">
+                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-blue-300 truncate border-r border-emerald-800">
                         ₹{totalTbb.toLocaleString('en-IN')}
                       </td>
+                      <td className="px-1 py-3"></td>
                     </tr>
                   </tfoot>
                 </table>
