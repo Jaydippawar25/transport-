@@ -4,6 +4,7 @@ import {
   Plus, 
   Search, 
   Printer, 
+  Download,
   CheckCircle2, 
   Clock, 
   FileText, 
@@ -18,6 +19,7 @@ import {
   Edit,
   Eye
 } from 'lucide-react';
+import html2pdf from 'html2pdf.js';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
@@ -37,6 +39,22 @@ const LoadingMemoView = ({ memo, onClose }) => {
       <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-200 font-serif text-black relative w-full max-w-5xl my-auto print:p-0 print:border-none print:shadow-none">
         <div className="absolute top-4 right-4 flex items-center gap-3 print:hidden">
           <button 
+            onClick={() => {
+              const element = document.getElementById('printable-loading-memo');
+              const opt = {
+                margin:       0.2,
+                filename:     `Memo_${memo.memoNo}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+              };
+              html2pdf().set(opt).from(element).save();
+            }}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-colors cursor-pointer"
+          >
+            <Download className="w-4 h-4" /> Save PDF
+          </button>
+          <button 
             onClick={() => window.print()}
             className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-colors cursor-pointer"
           >
@@ -51,7 +69,7 @@ const LoadingMemoView = ({ memo, onClose }) => {
           </button>
         )}
       </div>
-      <div className="overflow-x-auto printable-area bg-white">
+      <div id="printable-loading-memo" className="overflow-x-auto printable-area bg-white p-4">
       <div className="min-w-[800px] max-w-[1000px] mx-auto border-2 border-black p-1 print:min-w-0 print:w-full print:border-none">
         {/* Header section */}
         <div className="text-center border-b-2 border-black pb-2 mb-2">
