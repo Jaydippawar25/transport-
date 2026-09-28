@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataService } from '../services/dataService';
-import { Calculator, IndianRupee, MapPin, Truck } from 'lucide-react';
+import { Calculator, IndianRupee, MapPin, Truck, FileSpreadsheet } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 export default function Accounting() {
   const [memos, setMemos] = useState([]);
@@ -142,6 +143,44 @@ export default function Accounting() {
   const gtCommission = reportData.reduce((sum, r) => sum + r.commission, 0);
   const gtProfit = reportData.reduce((sum, r) => sum + r.profit, 0);
 
+  const handleExportExcel = () => {
+    const exportData = reportData.map(row => ({
+      [viewType === 'memo' ? 'Memo No.' : 'Station']: row.label,
+      ...(viewType === 'memo' ? { 'Station': row.subLabel, 'Date': row.date } : { 'Memo Count': row.memoCount }),
+      'To Pay': row.toPay,
+      'Paid': row.paid,
+      'T.B.B': row.tbb,
+      'Total Booking': row.totalIncome,
+      'Freight': row.freight,
+      'Loading/Other': row.loading + row.other,
+      'Total Expense': row.totalExpense,
+      'Commission': row.commission,
+      'Profit/Loss': row.profit
+    }));
+
+    exportData.push({
+      [viewType === 'memo' ? 'Memo No.' : 'Station']: 'GRAND TOTAL',
+      ...(viewType === 'memo' ? { 'Station': '', 'Date': '' } : { 'Memo Count': '' }),
+      'To Pay': gtToPay,
+      'Paid': gtPaid,
+      'T.B.B': gtTbb,
+      'Total Booking': gtIncome,
+      'Freight': reportData.reduce((sum, r) => sum + (r.freight || 0), 0),
+      'Loading/Other': reportData.reduce((sum, r) => sum + ((r.loading || 0) + (r.other || 0)), 0),
+      'Total Expense': gtExpense,
+      'Commission': gtCommission,
+      'Profit/Loss': gtProfit
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Accounting Report");
+    
+    const fileName = viewType === 'memo' ? 'Accounting_Memo_Wise.xlsx' : 'Accounting_Station_Wise.xlsx';
+    XLSX.writeFile(workbook, fileName);
+  };
+
+
   if (loading) {
     return <div className="p-8 text-center text-slate-500 font-bold">Loading Accounting Data...</div>;
   }
@@ -220,6 +259,13 @@ export default function Accounting() {
               <MapPin className="w-4 h-4" /> Station Wise
             </button>
           </div>
+          
+          <button
+            onClick={handleExportExcel}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-xl transition-all shadow-md active:scale-95 cursor-pointer ml-auto sm:ml-2"
+          >
+            <FileSpreadsheet className="w-4 h-4" /> Export Excel
+          </button>
         </div>
       </div>
 
