@@ -257,7 +257,31 @@ export default function StockOut() {
     transportAgents: []
   });
 
+
+  const getMemoPrefix = (station) => {
+    if (!station) return 'LM';
+    return station.substring(0, 3).toUpperCase();
+  };
+
+  const generateMemoNo = (station, allMemos) => {
+    const prefix = getMemoPrefix(station);
+    const maxMemo = allMemos.reduce((max, memo) => {
+      if (!memo.memoNo) return max;
+      if (memo.memoNo.startsWith(`${prefix}-`)) {
+        const match = memo.memoNo.match(/-(\d+)$/);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num >= 10000) return max; // Ignore legacy/random series
+          return num > max ? num : max;
+        }
+      }
+      return max;
+    }, 0);
+    return `${prefix}-${String(maxMemo + 1).padStart(5, '0')}`;
+  };
+
   const loadData = async () => {
+
     setLoading(true);
     try {
       const [outData, inData, masterData] = await Promise.all([
@@ -272,20 +296,9 @@ export default function StockOut() {
       setAllStockIn(inData);
       
       if (!editingMemoId) {
-        const maxMemo = outData.reduce((max, memo) => {
-          if (!memo.memoNo) return max;
-          const match = memo.memoNo.match(/-(\d+)$/);
-          if (match) {
-            const num = parseInt(match[1], 10);
-            if (num >= 10000) return max; // Ignore legacy/random series
-            return num > max ? num : max;
-          }
-          return max;
-        }, 0);
-        
         setFormData(prev => ({
           ...prev,
-          memoNo: `LM-${String(maxMemo + 1).padStart(5, '0')}`
+          memoNo: generateMemoNo(prev.toStation, outData)
         }));
       }
     } catch (err) {
@@ -485,7 +498,15 @@ export default function StockOut() {
   };
 
   const handleToStationChange = (station) => {
-    setFormData({ ...formData, toStation: station });
+    if (!editingMemoId) {
+      setFormData(prev => ({
+        ...prev,
+        toStation: station,
+        memoNo: generateMemoNo(station, stockOutList)
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, toStation: station }));
+    }
   };
 
   const handleSubmit = async (e) => {
