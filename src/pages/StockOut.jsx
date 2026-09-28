@@ -287,7 +287,8 @@ export default function StockOut() {
   };
 
   const handleTransportAgentChange = (val) => {
-    const matched = (masters.transportAgents || []).find(ta => ta.name.toLowerCase() === val.toLowerCase());
+    const normalize = (str) => (str || '').replace(/\s+/g, '').toLowerCase();
+    const matched = (masters.transportAgents || []).find(ta => normalize(ta.name) === normalize(val));
     setFormData(prev => ({
       ...prev,
       transportAgent: val,
