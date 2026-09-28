@@ -36,10 +36,16 @@ const LoadingMemoView = ({ memo, onClose }) => {
     <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto print:static print:bg-transparent print:backdrop-blur-none print:z-auto print:p-0">
       <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-200 font-serif text-black relative w-full max-w-5xl my-auto print:p-0 print:border-none print:shadow-none">
         <div className="absolute top-4 right-4 flex items-center gap-3 print:hidden">
+          <button 
+            onClick={() => window.print()}
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-colors cursor-pointer"
+          >
+            <Printer className="w-4 h-4" /> Print
+          </button>
         {onClose && (
           <button 
             onClick={onClose}
-            className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors"
+            className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors cursor-pointer"
           >
             Close
           </button>
