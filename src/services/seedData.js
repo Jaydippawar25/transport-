@@ -318,7 +318,7 @@ export const INITIAL_MASTERS = {
       mobile: "9823033344"
     }
   ],
-  transporters: [
+  transportAgents: [
     {
       id: "m-tsp-1",
       name: "Shree 1 Transporter",

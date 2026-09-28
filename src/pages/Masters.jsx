@@ -23,7 +23,7 @@ export default function Masters() {
     stations: [],
     deliveryPersons: [],
     drivers: [],
-    transporters: []
+    transportAgents: []
   });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('consignors');
@@ -61,7 +61,7 @@ export default function Masters() {
         stations: data.stations || [],
         deliveryPersons: data.deliveryPersons || [],
         drivers: data.drivers || [],
-        transporters: data.transporters || []
+        transportAgents: data.transportAgents || []
       });
     } catch (err) {
       console.error("Failed to load masters:", err);
@@ -102,7 +102,7 @@ export default function Masters() {
     setIsSubmitting(true);
     try {
       let payload = {};
-      if (activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transporters') {
+      if (activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transportAgents') {
         payload = {
           name: formData.name.trim(),
           address: formData.address.trim(),
