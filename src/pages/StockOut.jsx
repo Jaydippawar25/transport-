@@ -68,12 +68,7 @@ const LoadingMemoView = ({ memo, onClose }) => {
           >
             <Download className="w-4 h-4" /> Save PDF
           </button>
-          <button 
-            onClick={() => window.print()}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-colors cursor-pointer"
-          >
-            <Printer className="w-4 h-4" /> Print
-          </button>
+
         {onClose && (
           <button 
             onClick={onClose}
