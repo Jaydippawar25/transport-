@@ -39,7 +39,8 @@ export default function TransportAgent() {
     }
   };
 
-  const agentMemos = stockOutList.filter(memo => memo.transportAgent === selectedAgent);
+  const normalize = str => (str || '').trim().toLowerCase();
+  const agentMemos = stockOutList.filter(memo => normalize(memo.transportAgent) === normalize(selectedAgent));
   
   const filteredMemos = agentMemos.filter(memo => {
     const term = searchTerm.toLowerCase();
