@@ -1,11 +1,24 @@
 import React from 'react';
-import { X, Printer, Truck } from 'lucide-react';
+import { X, Printer, Truck, Download } from 'lucide-react';
+import html2pdf from 'html2pdf.js';
 
 export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   if (!memo) return null;
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPdf = () => {
+    const element = document.getElementById('printable-memo-content');
+    const opt = {
+      margin:       0.2,
+      filename:     `Memo_${memo.memoNo}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(element).save();
   };
 
   const entries = memo.entries || [];
@@ -35,8 +48,14 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
 
           <div className="flex items-center gap-2.5">
             <button
+              onClick={handleDownloadPdf}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer ml-2"
+            >
+              <Download className="w-4 h-4" /> Save PDF
+            </button>
+            <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer ml-2"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <Printer className="w-4 h-4" /> Print
             </button>
@@ -52,7 +71,7 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
 
         {/* PRINTABLE BODY CONTENT */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 printable-area font-sans text-black bg-white">
-          <div className="w-full max-w-[210mm] mx-auto print:w-auto print:max-w-none print:m-0 print:p-0">
+          <div id="printable-memo-content" className="w-full max-w-[210mm] mx-auto print:w-auto print:max-w-none print:m-0 print:p-0 bg-white p-4">
             
             {/* Header */}
             <div className="flex justify-between items-start border-b-2 border-black pb-2 mb-2">

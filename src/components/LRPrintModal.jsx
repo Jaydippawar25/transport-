@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Printer } from 'lucide-react';
+import { X, Printer, Download } from 'lucide-react';
+import html2pdf from 'html2pdf.js';
 import LRBillSlip from './LRBillSlip';
 
 export default function LRPrintModal({ lr, onClose }) {
@@ -9,6 +10,18 @@ export default function LRPrintModal({ lr, onClose }) {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPdf = () => {
+    const element = document.getElementById('printable-lr-content');
+    const opt = {
+      margin:       0.1,
+      filename:     `LR_${lr.lrNo}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
   };
 
   // Format Date & Time like physical bill (e.g., 05-09-2026 04:18:24pm)
@@ -70,6 +83,12 @@ export default function LRPrintModal({ lr, onClose }) {
             </div>
 
             <button
+              onClick={handleDownloadPdf}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
+            >
+              <Download className="w-4 h-4" /> Save PDF
+            </button>
+            <button
               onClick={handlePrint}
               className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
             >
@@ -87,7 +106,7 @@ export default function LRPrintModal({ lr, onClose }) {
         </div>
 
         {/* PRINTABLE PHYSICAL LR BILL SLIPS CONTAINER - SCROLLABLE AREA */}
-        <div className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-[#fef9c3] text-black font-sans ${printCopies === 3 ? 'print-3-copies' : ''}`}>
+        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-[#fef9c3] text-black font-sans ${printCopies === 3 ? 'print-3-copies' : ''}`}>
           
           <div className="mx-1 sm:mx-4 space-y-2 print:space-y-0 print:mx-0">
             {printCopies === 3 ? (
