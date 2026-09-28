@@ -76,6 +76,10 @@ const LoadingMemoView = ({ memo, onClose }) => {
               <div className="p-1.5 uppercase text-center flex items-center justify-center">OWNER NAME</div>
               <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.ownerName || '-'}</div>
             </div>
+            <div className="grid grid-cols-2 divide-x-2 divide-black">
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">AGENT</div>
+              <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.transportAgent || '-'}</div>
+            </div>
           </div>
 
           <div className="flex flex-col divide-y-2 divide-black">
@@ -96,6 +100,10 @@ const LoadingMemoView = ({ memo, onClose }) => {
               <div className="p-1.5 text-center flex items-center justify-center">
                 {new Date(memo.date || memo.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
               </div>
+            </div>
+            <div className="grid grid-cols-2 divide-x-2 divide-black">
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">AGENT MO.</div>
+              <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.transportAgentMobile || '-'}</div>
             </div>
           </div>
         </div>
@@ -225,6 +233,8 @@ export default function StockOut() {
     lorryNo: '',
     ownerName: '',
     driverName: '',
+    transportAgent: '',
+    transportAgentMobile: '',
     fromStation: 'SANGLI',
     toStation: '',
     freight: '',
@@ -243,7 +253,7 @@ export default function StockOut() {
     stations: [],
     deliveryPersons: [],
     drivers: [],
-    transporters: []
+    transportAgents: []
   });
 
   const loadData = async () => {
@@ -273,6 +283,15 @@ export default function StockOut() {
       ...prev,
       lorryNo: val,
       ownerName: matched && matched.ownerName ? matched.ownerName : prev.ownerName
+    }));
+  };
+
+  const handleTransportAgentChange = (val) => {
+    const matched = (masters.transportAgents || []).find(ta => ta.name.toLowerCase() === val.toLowerCase());
+    setFormData(prev => ({
+      ...prev,
+      transportAgent: val,
+      transportAgentMobile: matched && matched.mobile ? matched.mobile : prev.transportAgentMobile
     }));
   };
 
@@ -416,6 +435,8 @@ export default function StockOut() {
       lorryNo: memo.lorryNo || '',
       ownerName: memo.ownerName || '',
       driverName: memo.driverName || '',
+      transportAgent: memo.transportAgent || '',
+      transportAgentMobile: memo.transportAgentMobile || '',
       fromStation: memo.fromStation || 'SANGLI',
       toStation: memo.toStation || '',
       freight: memo.freight || '',
@@ -474,6 +495,8 @@ export default function StockOut() {
         lorryNo: formData.lorryNo.toUpperCase(),
         ownerName: formData.ownerName,
         driverName: formData.driverName,
+        transportAgent: formData.transportAgent,
+        transportAgentMobile: formData.transportAgentMobile,
         fromStation: formData.fromStation,
         toStation: formData.toStation,
         freight: formData.freight,
@@ -501,6 +524,8 @@ export default function StockOut() {
         lorryNo: '',
         ownerName: '',
         driverName: '',
+        transportAgent: '',
+        transportAgentMobile: '',
         fromStation: 'SANGLI',
         toStation: '',
         freight: '',
@@ -590,7 +615,7 @@ export default function StockOut() {
           </div>
 
           {/* STOCK OUT HEADER DETAILS (Matching Spreadsheet Layout) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
             <div>
               <label className="text-[11px] font-bold text-slate-700">DATE *</label>
               <input
@@ -646,6 +671,29 @@ export default function StockOut() {
                 onChange={(e) => setFormData({ ...formData, ownerName: e.target.value })}
                 placeholder="e.g. Rahul Patil"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">TRANSPORT AGENT</label>
+              <input
+                type="text"
+                list="stockout-transport-agents-datalist"
+                value={formData.transportAgent}
+                onChange={(e) => handleTransportAgentChange(e.target.value)}
+                placeholder="Select or type..."
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-medium uppercase"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-bold text-slate-700">AGENT MOBILE</label>
+              <input
+                type="text"
+                value={formData.transportAgentMobile}
+                onChange={(e) => setFormData({ ...formData, transportAgentMobile: e.target.value })}
+                placeholder="e.g. 9876543210"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono font-bold"
               />
             </div>
 
@@ -919,6 +967,12 @@ export default function StockOut() {
           <datalist id="stockout-drivers-datalist">
             {(masters.drivers || []).map(d => (
               <option key={d.id} value={d.name}>{d.mobile ? `${d.name} (${d.mobile})` : d.name}</option>
+            ))}
+          </datalist>
+
+          <datalist id="stockout-transport-agents-datalist">
+            {(masters.transportAgents || []).map(ta => (
+              <option key={ta.id} value={ta.name}>{ta.mobile ? `${ta.name} (${ta.mobile})` : ta.name}</option>
             ))}
           </datalist>
 
