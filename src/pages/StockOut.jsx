@@ -1144,7 +1144,7 @@ export default function StockOut() {
       {/* Print Modal */}
       {viewMemoData && <LoadingMemoView memo={viewMemoData} onClose={() => setViewMemoData(null)} />}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
-      {selectedMemo && <MemoPrintModal memo={selectedMemo} stockIn={stockIn} onClose={() => setSelectedMemo(null)} />}
+      {selectedMemo && <MemoPrintModal memo={selectedMemo} stockIn={allStockIn} onClose={() => setSelectedMemo(null)} />}
 
     </div>
   );
