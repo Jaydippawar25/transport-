@@ -331,9 +331,9 @@ export default function StockOut() {
           ...prev,
           [lr.lrNo]: {
             deliveryPerson: lr.consigneeName ? `${lr.consigneeName.split(' ')[0]} Staff` : 'Local Driver',
-            toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : 0,
-            paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : 0,
-            tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : 0
+            toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : '',
+            paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : '',
+            tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : ''
           }
         }));
       }
@@ -361,9 +361,9 @@ export default function StockOut() {
         if (lr && !newCustomData[lr.lrNo]) {
           newCustomData[lr.lrNo] = {
             deliveryPerson: lr.consigneeName ? `${lr.consigneeName.split(' ')[0]} Staff` : 'Local Driver',
-            toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : 0,
-            paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : 0,
-            tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : 0
+            toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : '',
+            paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : '',
+            tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : ''
           };
         }
       });
@@ -423,9 +423,9 @@ export default function StockOut() {
   const memoEntries = selectedLrObjects.map((lr, index) => {
     const custom = customLrData[lr.id] || customLrData[lr.lrNo] || {
       deliveryPerson: 'Local Driver',
-      toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : 0,
-      paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : 0,
-      tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : 0
+      toPay: lr.paymentType === 'ToPay' ? Number(lr.charges?.total || 0) : '',
+      paid: lr.paymentType === 'Paid' ? Number(lr.charges?.total || 0) : '',
+      tbb: lr.paymentType === 'T.B.B' ? Number(lr.charges?.total || 0) : ''
     };
     return {
       srNo: index + 1,

@@ -72,10 +72,10 @@ export default function StockIn() {
     goodsValue: '',
     invoiceNo: '',
     ewayBillNo: '',
-    freight: 0,
-    hamali: 0,
-    other: 0,
-    stCharges: 0,
+    freight: '',
+    hamali: '',
+    other: '',
+    stCharges: '',
     paymentType: 'ToPay' // 'ToPay' | 'Paid' | 'T.B.B'
   });
 
