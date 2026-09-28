@@ -636,7 +636,7 @@ export default function StockOut() {
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-slate-700">MEMO NO. (Automatically)</label>
+              <label className="text-[11px] font-bold text-slate-700">MEMO NO.</label>
               <input
                 type="text"
                 readOnly
