@@ -19,7 +19,8 @@ import {
   Edit,
   Eye
 } from 'lucide-react';
-import html2pdf from 'html2pdf.js';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
@@ -39,16 +40,19 @@ const LoadingMemoView = ({ memo, onClose }) => {
       <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-slate-200 font-serif text-black relative w-full max-w-5xl my-auto print:p-0 print:border-none print:shadow-none">
         <div className="absolute top-4 right-4 flex items-center gap-3 print:hidden">
           <button 
-            onClick={() => {
-              const element = document.getElementById('printable-loading-memo');
-              const opt = {
-                margin:       0.2,
-                filename:     `Memo_${memo.memoNo}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
-              };
-              html2pdf().set(opt).from(element).save();
+            onClick={async () => {
+              try {
+                const element = document.getElementById('printable-loading-memo');
+                const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`Memo_${memo.memoNo}.pdf`);
+              } catch(err) {
+                alert("Error saving PDF: " + err.message);
+              }
             }}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-colors cursor-pointer"
           >

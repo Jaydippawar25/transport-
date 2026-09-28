@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Printer, Download } from 'lucide-react';
-import html2pdf from 'html2pdf.js';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import LRBillSlip from './LRBillSlip';
 
 export default function LRPrintModal({ lr, onClose }) {
@@ -12,16 +13,19 @@ export default function LRPrintModal({ lr, onClose }) {
     window.print();
   };
 
-  const handleDownloadPdf = () => {
-    const element = document.getElementById('printable-lr-content');
-    const opt = {
-      margin:       0.1,
-      filename:     `LR_${lr.lrNo}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+  const handleDownloadPdf = async () => {
+    try {
+      const element = document.getElementById('printable-lr-content');
+      const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`LR_${lr.lrNo}.pdf`);
+    } catch(err) {
+      alert("Error saving PDF: " + err.message);
+    }
   };
 
   // Format Date & Time like physical bill (e.g., 05-09-2026 04:18:24pm)
