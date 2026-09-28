@@ -99,6 +99,24 @@ export default function Masters() {
       return;
     }
 
+    // Mobile Validation
+    if (formData.mobile.trim()) {
+      const mobileRegex = /^[0-9]{10}$/;
+      if (!mobileRegex.test(formData.mobile.trim())) {
+        alert('Please enter a valid 10-digit Mobile Number.');
+        return;
+      }
+    }
+
+    // GSTIN Validation
+    if (formData.gstin.trim() && (activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transportAgents')) {
+      const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/i;
+      if (!gstinRegex.test(formData.gstin.trim())) {
+        alert('Please enter a valid 15-character GSTIN Number (e.g., 27AAACG1234F1Z5).');
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     try {
       let payload = {};
@@ -466,9 +484,10 @@ export default function Masters() {
                       </label>
                       <input
                         type="text"
+                        maxLength={15}
                         placeholder="e.g. 27AAACG1234F1Z5"
                         value={formData.gstin}
-                        onChange={(e) => setFormData({ ...formData, gstin: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, gstin: e.target.value.toUpperCase() })}
                         className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase"
                       />
                     </div>
@@ -480,9 +499,13 @@ export default function Masters() {
                     </label>
                     <input
                       type="text"
+                      maxLength={10}
                       placeholder="e.g. 9822012345"
                       value={formData.mobile}
-                      onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, '');
+                        setFormData({ ...formData, mobile: val });
+                      }}
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
