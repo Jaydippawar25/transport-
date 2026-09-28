@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, Printer, Truck } from 'lucide-react';
 
-export default function MemoPrintModal({ memo, onClose }) {
+export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   if (!memo) return null;
 
   const handlePrint = () => {
@@ -10,7 +10,11 @@ export default function MemoPrintModal({ memo, onClose }) {
 
   const entries = memo.entries || [];
   
-  const calcTotalWeight = entries.reduce((acc, curr) => acc + Number(curr.weight || 0), 0);
+  // Calculate total weight (fallback to stockIn if old memo lacks weight)
+  const calcTotalWeight = entries.reduce((acc, curr) => {
+    const origLr = stockIn.find(lr => lr.id === curr.lrId || lr.lrNo === curr.lrNo);
+    return acc + Number(origLr?.weight || curr.weight || 0);
+  }, 0);
 
   return (
     <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
@@ -102,7 +106,11 @@ export default function MemoPrintModal({ memo, onClose }) {
                 </tr>
               </thead>
               <tbody>
-                {entries.map((e, idx) => (
+                {entries.map((e, idx) => {
+                  const origLr = stockIn.find(lr => lr.id === e.lrId || lr.lrNo === e.lrNo);
+                  const displayWeight = origLr?.weight || e.weight || '-';
+                  
+                  return (
                   <tr key={idx} className="border-b border-black">
                     <td className="border-r border-black py-1 px-1 text-center">{idx + 1}</td>
                     <td className="border-r border-black py-1 px-1 font-bold">{e.lrNo}</td>
@@ -110,12 +118,13 @@ export default function MemoPrintModal({ memo, onClose }) {
                     <td className="border-r border-black py-1 px-1 uppercase truncate max-w-[120px]" title={e.consignor}>{e.consignor}</td>
                     <td className="border-r border-black py-1 px-1 uppercase truncate max-w-[120px]" title={e.consignee}>{e.consignee}</td>
                     <td className="border-r border-black py-1 px-1 uppercase">{e.station || e.toStation}</td>
-                    <td className="border-r border-black py-1 px-1 text-center font-bold">{e.weight || '-'}</td>
+                    <td className="border-r border-black py-1 px-1 text-center font-bold">{displayWeight}</td>
                     <td className="border-r border-black py-1 px-1 text-right font-bold">{e.toPay > 0 ? e.toPay : ''}</td>
                     <td className="border-r border-black py-1 px-1 text-right font-bold">{e.paid > 0 ? e.paid : ''}</td>
                     <td className="py-1 px-1 text-right font-bold">{e.tbb > 0 ? e.tbb : ''}</td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
               <tfoot>
                 <tr className="font-bold border-t-2 border-black bg-slate-100">

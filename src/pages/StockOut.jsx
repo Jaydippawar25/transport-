@@ -422,6 +422,7 @@ export default function StockOut() {
       deliveryPerson: custom.deliveryPerson || 'Local Driver',
       station: lr.toStation,
       packages: Number(lr.packages || 0),
+      weight: lr.weight || '',
       toPay: custom.toPay,
       paid: custom.paid,
       tbb: custom.tbb
@@ -1135,7 +1136,7 @@ export default function StockOut() {
       {/* Print Modal */}
       {viewMemoData && <LoadingMemoView memo={viewMemoData} onClose={() => setViewMemoData(null)} />}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
-      {selectedMemo && <MemoPrintModal memo={selectedMemo} onClose={() => setSelectedMemo(null)} />}
+      {selectedMemo && <MemoPrintModal memo={selectedMemo} stockIn={stockIn} onClose={() => setSelectedMemo(null)} />}
 
     </div>
   );
