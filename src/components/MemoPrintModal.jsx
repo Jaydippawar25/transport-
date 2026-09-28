@@ -75,14 +75,17 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
               <div className="space-y-1">
                 <div>Memo No.: {memo.memoNo}</div>
                 <div>Driver Name: {memo.driverName}</div>
+                {memo.transportAgent && <div>Transport Agent: {memo.transportAgent}</div>}
               </div>
               <div className="space-y-1 text-center">
                 <div>Owner Name: {memo.ownerName || '_______________'}</div>
                 <div>To Station: {memo.toStation || '_______________'}</div>
+                {memo.transportAgentMobile && <div>Agent Mob.: {memo.transportAgentMobile}</div>}
               </div>
               <div className="space-y-1 text-right">
                 <div>Date: {(new Date(memo.date || memo.createdAt)).toLocaleDateString('en-IN')}</div>
                 <div>Lorry No.: {memo.lorryNo}</div>
+                {(memo.transportAgent || memo.transportAgentMobile) && <div className="text-transparent hidden sm:block">.</div>}
               </div>
             </div>
 
