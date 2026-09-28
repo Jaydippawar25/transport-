@@ -580,11 +580,11 @@ export default function StockIn() {
             <div>
               <label className="text-xs font-bold text-slate-700">PKG (Packages) *</label>
               <input
-                type="number"
-                min="1"
+                type="text"
+                inputMode="numeric"
                 required
                 value={formData.packages}
-                onChange={(e) => setFormData({ ...formData, packages: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, packages: e.target.value.replace(/[^0-9]/g, '') })}
                 className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold"
               />
             </div>
@@ -655,10 +655,10 @@ export default function StockIn() {
               <div>
                 <label className="text-[11px] font-semibold text-slate-700">Freight (₹)</label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
                   value={formData.freight}
-                  onChange={(e) => setFormData({ ...formData, freight: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, freight: e.target.value.replace(/[^0-9]/g, '') })}
                   className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
                 />
               </div>
@@ -666,10 +666,10 @@ export default function StockIn() {
               <div>
                 <label className="text-[11px] font-semibold text-slate-700">Hamali / Labor (₹)</label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
                   value={formData.hamali}
-                  onChange={(e) => setFormData({ ...formData, hamali: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, hamali: e.target.value.replace(/[^0-9]/g, '') })}
                   className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
                 />
               </div>
@@ -677,10 +677,10 @@ export default function StockIn() {
               <div>
                 <label className="text-[11px] font-semibold text-slate-700">Other Charges (₹)</label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
                   value={formData.other}
-                  onChange={(e) => setFormData({ ...formData, other: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, other: e.target.value.replace(/[^0-9]/g, '') })}
                   className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
                 />
               </div>
@@ -688,10 +688,10 @@ export default function StockIn() {
               <div>
                 <label className="text-[11px] font-semibold text-slate-700">Stat. Charges (₹)</label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
                   value={formData.stCharges}
-                  onChange={(e) => setFormData({ ...formData, stCharges: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, stCharges: e.target.value.replace(/[^0-9]/g, '') })}
                   className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
                 />
               </div>

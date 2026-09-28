@@ -737,9 +737,10 @@ export default function StockOut() {
             <div>
               <label className="text-[11px] font-bold text-slate-700">FREIGHT</label>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 value={formData.freight}
-                onChange={(e) => setFormData({ ...formData, freight: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, freight: e.target.value.replace(/[^0-9]/g, '') })}
                 placeholder="e.g. 5000"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold"
               />
@@ -747,9 +748,10 @@ export default function StockOut() {
             <div>
               <label className="text-[11px] font-bold text-slate-700">LOADING CHARGES</label>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 value={formData.loadingCharges}
-                onChange={(e) => setFormData({ ...formData, loadingCharges: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, loadingCharges: e.target.value.replace(/[^0-9]/g, '') })}
                 placeholder="e.g. 500"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold"
               />
@@ -757,9 +759,10 @@ export default function StockOut() {
             <div>
               <label className="text-[11px] font-bold text-slate-700">OTHER CHARGES</label>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 value={formData.otherCharges}
-                onChange={(e) => setFormData({ ...formData, otherCharges: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, otherCharges: e.target.value.replace(/[^0-9]/g, '') })}
                 placeholder="e.g. 200"
                 className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold"
               />
@@ -886,10 +889,10 @@ export default function StockOut() {
                           {/* Editable ToPay */}
                           <td className="px-1 py-2 border-r border-slate-200 text-center bg-amber-50/30">
                             <input
-                              type="number"
-                              min="0"
+                              type="text"
+                              inputMode="numeric"
                               value={e.toPay}
-                              onChange={(evt) => handleLrDataChange(e.lrNo, 'toPay', evt.target.value)}
+                              onChange={(evt) => handleLrDataChange(e.lrNo, 'toPay', evt.target.value.replace(/[^0-9]/g, ''))}
                               className="w-full text-center px-1 py-1.5 bg-white border border-amber-300 rounded-lg font-mono font-bold text-amber-900 text-xs focus:outline-none"
                             />
                           </td>
@@ -897,10 +900,10 @@ export default function StockOut() {
                           {/* Editable Paid */}
                           <td className="px-1 py-2 border-r border-slate-200 text-center bg-emerald-50/30">
                             <input
-                              type="number"
-                              min="0"
+                              type="text"
+                              inputMode="numeric"
                               value={e.paid}
-                              onChange={(evt) => handleLrDataChange(e.lrNo, 'paid', evt.target.value)}
+                              onChange={(evt) => handleLrDataChange(e.lrNo, 'paid', evt.target.value.replace(/[^0-9]/g, ''))}
                               className="w-full text-center px-1 py-1.5 bg-white border border-emerald-300 rounded-lg font-mono font-bold text-emerald-900 text-xs focus:outline-none"
                             />
                           </td>
@@ -908,10 +911,10 @@ export default function StockOut() {
                           {/* Editable T.B.B */}
                           <td className="px-1 py-2 text-center bg-blue-50/30">
                             <input
-                              type="number"
-                              min="0"
+                              type="text"
+                              inputMode="numeric"
                               value={e.tbb}
-                              onChange={(evt) => handleLrDataChange(e.lrNo, 'tbb', evt.target.value)}
+                              onChange={(evt) => handleLrDataChange(e.lrNo, 'tbb', evt.target.value.replace(/[^0-9]/g, ''))}
                               className="w-full text-center px-1 py-1.5 bg-white border border-blue-300 rounded-lg font-mono font-bold text-blue-900 text-xs focus:outline-none"
                             />
                           </td>
