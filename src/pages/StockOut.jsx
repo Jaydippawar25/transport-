@@ -1077,7 +1077,7 @@ export default function StockOut() {
                           className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors cursor-pointer"
                           title={`View Memo #${memo.memoNo}`}
                         >
-                          <Eye className="w-4 h-4" />
+                          <FileText className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleEditMemo(memo)}

@@ -986,7 +986,7 @@ export default function StockIn() {
                             className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors cursor-pointer"
                             title="View LR"
                           >
-                            <Eye className="w-4 h-4" />
+                            <FileText className="w-4 h-4" />
                           </button>
                           <button
                             onClick={(e) => {
