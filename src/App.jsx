@@ -9,6 +9,7 @@ import StockOut from './pages/StockOut';
 import Reports from './pages/Reports';
 import Accounting from './pages/Accounting';
 import Masters from './pages/Masters';
+import TransportAgent from './pages/TransportAgent';
 import Login from './pages/Login';
 import LRPrintModal from './components/LRPrintModal';
 import MemoPrintModal from './components/MemoPrintModal';
@@ -75,6 +76,7 @@ export default function App() {
             <Route path="/dashboard" element={<AuthenticatedRoute><Dashboard /></AuthenticatedRoute>} />
             <Route path="/stock-in" element={<AuthenticatedRoute><StockIn /></AuthenticatedRoute>} />
             <Route path="/stock-out" element={<AuthenticatedRoute><StockOut /></AuthenticatedRoute>} />
+            <Route path="/transport-agent" element={<AuthenticatedRoute><TransportAgent /></AuthenticatedRoute>} />
             <Route path="/masters" element={<AuthenticatedRoute><Masters /></AuthenticatedRoute>} />
             <Route path="/reports" element={<AuthenticatedRoute><Reports /></AuthenticatedRoute>} />
             <Route path="/accounting" element={<AuthenticatedRoute><Accounting /></AuthenticatedRoute>} />

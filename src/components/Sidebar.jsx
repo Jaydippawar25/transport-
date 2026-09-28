@@ -9,7 +9,8 @@ import {
   LogOut,
   Boxes,
   X,
-  Calculator
+  Calculator,
+  Users
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -26,6 +27,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
     { label: 'Stock In (LR Entry)', path: '/stock-in', icon: PackagePlus },
     { label: 'Stock Out (Memo)', path: '/stock-out', icon: Truck },
+    { label: 'Transport Agent', path: '/transport-agent', icon: Users },
     { label: 'Masters (Drop Box)', path: '/masters', icon: FolderKanban },
     { label: 'Accounting', path: '/accounting', icon: Calculator },
     { label: 'Reports', path: '/reports', icon: BarChart3 }
