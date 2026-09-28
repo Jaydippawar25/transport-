@@ -209,12 +209,7 @@ const LoadingMemoView = ({ memo, onClose }) => {
   );
 };
 
-const getMemoPrefix = (station) => {
-  const s = (station || '').toUpperCase();
-  if (s === 'SANGLI') return 'SNG-';
-  if (s === 'PUNE') return 'PUN-';
-  return s ? (s.substring(0, 3).toUpperCase() + '-') : 'LM-';
-};
+
 
 export default function StockOut() {
   const [stockOutList, setStockOutList] = useState([]);
@@ -234,7 +229,7 @@ export default function StockOut() {
 
   // Form state (Matching spreadsheet header fields)
   const [formData, setFormData] = useState({
-    memoNo: `${getMemoPrefix('')}${Math.floor(10000 + Math.random() * 90000)}`,
+    memoNo: '',
     date: new Date().toISOString().split('T')[0],
     lorryNo: '',
     ownerName: '',
@@ -275,6 +270,24 @@ export default function StockOut() {
       
       // LRs sitting in godown + previously dispatched LRs for edit mode
       setAllStockIn(inData);
+      
+      if (!editingMemoId) {
+        const maxMemo = outData.reduce((max, memo) => {
+          if (!memo.memoNo) return max;
+          const match = memo.memoNo.match(/-(\d+)$/);
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num >= 10000) return max; // Ignore legacy/random series
+            return num > max ? num : max;
+          }
+          return max;
+        }, 0);
+        
+        setFormData(prev => ({
+          ...prev,
+          memoNo: `LM-${String(maxMemo + 1).padStart(5, '0')}`
+        }));
+      }
     } catch (err) {
       console.error("Error loading stock out data:", err);
     } finally {
@@ -472,15 +485,7 @@ export default function StockOut() {
   };
 
   const handleToStationChange = (station) => {
-    if (!editingMemoId) {
-      // Keep existing numeric part if it exists, or generate a new one
-      const currentParts = formData.memoNo.split('-');
-      const currentNum = currentParts.length > 1 ? currentParts[1] : Math.floor(10000 + Math.random() * 90000);
-      const prefix = getMemoPrefix(station);
-      setFormData({ ...formData, toStation: station, memoNo: `${prefix}${currentNum}` });
-    } else {
-      setFormData({ ...formData, toStation: station });
-    }
+    setFormData({ ...formData, toStation: station });
   };
 
   const handleSubmit = async (e) => {
@@ -527,7 +532,7 @@ export default function StockOut() {
 
       // Reset form
       setFormData({
-        memoNo: `${getMemoPrefix('')}${Math.floor(10000 + Math.random() * 90000)}`,
+        memoNo: '',
         date: new Date().toISOString().split('T')[0],
         lorryNo: '',
         ownerName: '',
