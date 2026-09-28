@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Printer, Truck, Download } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
 
 export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
@@ -13,8 +13,18 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   const handleDownloadPdf = async () => {
     try {
       const element = document.getElementById('printable-memo-content');
-      const canvas = await html2canvas(element, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      const scale = 2;
+      const imgData = await domtoimage.toJpeg(element, {
+        quality: 1.0,
+        bgcolor: '#ffffff',
+        width: element.clientWidth * scale,
+        height: element.clientHeight * scale,
+        style: {
+          transform: 'scale(' + scale + ')',
+          transformOrigin: 'top left'
+        }
+      });
+      const canvas = { width: element.clientWidth * scale, height: element.clientHeight * scale };
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
