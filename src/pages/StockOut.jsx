@@ -51,7 +51,7 @@ const LoadingMemoView = ({ memo, onClose }) => {
           </button>
         )}
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto printable-area bg-white">
       <div className="min-w-[800px] max-w-[1000px] mx-auto border-2 border-black p-1 print:min-w-0 print:w-full print:border-none">
         {/* Header section */}
         <div className="text-center border-b-2 border-black pb-2 mb-2">
