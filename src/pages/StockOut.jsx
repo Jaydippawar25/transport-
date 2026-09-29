@@ -285,9 +285,17 @@ export default function StockOut() {
   });
 
 
+  const getStationPrefix = (stationName) => {
+    if (!stationName) return 'SNG';
+    const name = stationName.toUpperCase();
+    if (name === 'SANGLI') return 'SNG';
+    if (name === 'MUMBAI') return 'MUM';
+    if (name === 'PUNE') return 'PUN';
+    return name.replace(/[^A-Z]/g, '').substring(0, 3);
+  };
+
   const generateMemoNo = (station, allMemos) => {
-    if (!station) return '';
-    const prefix = station.substring(0, 3).toUpperCase();
+    const prefix = getStationPrefix(station);
     const maxMemo = allMemos.reduce((max, memo) => {
       if (!memo.memoNo) return max;
       
