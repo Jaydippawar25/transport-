@@ -59,12 +59,7 @@ export default function Dashboard() {
     loadData();
   }, []);
 
-  const handleSeedData = async () => {
-    setIsSeeding(true);
-    await dataService.seedDatabase();
-    await loadData();
-    setIsSeeding(false);
-  };
+  
 
   const handleClearData = async () => {
     if (window.confirm("Are you sure you want to delete ALL Stock In and Stock Out records? This cannot be undone.")) {
@@ -183,14 +178,7 @@ export default function Dashboard() {
             <Trash2 className="w-4 h-4" />
             {isClearing ? 'Clearing...' : 'Clear All Data'}
           </button>
-          <button
-            onClick={handleSeedData}
-            disabled={isSeeding}
-            className="flex items-center gap-2 px-3.5 py-2 bg-indigo-600/90 hover:bg-indigo-600 text-white text-xs font-semibold rounded-xl border border-indigo-400/30 transition-all shadow-md cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            {isSeeding ? 'Seeding...' : 'Seed Sample Data'}
-          </button>
+          
         </div>
       </div>
 
@@ -423,7 +411,7 @@ export default function Dashboard() {
 
         <div className="divide-y divide-slate-100 overflow-x-auto">
           {recentActivities.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-500">No recent activity found. Seed sample data to test.</div>
+            <div className="p-8 text-center text-xs text-slate-500">No recent activity found.</div>
           ) : (
             recentActivities.map((act) => (
               <div 
