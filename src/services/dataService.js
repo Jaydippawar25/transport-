@@ -192,6 +192,11 @@ export const dataService = {
       totalPackages: Number(memoData.totalPackages || 0),
       totalToPay: Number(memoData.totalToPay || 0),
       totalPaid: Number(memoData.totalPaid || 0),
+      totalTbb: Number(memoData.totalTbb || 0),
+      grandTotal: Number(memoData.grandTotal || 0),
+      freight: Number(memoData.freight || 0),
+      loadingCharges: Number(memoData.loadingCharges || 0),
+      otherCharges: Number(memoData.otherCharges || 0),
       createdAt: new Date().toISOString()
     };
 
@@ -250,6 +255,11 @@ export const dataService = {
       totalPackages: Number(memoData.totalPackages || 0),
       totalToPay: Number(memoData.totalToPay || 0),
       totalPaid: Number(memoData.totalPaid || 0),
+      totalTbb: Number(memoData.totalTbb || 0),
+      grandTotal: Number(memoData.grandTotal || 0),
+      freight: Number(memoData.freight || 0),
+      loadingCharges: Number(memoData.loadingCharges || 0),
+      otherCharges: Number(memoData.otherCharges || 0),
       updatedAt: new Date().toISOString()
     };
 

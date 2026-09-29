@@ -478,15 +478,15 @@ export default function StockOut() {
     return {
       srNo: index + 1,
       lrNo: lr.lrNo,
-      consignor: lr.consignorName,
-      consignee: lr.consigneeName,
+      consignor: lr.consignorName || '',
+      consignee: lr.consigneeName || '',
       deliveryPerson: custom.deliveryPerson || 'Local Driver',
       station: lr.toStation,
       packages: Number(lr.packages || 0),
       weight: lr.weight || '',
-      toPay: custom.toPay,
-      paid: custom.paid,
-      tbb: custom.tbb
+      toPay: custom.toPay || 0,
+      paid: custom.paid || 0,
+      tbb: custom.tbb || 0
     };
   });
 
@@ -539,7 +539,8 @@ export default function StockOut() {
       customData[e.id || e.lrNo] = {
         deliveryPerson: e.deliveryPerson || '',
         paid: e.paid || 0,
-        toPay: e.toPay || 0
+        toPay: e.toPay || 0,
+        tbb: e.tbb || 0
       };
     });
     setCustomLrData(customData);
