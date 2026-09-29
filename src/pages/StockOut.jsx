@@ -935,7 +935,7 @@ export default function StockOut() {
               <div className="w-full">
                 <table className="w-full text-xs sm:text-sm text-left border-collapse table-fixed">
                   <thead>
-                    <tr className="bg-emerald-900 text-slate-800 font-bold text-[10px] sm:text-xs">
+                    <tr className="bg-emerald-50 text-emerald-800 font-bold text-[10px] sm:text-xs">
                       <th className="px-1.5 py-3 border-r border-emerald-200 text-center w-[4%]">SR.</th>
                       <th className="px-2 py-3 border-r border-emerald-200 w-[12%]">L.R.NO.</th>
                       <th className="px-1 py-3 border-r border-emerald-200 text-center w-[5%]">PKG</th>
@@ -943,9 +943,9 @@ export default function StockOut() {
                       <th className="px-2 py-3 border-r border-emerald-200 w-[18%] truncate">CONSIGNEE</th>
                       <th className="px-1 py-3 border-r border-emerald-200 text-center w-[6%]">WEIGHT</th>
                       <th className="px-1 py-3 border-r border-emerald-200 text-center w-[10%]">STATION</th>
-                      <th className="px-1 py-3 border-r border-emerald-200 text-center bg-amber-950/60 text-amber-700 w-[9%]">TO PAY</th>
+                      <th className="px-1 py-3 border-r border-emerald-200 text-center bg-amber-50 text-amber-700 w-[9%]">TO PAY</th>
                       <th className="px-1 py-3 border-r border-emerald-200 text-center bg-emerald-50 text-emerald-700 w-[9%]">PAID</th>
-                      <th className="px-1 py-3 text-center bg-blue-950/60 text-blue-700 w-[9%]">T.B.B</th>
+                      <th className="px-1 py-3 text-center bg-blue-50 text-blue-700 w-[9%]">T.B.B</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-emerald-200/60 bg-white">
@@ -998,7 +998,7 @@ export default function StockOut() {
                     })}
                   </tbody>
                   <tfoot>
-                    <tr className="bg-emerald-900 font-bold text-slate-800 text-xs sm:text-sm border-t-2 border-emerald-900">
+                    <tr className="bg-emerald-50 font-bold text-emerald-900 text-xs sm:text-sm border-t-2 border-emerald-200">
                       <td colSpan={2} className="px-2 py-3 text-right uppercase tracking-wider font-black">
                         TOTAL:
                       </td>
