@@ -995,16 +995,6 @@ export default function StockIn() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setSelectedLr(item);
-                            }}
-                            className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors cursor-pointer"
-                            title="View LR"
-                          >
-                            <FileText className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
                               handleEdit(item);
                             }}
                             className="p-1.5 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg transition-colors cursor-pointer"
