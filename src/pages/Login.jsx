@@ -6,13 +6,16 @@ import {
   AlertCircle,
   X,
   CheckCircle2,
-  Loader2
+  Loader2,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -118,13 +121,24 @@ export default function Login() {
                 <div className="flex items-center gap-2.5 text-slate-400">
                   <Lock className="w-4 h-4 shrink-0 text-slate-600" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="password"
-                    className="w-full bg-transparent text-slate-700 placeholder-slate-400 text-sm focus:outline-none py-1.5"
+                    className="w-full bg-transparent text-slate-700 placeholder-slate-400 text-sm focus:outline-none py-1.5 pr-8"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
                 </div>
               </div>
 
