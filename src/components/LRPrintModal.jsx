@@ -50,7 +50,7 @@ export default function LRPrintModal({ lr, onClose }) {
     }
   };
 
-  const formattedDate = formatDateString(lr.date || lr.createdAt);
+  const formattedDate = formatDateString(new Date()); // Always show current live time
 
   const copiesList = [
     { id: 1, title: 'CONSIGNOR COPY' },
