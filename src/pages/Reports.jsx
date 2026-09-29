@@ -459,17 +459,17 @@ export default function Reports() {
           {activeSection === 'STOCK_IN' && (
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
-                  <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                  <th className="p-3 border-r border-slate-800">L.R. NO. & DATE</th>
-                  <th className="p-3 border-r border-slate-800 text-center w-16">PKG</th>
-                  <th className="p-3 border-r border-slate-800">CONSIGNOR</th>
-                  <th className="p-3 border-r border-slate-800">CONSIGNEE</th>
-                  <th className="p-3 border-r border-slate-800 text-center">STATION</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-24">TO PAY (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-24">PAID (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-24">T.B.B (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-center w-24">STATUS</th>
+                <tr className="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
+                  <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
+                  <th className="p-3 border-r border-slate-200">L.R. NO. & DATE</th>
+                  <th className="p-3 border-r border-slate-200 text-center w-16">PKG</th>
+                  <th className="p-3 border-r border-slate-200">CONSIGNOR</th>
+                  <th className="p-3 border-r border-slate-200">CONSIGNEE</th>
+                  <th className="p-3 border-r border-slate-200 text-center">STATION</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-24">TO PAY (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-24">PAID (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-24">T.B.B (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-center w-24">STATUS</th>
                   <th className="p-3 text-center w-16">PRINT</th>
                 </tr>
               </thead>
@@ -532,14 +532,14 @@ export default function Reports() {
                 )}
               </tbody>
               <tfoot>
-                <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                  <td colSpan={2} className="p-3 text-right uppercase font-black text-slate-300">TOTAL:</td>
-                  <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-yellow-300">{inTotalPkgs}</td>
-                  <td colSpan={3} className="p-3 border-r border-slate-800 text-right uppercase font-black text-slate-300">AMOUNTS:</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-amber-300">₹{inTotalToPay.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">₹{inTotalPaid.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-blue-300">₹{inTotalTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 text-center font-mono font-black text-yellow-400" colSpan={2}>₹{inGrandTotal.toLocaleString('en-IN')}</td>
+                <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
+                  <td colSpan={2} className="p-3 text-right uppercase font-black text-slate-700">TOTAL:</td>
+                  <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-slate-800">{inTotalPkgs}</td>
+                  <td colSpan={3} className="p-3 border-r border-slate-200 text-right uppercase font-black text-slate-700">AMOUNTS:</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-amber-700">₹{inTotalToPay.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">₹{inTotalPaid.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-blue-700">₹{inTotalTbb.toLocaleString('en-IN')}</td>
+                  <td className="p-3 text-center font-mono font-black text-indigo-700" colSpan={2}>₹{inGrandTotal.toLocaleString('en-IN')}</td>
                 </tr>
               </tfoot>
             </table>
@@ -549,16 +549,16 @@ export default function Reports() {
           {activeSection === 'STOCK_OUT' && (
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
-                  <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                  <th className="p-3 border-r border-slate-800">MEMO NO. & DATE</th>
-                  <th className="p-3 border-r border-slate-800">VEHICLE NO</th>
-                  <th className="p-3 border-r border-slate-800">DRIVER NAME</th>
-                  <th className="p-3 border-r border-slate-800 text-center w-24">LOADED LRs</th>
-                  <th className="p-3 border-r border-slate-800 text-center w-20">TOTAL PKG</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-28">TOPAY (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-28">PAID (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-28">T.B.B (₹)</th>
+                <tr className="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
+                  <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
+                  <th className="p-3 border-r border-slate-200">MEMO NO. & DATE</th>
+                  <th className="p-3 border-r border-slate-200">VEHICLE NO</th>
+                  <th className="p-3 border-r border-slate-200">DRIVER NAME</th>
+                  <th className="p-3 border-r border-slate-200 text-center w-24">LOADED LRs</th>
+                  <th className="p-3 border-r border-slate-200 text-center w-20">TOTAL PKG</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-28">TOPAY (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-28">PAID (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-28">T.B.B (₹)</th>
                   <th className="p-3 text-right w-32">TOTAL OUT (₹)</th>
                 </tr>
               </thead>
@@ -595,14 +595,14 @@ export default function Reports() {
                 )}
               </tbody>
               <tfoot>
-                <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                  <td colSpan={2} className="p-3 text-right uppercase font-black text-slate-300">TOTAL:</td>
-                  <td colSpan={3} className="p-3 border-r border-slate-800 text-right uppercase font-black text-slate-300">SUMMARY:</td>
-                  <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-yellow-300">{outTotalPkgs} Pkgs</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-amber-300">₹{outTotalToPay.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">₹{outTotalPaid.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-blue-300">₹{outTotalTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 text-right font-mono font-black text-yellow-400">₹{outGrandTotal.toLocaleString('en-IN')}</td>
+                <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
+                  <td colSpan={2} className="p-3 text-right uppercase font-black text-slate-700">TOTAL:</td>
+                  <td colSpan={3} className="p-3 border-r border-slate-200 text-right uppercase font-black text-slate-700">SUMMARY:</td>
+                  <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-slate-800">{outTotalPkgs} Pkgs</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-amber-700">₹{outTotalToPay.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">₹{outTotalPaid.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-blue-700">₹{outTotalTbb.toLocaleString('en-IN')}</td>
+                  <td className="p-3 text-right font-mono font-black text-indigo-700">₹{outGrandTotal.toLocaleString('en-IN')}</td>
                 </tr>
               </tfoot>
             </table>
@@ -612,17 +612,17 @@ export default function Reports() {
           {activeSection === 'PENDING_STOCK' && (
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
-                  <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                  <th className="p-3 border-r border-slate-800">L.R. NO. & DATE</th>
-                  <th className="p-3 border-r border-slate-800 text-center w-16">PKG</th>
-                  <th className="p-3 border-r border-slate-800">CONSIGNOR</th>
-                  <th className="p-3 border-r border-slate-800">CONSIGNEE</th>
-                  <th className="p-3 border-r border-slate-800 text-center">DESTINATION STATION</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-24">TO PAY (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-24">PAID (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-right w-24">T.B.B (₹)</th>
-                  <th className="p-3 border-r border-slate-800 text-center w-28">GODOWN STATUS</th>
+                <tr className="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
+                  <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
+                  <th className="p-3 border-r border-slate-200">L.R. NO. & DATE</th>
+                  <th className="p-3 border-r border-slate-200 text-center w-16">PKG</th>
+                  <th className="p-3 border-r border-slate-200">CONSIGNOR</th>
+                  <th className="p-3 border-r border-slate-200">CONSIGNEE</th>
+                  <th className="p-3 border-r border-slate-200 text-center">DESTINATION STATION</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-24">TO PAY (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-24">PAID (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-24">T.B.B (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-center w-28">GODOWN STATUS</th>
                   <th className="p-3 text-center w-16">PRINT</th>
                 </tr>
               </thead>
@@ -677,14 +677,14 @@ export default function Reports() {
                 )}
               </tbody>
               <tfoot>
-                <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                  <td colSpan={2} className="p-3 text-right uppercase font-black text-slate-300">TOTAL:</td>
-                  <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-yellow-300">{pendingTotalPkgs}</td>
-                  <td colSpan={3} className="p-3 border-r border-slate-800 text-right uppercase font-black text-slate-300">AMOUNTS:</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-amber-300">₹{pendingTotalToPay.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">₹{pendingTotalPaid.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-blue-300">₹{pendingTotalTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 text-center font-mono font-black text-yellow-400" colSpan={2}>₹{pendingGrandTotal.toLocaleString('en-IN')}</td>
+                <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
+                  <td colSpan={2} className="p-3 text-right uppercase font-black text-slate-700">TOTAL:</td>
+                  <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-slate-800">{pendingTotalPkgs}</td>
+                  <td colSpan={3} className="p-3 border-r border-slate-200 text-right uppercase font-black text-slate-700">AMOUNTS:</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-amber-700">₹{pendingTotalToPay.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">₹{pendingTotalPaid.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-blue-700">₹{pendingTotalTbb.toLocaleString('en-IN')}</td>
+                  <td className="p-3 text-center font-mono font-black text-indigo-700" colSpan={2}>₹{pendingGrandTotal.toLocaleString('en-IN')}</td>
                 </tr>
               </tfoot>
             </table>

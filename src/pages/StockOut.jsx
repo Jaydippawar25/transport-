@@ -935,17 +935,17 @@ export default function StockOut() {
               <div className="w-full">
                 <table className="w-full text-xs sm:text-sm text-left border-collapse table-fixed">
                   <thead>
-                    <tr className="bg-emerald-900 text-white font-bold text-[10px] sm:text-xs">
-                      <th className="px-1.5 py-3 border-r border-emerald-800 text-center w-[4%]">SR.</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[12%]">L.R.NO.</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[5%]">PKG</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[18%] truncate">CONSIGNOR</th>
-                      <th className="px-2 py-3 border-r border-emerald-800 w-[18%] truncate">CONSIGNEE</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[6%]">WEIGHT</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center w-[10%]">STATION</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center bg-amber-950/60 text-amber-300 w-[9%]">TO PAY</th>
-                      <th className="px-1 py-3 border-r border-emerald-800 text-center bg-emerald-950/60 text-emerald-300 w-[9%]">PAID</th>
-                      <th className="px-1 py-3 text-center bg-blue-950/60 text-blue-300 w-[9%]">T.B.B</th>
+                    <tr className="bg-emerald-900 text-slate-800 font-bold text-[10px] sm:text-xs">
+                      <th className="px-1.5 py-3 border-r border-emerald-200 text-center w-[4%]">SR.</th>
+                      <th className="px-2 py-3 border-r border-emerald-200 w-[12%]">L.R.NO.</th>
+                      <th className="px-1 py-3 border-r border-emerald-200 text-center w-[5%]">PKG</th>
+                      <th className="px-2 py-3 border-r border-emerald-200 w-[18%] truncate">CONSIGNOR</th>
+                      <th className="px-2 py-3 border-r border-emerald-200 w-[18%] truncate">CONSIGNEE</th>
+                      <th className="px-1 py-3 border-r border-emerald-200 text-center w-[6%]">WEIGHT</th>
+                      <th className="px-1 py-3 border-r border-emerald-200 text-center w-[10%]">STATION</th>
+                      <th className="px-1 py-3 border-r border-emerald-200 text-center bg-amber-950/60 text-amber-700 w-[9%]">TO PAY</th>
+                      <th className="px-1 py-3 border-r border-emerald-200 text-center bg-emerald-50 text-emerald-700 w-[9%]">PAID</th>
+                      <th className="px-1 py-3 text-center bg-blue-950/60 text-blue-700 w-[9%]">T.B.B</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-emerald-200/60 bg-white">
@@ -998,23 +998,23 @@ export default function StockOut() {
                     })}
                   </tbody>
                   <tfoot>
-                    <tr className="bg-emerald-900 font-bold text-white text-xs sm:text-sm border-t-2 border-emerald-900">
+                    <tr className="bg-emerald-900 font-bold text-slate-800 text-xs sm:text-sm border-t-2 border-emerald-900">
                       <td colSpan={2} className="px-2 py-3 text-right uppercase tracking-wider font-black">
                         TOTAL:
                       </td>
-                      <td className="px-1 py-3 text-center font-mono font-black text-xs sm:text-sm text-yellow-300">
+                      <td className="px-1 py-3 text-center font-mono font-black text-xs sm:text-sm text-slate-800">
                         {totalPackages}
                       </td>
-                      <td colSpan={3} className="px-2 py-3 text-right uppercase tracking-wider font-black text-slate-300">
+                      <td colSpan={3} className="px-2 py-3 text-right uppercase tracking-wider font-black text-slate-700">
                         AMOUNTS TOTAL:
                       </td>
-                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-amber-300 truncate">
+                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-amber-700 truncate">
                         ₹{totalToPay.toLocaleString('en-IN')}
                       </td>
-                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-emerald-300 truncate">
+                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-emerald-700 truncate">
                         ₹{totalPaid.toLocaleString('en-IN')}
                       </td>
-                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-blue-300 truncate">
+                      <td className="px-1 py-3 text-center font-mono font-black text-xs text-blue-700 truncate">
                         ₹{totalTbb.toLocaleString('en-IN')}
                       </td>
                     </tr>
@@ -1105,15 +1105,15 @@ export default function StockOut() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
-                <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                <th className="p-3 border-r border-slate-800">Date</th>
-                <th className="p-3 border-r border-slate-800">MEMO NO.</th>
-                <th className="p-3 border-r border-slate-800">VEHICLE NO.</th>
-                <th className="p-3 border-r border-slate-800">DRIVER NAME</th>
-                <th className="p-3 border-r border-slate-800 text-center">TOTAL LRs</th>
-                <th className="p-3 border-r border-slate-800 text-center w-16">TOTAL PKG</th>
-                <th className="p-3 border-r border-slate-800 text-right w-28">TOTAL AMOUNT (₹)</th>
+              <tr className="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
+                <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
+                <th className="p-3 border-r border-slate-200">Date</th>
+                <th className="p-3 border-r border-slate-200">MEMO NO.</th>
+                <th className="p-3 border-r border-slate-200">VEHICLE NO.</th>
+                <th className="p-3 border-r border-slate-200">DRIVER NAME</th>
+                <th className="p-3 border-r border-slate-200 text-center">TOTAL LRs</th>
+                <th className="p-3 border-r border-slate-200 text-center w-16">TOTAL PKG</th>
+                <th className="p-3 border-r border-slate-200 text-right w-28">TOTAL AMOUNT (₹)</th>
                 <th className="p-3 text-center w-24">ACTIONS</th>
               </tr>
             </thead>
@@ -1194,17 +1194,17 @@ export default function StockOut() {
 
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
-              <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
+              <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
+                <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-700">
                   TOTALS:
                 </td>
-                <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-yellow-300">
+                <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
                   {filteredMemos.reduce((sum, m) => sum + (m.entries || []).length, 0)} LRs
                 </td>
-                <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-yellow-300">
+                <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
                   {regTotalPkgs} Pkgs
                 </td>
-                <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-emerald-300">
+                <td className="p-3 border-r border-slate-200 text-right font-mono font-black text-emerald-700">
                   ₹{regGrandTotal.toLocaleString('en-IN')}
                 </td>
                 <td className="p-3"></td>

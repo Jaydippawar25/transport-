@@ -896,18 +896,18 @@ export default function StockIn() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-slate-900 text-slate-200 font-bold text-[11px] uppercase tracking-wider">
-                <th className="p-3 border-r border-slate-800 text-center w-12">SR.</th>
-                <th className="p-3 border-r border-slate-800">L.R. NO. & DATE</th>
-                <th className="p-3 border-r border-slate-800">MEMO NO</th>
-                <th className="p-3 border-r border-slate-800">VEHICLE & DRIVER</th>
-                <th className="p-3 border-r border-slate-800">CONSIGNOR</th>
-                <th className="p-3 border-r border-slate-800">CONSIGNEE</th>
-                <th className="p-3 border-r border-slate-800 text-center">STATION</th>
-                <th className="p-3 border-r border-slate-800 text-center w-16">PKG</th>
-                <th className="p-3 border-r border-slate-800 text-right w-28">TO PAY (₹)</th>
-                <th className="p-3 border-r border-slate-800 text-right w-28">PAID (₹)</th>
-                <th className="p-3 border-r border-slate-800 text-right w-28">T.B.B (₹)</th>
+              <tr className="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
+                <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
+                <th className="p-3 border-r border-slate-200">L.R. NO. & DATE</th>
+                <th className="p-3 border-r border-slate-200">MEMO NO</th>
+                <th className="p-3 border-r border-slate-200">VEHICLE & DRIVER</th>
+                <th className="p-3 border-r border-slate-200">CONSIGNOR</th>
+                <th className="p-3 border-r border-slate-200">CONSIGNEE</th>
+                <th className="p-3 border-r border-slate-200 text-center">STATION</th>
+                <th className="p-3 border-r border-slate-200 text-center w-16">PKG</th>
+                <th className="p-3 border-r border-slate-200 text-right w-28">TO PAY (₹)</th>
+                <th className="p-3 border-r border-slate-200 text-right w-28">PAID (₹)</th>
+                <th className="p-3 border-r border-slate-200 text-right w-28">T.B.B (₹)</th>
                 <th className="p-3 text-center w-28">ACTIONS</th>
               </tr>
             </thead>
@@ -1029,23 +1029,23 @@ export default function StockIn() {
             
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
-              <tr className="bg-slate-900 text-white font-bold text-xs border-t-2 border-slate-800">
-                <td colSpan={7} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
+              <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
+                <td colSpan={7} className="p-3 text-right uppercase tracking-wider font-black text-slate-700">
                   TOTAL:
                 </td>
-                <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-yellow-300">
+                <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
                   {totalPkgs} Pkgs
                 </td>
-                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-amber-300">
+                <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-amber-700">
                   ₹{totalToPay.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-emerald-300">
+                <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-emerald-700">
                   ₹{totalPaid.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-blue-300">
+                <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-blue-700">
                   ₹{totalTBB.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 text-center font-mono font-black text-xs text-yellow-400">
+                <td className="p-3 text-center font-mono font-black text-xs text-indigo-700">
                   ₹{grandTotal.toLocaleString('en-IN')}
                 </td>
               </tr>

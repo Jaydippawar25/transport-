@@ -297,7 +297,7 @@ export default function Accounting() {
           </div>
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-2xl shadow-lg border border-slate-800 text-white relative overflow-hidden">
+        <div className="bg-slate-900 p-6 rounded-2xl shadow-lg border border-slate-200 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <Calculator className="w-24 h-24" />
           </div>
@@ -313,19 +313,19 @@ export default function Accounting() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-900 text-slate-200 font-bold text-[10px] uppercase tracking-wider">
-                <th className="p-3 border-r border-slate-800">{viewType === 'memo' ? 'Memo No.' : 'Station'}</th>
-                {viewType === 'memo' && <th className="p-3 border-r border-slate-800">Date</th>}
-                {viewType === 'station' && <th className="p-3 border-r border-slate-800 text-center">Memo Count</th>}
-                <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/30 text-emerald-300">To Pay</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/30 text-emerald-300">Paid</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/30 text-emerald-300">T.B.B</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-emerald-900/50 text-emerald-300 font-black">TOTAL BOOKING</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-rose-900/30 text-rose-300">Freight</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-rose-900/30 text-rose-300">Loading/Other</th>
-                <th className="p-3 border-r border-slate-800 text-right bg-rose-900/50 text-rose-300 font-black">TOTAL EXPENSE</th>
-                <th className="p-3 border-r border-slate-800 text-right text-orange-300 font-black">COMMISSION</th>
-                <th className="p-3 text-right text-indigo-300 font-black">PROFIT / LOSS</th>
+              <tr className="bg-slate-50 text-slate-500 font-bold text-[10px] uppercase tracking-wider">
+                <th className="p-3 border-r border-slate-200">{viewType === 'memo' ? 'Memo No.' : 'Station'}</th>
+                {viewType === 'memo' && <th className="p-3 border-r border-slate-200">Date</th>}
+                {viewType === 'station' && <th className="p-3 border-r border-slate-200 text-center">Memo Count</th>}
+                <th className="p-3 border-r border-slate-200 text-right bg-emerald-50 text-emerald-700">To Pay</th>
+                <th className="p-3 border-r border-slate-200 text-right bg-emerald-50 text-emerald-700">Paid</th>
+                <th className="p-3 border-r border-slate-200 text-right bg-emerald-50 text-emerald-700">T.B.B</th>
+                <th className="p-3 border-r border-slate-200 text-right bg-emerald-100 text-emerald-700 font-black">TOTAL BOOKING</th>
+                <th className="p-3 border-r border-slate-200 text-right bg-rose-50 text-rose-700">Freight</th>
+                <th className="p-3 border-r border-slate-200 text-right bg-rose-50 text-rose-700">Loading/Other</th>
+                <th className="p-3 border-r border-slate-200 text-right bg-rose-100 text-rose-700 font-black">TOTAL EXPENSE</th>
+                <th className="p-3 border-r border-slate-200 text-right text-orange-700 font-black">COMMISSION</th>
+                <th className="p-3 text-right text-indigo-700 font-black">PROFIT / LOSS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -361,25 +361,25 @@ export default function Accounting() {
             </tbody>
             {reportData.length > 0 && (
               <tfoot>
-                <tr className="bg-slate-900 text-white font-bold text-[11px] border-t-2 border-slate-800">
-                  <td colSpan={viewType === 'memo' ? 2 : 2} className="p-3 text-right uppercase tracking-wider text-slate-300">
+                <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-[11px] border-t-2 border-slate-200">
+                  <td colSpan={viewType === 'memo' ? 2 : 2} className="p-3 text-right uppercase tracking-wider text-slate-700">
                     GRAND TOTALS:
                   </td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">{gtToPay.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">{gtPaid.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-emerald-300">{gtTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-emerald-400">{gtIncome.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">{gtToPay.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">{gtPaid.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">{gtTbb.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono font-black text-emerald-800">{gtIncome.toLocaleString('en-IN')}</td>
                   
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-rose-300">
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-rose-700">
                     {reportData.reduce((sum, r) => sum + r.freight, 0).toLocaleString('en-IN')}
                   </td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono text-rose-300">
+                  <td className="p-3 border-r border-slate-200 text-right font-mono text-rose-700">
                     {reportData.reduce((sum, r) => sum + r.loading + r.other, 0).toLocaleString('en-IN')}
                   </td>
-                  <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-rose-400">{gtExpense.toLocaleString('en-IN')}</td>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono font-black text-rose-700">{gtExpense.toLocaleString('en-IN')}</td>
                   
-                  <td className="p-3 border-r border-slate-800 text-right font-mono font-black text-orange-400">{gtCommission.toLocaleString('en-IN')}</td>
-                  <td className={`p-3 text-right font-mono font-black ${gtProfit >= 0 ? 'text-indigo-300' : 'text-rose-400'}`}>
+                  <td className="p-3 border-r border-slate-200 text-right font-mono font-black text-orange-700">{gtCommission.toLocaleString('en-IN')}</td>
+                  <td className={`p-3 text-right font-mono font-black ${gtProfit >= 0 ? 'text-indigo-700' : 'text-rose-700'}`}>
                     {gtProfit >= 0 ? '+' : ''}{gtProfit.toLocaleString('en-IN')}
                   </td>
                 </tr>

@@ -256,17 +256,17 @@ export default function TransportAgent() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-slate-900 text-slate-200 uppercase text-[10px] tracking-wider">
-                    <th className="p-3 font-bold border-r border-slate-800">DATE</th>
-                    <th className="p-3 font-bold border-r border-slate-800">MEMO NO.</th>
-                    <th className="p-3 font-bold border-r border-slate-800">VEHICLE NO.</th>
-                    <th className="p-3 font-bold border-r border-slate-800">DRIVER NAME</th>
-                    <th className="p-3 font-bold text-center border-r border-slate-800">TOTAL LRS</th>
-                    <th className="p-3 font-bold text-center border-r border-slate-800">TOTAL PKG</th>
-                    <th className="p-3 font-bold text-right border-r border-slate-800">TO PAY (₹)</th>
-                    <th className="p-3 font-bold text-right border-r border-slate-800">PAID (₹)</th>
-                    <th className="p-3 font-bold text-right border-r border-slate-800">T.B.B (₹)</th>
-                    <th className="p-3 font-bold text-right border-r border-slate-800">TOTAL (₹)</th>
+                  <tr className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider">
+                    <th className="p-3 font-bold border-r border-slate-200">DATE</th>
+                    <th className="p-3 font-bold border-r border-slate-200">MEMO NO.</th>
+                    <th className="p-3 font-bold border-r border-slate-200">VEHICLE NO.</th>
+                    <th className="p-3 font-bold border-r border-slate-200">DRIVER NAME</th>
+                    <th className="p-3 font-bold text-center border-r border-slate-200">TOTAL LRS</th>
+                    <th className="p-3 font-bold text-center border-r border-slate-200">TOTAL PKG</th>
+                    <th className="p-3 font-bold text-right border-r border-slate-200">TO PAY (₹)</th>
+                    <th className="p-3 font-bold text-right border-r border-slate-200">PAID (₹)</th>
+                    <th className="p-3 font-bold text-right border-r border-slate-200">T.B.B (₹)</th>
+                    <th className="p-3 font-bold text-right border-r border-slate-200">TOTAL (₹)</th>
                     <th className="p-3 font-bold text-center">ACTION</th>
                   </tr>
                 </thead>
