@@ -101,7 +101,7 @@ export default function TransportAgent() {
   const sumToPay = filteredMemos.reduce((sum, m) => sum + (Number(m.totalToPay) || 0), 0);
   const sumPaid = filteredMemos.reduce((sum, m) => sum + (Number(m.totalPaid) || 0), 0);
   const sumTbb = filteredMemos.reduce((sum, m) => sum + (Number(m.totalTbb) || 0), 0);
-  const totalGrandTotal = filteredMemos.reduce((sum, m) => sum + (Number(m.grandTotal) || 0), 0);
+  const totalGrandTotal = sumToPay + sumPaid + sumTbb; // Use calculated sum to bypass any bad historical data
 
   const handleExportExcel = () => {
     const exportData = filteredMemos.map(memo => ({
@@ -114,7 +114,7 @@ export default function TransportAgent() {
       'To Pay': Number(memo.totalToPay || 0),
       'Paid': Number(memo.totalPaid || 0),
       'T.B.B': Number(memo.totalTbb || 0),
-      'Total Amount': Number(memo.grandTotal || 0)
+      'Total Amount': ((Number(memo.totalToPay) || 0) + (Number(memo.totalPaid) || 0) + (Number(memo.totalTbb) || 0))
     }));
 
     exportData.push({
@@ -300,7 +300,7 @@ export default function TransportAgent() {
                           {Number(memo.totalTbb || 0).toLocaleString('en-IN')}
                         </td>
                         <td className="p-3 text-right font-black font-mono text-indigo-700 bg-indigo-50/50 whitespace-nowrap border-r border-slate-100">
-                          ₹{Number(memo.grandTotal || 0).toLocaleString('en-IN')}
+                          ₹{((Number(memo.totalToPay) || 0) + (Number(memo.totalPaid) || 0) + (Number(memo.totalTbb) || 0)).toLocaleString('en-IN')}
                         </td>
                         <td className="p-3 text-center">
                           <button

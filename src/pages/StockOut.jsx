@@ -482,10 +482,10 @@ export default function StockOut() {
     };
   });
 
-  const totalPackages = memoEntries.reduce((sum, e) => sum + e.packages, 0);
-  const totalToPay = memoEntries.reduce((sum, e) => sum + e.toPay, 0);
-  const totalPaid = memoEntries.reduce((sum, e) => sum + e.paid, 0);
-  const totalTbb = memoEntries.reduce((sum, e) => sum + (e.tbb || 0), 0);
+  const totalPackages = memoEntries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
+  const totalToPay = memoEntries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
+  const totalPaid = memoEntries.reduce((sum, e) => sum + Number(e.paid || 0), 0);
+  const totalTbb = memoEntries.reduce((sum, e) => sum + Number(e.tbb || 0), 0);
   const grandTotal = totalToPay + totalPaid + totalTbb;
 
 
