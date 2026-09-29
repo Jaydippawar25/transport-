@@ -19,7 +19,7 @@ import {
   FileSpreadsheet,
   Edit,
   Eye
-} from 'lucide-react';
+, Trash2 } from 'lucide-react';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 
@@ -280,6 +280,20 @@ export default function StockIn() {
       alert(`Failed to save entry: ${err.message || err}`);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+
+  const handleDeleteLr = async (id, e) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
+      try {
+        await dataService.deleteStockIn(id);
+        await loadData();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete record.");
+      }
     }
   };
 
@@ -1007,6 +1021,13 @@ export default function StockIn() {
                             title="Print LR"
                           >
                             <Printer className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => handleDeleteLr(item.id, e)}
+                            className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer"
+                            title="Delete LR"
+                          >
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </td>

@@ -18,7 +18,7 @@ import {
   FileSpreadsheet,
   Edit,
   Eye
-} from 'lucide-react';
+, Trash2 } from 'lucide-react';
 import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
 import { dataService } from '../services/dataService';
@@ -487,6 +487,20 @@ export default function StockOut() {
   const totalPaid = memoEntries.reduce((sum, e) => sum + e.paid, 0);
   const totalTbb = memoEntries.reduce((sum, e) => sum + (e.tbb || 0), 0);
   const grandTotal = totalToPay + totalPaid + totalTbb;
+
+
+  const handleDeleteMemo = async (id, e) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
+      try {
+        await dataService.deleteStockOut(id);
+        await loadData();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete record.");
+      }
+    }
+  };
 
   const handleEditMemo = (memo) => {
     setEditingMemoId(memo.id);
@@ -1155,6 +1169,13 @@ export default function StockOut() {
                           title={`Print Memo #${memo.memoNo}`}
                         >
                           <Printer className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={(e) => handleDeleteMemo(memo.id, e)}
+                          className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer"
+                          title="Delete Memo"
+                        >
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
