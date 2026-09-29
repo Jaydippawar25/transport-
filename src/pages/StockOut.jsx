@@ -290,17 +290,20 @@ export default function StockOut() {
     const prefix = station.substring(0, 3).toUpperCase();
     const maxMemo = allMemos.reduce((max, memo) => {
       if (!memo.memoNo) return max;
-      if (memo.memoNo.startsWith(`${prefix}-`)) {
-        const match = memo.memoNo.match(/-(\d+)$/);
-        if (match) {
-          const num = parseInt(match[1], 10);
-          // Only match if it's a 5-digit number (or similar) to avoid legacy weird formats
-          // but if we want to strictly increment from previous max:
-          return num > max ? num : max;
-        }
+      
+      // Ignore legacy LM- memos so the new sequence cleanly starts from 00001
+      if (memo.memoNo.startsWith('LM-')) return max;
+
+      // Match ANY station prefix to maintain a global counter
+      const match = memo.memoNo.match(/^[A-Z]+-(\d+)$/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        return num > max ? num : max;
       }
+      
       return max;
     }, 0);
+    
     return `${prefix}-${String(maxMemo + 1).padStart(5, '0')}`;
   };
 
