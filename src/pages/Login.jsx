@@ -5,13 +5,14 @@ import {
   Lock, 
   AlertCircle,
   X,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
-  const [email, setEmail] = useState('admin@123.com');
-  const [password, setPassword] = useState('Pass123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -134,7 +135,12 @@ export default function Login() {
                   disabled={isSubmitting}
                   className="w-full py-3 bg-gradient-to-r from-[#212c75] to-[#1c235b] hover:from-[#1b2460] hover:to-[#161c48] text-white font-semibold text-sm rounded-lg shadow-lg shadow-indigo-900/30 transition-all cursor-pointer disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Authenticating...' : 'Login'}
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Loading...
+                    </span>
+                  ) : 'Login'}
                 </button>
               </div>
 
