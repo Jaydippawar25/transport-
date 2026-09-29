@@ -1105,7 +1105,7 @@ export default function StockOut() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
+              <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
                 <th className="p-3 border-r border-slate-200">Date</th>
                 <th className="p-3 border-r border-slate-200">MEMO NO.</th>
@@ -1194,7 +1194,7 @@ export default function StockOut() {
 
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
-              <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
+              <tr className="bg-blue-50 text-blue-900 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
                 <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-700">
                   TOTALS:
                 </td>

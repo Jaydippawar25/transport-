@@ -313,7 +313,7 @@ export default function Accounting() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-50 text-slate-500 font-bold text-[10px] uppercase tracking-wider">
+              <tr className="bg-blue-50 text-blue-800 font-bold text-[10px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200">{viewType === 'memo' ? 'Memo No.' : 'Station'}</th>
                 {viewType === 'memo' && <th className="p-3 border-r border-slate-200">Date</th>}
                 {viewType === 'station' && <th className="p-3 border-r border-slate-200 text-center">Memo Count</th>}
@@ -361,7 +361,7 @@ export default function Accounting() {
             </tbody>
             {reportData.length > 0 && (
               <tfoot>
-                <tr className="bg-slate-50 text-slate-800 border-t-2 border-slate-200 font-bold text-[11px] border-t-2 border-slate-200">
+                <tr className="bg-blue-50 text-blue-900 border-t-2 border-slate-200 font-bold text-[11px] border-t-2 border-slate-200">
                   <td colSpan={viewType === 'memo' ? 2 : 2} className="p-3 text-right uppercase tracking-wider text-slate-700">
                     GRAND TOTALS:
                   </td>

@@ -256,7 +256,7 @@ export default function TransportAgent() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider">
+                  <tr className="bg-blue-50 text-blue-800 uppercase text-[10px] tracking-wider">
                     <th className="p-3 font-bold border-r border-slate-200">DATE</th>
                     <th className="p-3 font-bold border-r border-slate-200">MEMO NO.</th>
                     <th className="p-3 font-bold border-r border-slate-200">VEHICLE NO.</th>
