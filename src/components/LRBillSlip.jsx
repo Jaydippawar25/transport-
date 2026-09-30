@@ -54,11 +54,11 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
   const toPayAmt = Number(lr.toPay || (lr.paymentType === 'ToPay' ? lr.charges?.total : 0) || 0);
   const paidAmt = Number(lr.paid || (lr.paymentType === 'Paid' ? lr.charges?.total : 0) || 0);
   const tbbAmt = Number(lr.tbb || (lr.paymentType === 'T.B.B' ? lr.charges?.total : 0) || 0);
-  const totalAmt = lr.charges?.total || (toPayAmt + paidAmt + tbbAmt) || 300;
+  const totalAmt = lr.charges?.total !== undefined ? lr.charges.total : (toPayAmt + paidAmt + tbbAmt);
 
   const paymentType = lr.paymentType || (toPayAmt > 0 ? 'ToPay' : paidAmt > 0 ? 'Paid' : tbbAmt > 0 ? 'T.B.B' : 'ToPay');
 
-  const freight = lr.charges?.freight || totalAmt;
+  const freight = lr.charges?.freight !== undefined ? lr.charges.freight : totalAmt;
   const hamali = Number(lr.charges?.hamali || 0);
   const other = Number(lr.charges?.other || 0);
   const stCharges = Number(lr.charges?.stCharges || 0);
@@ -237,14 +237,14 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
             <thead>
               <tr className="border-b border-black text-[10px] font-bold">
                 <th className="py-0.5 px-1 border-r border-black text-left">Charges</th>
-                <th className="py-0.5 px-1 text-right">Amount</th>
+                <th className="py-0.5 px-1 text-right">Amount (Rs)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/30">
               <tr>
                 <td className="py-1 px-1 border-r border-black font-semibold text-[11px]">Freight</td>
                 <td className="py-1 px-1 text-right font-bold text-[12px]">
-                  ₹{freight}
+                  {freight > 0 ? `₹${freight}` : '-'}
                 </td>
               </tr>
               <tr>
@@ -262,7 +262,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
               <tr className="border-t-2 border-black bg-[#fff099]">
                 <td className="py-1 px-1 border-r border-black font-black uppercase text-[12px]">Total</td>
                 <td className="py-1 px-1 text-right font-black text-[13px]">
-                  ₹{totalAmt}
+                  {totalAmt > 0 ? `₹${totalAmt}` : '-'}
                 </td>
               </tr>
             </tbody>
