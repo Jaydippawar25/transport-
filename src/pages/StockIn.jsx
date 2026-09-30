@@ -899,8 +899,6 @@ export default function StockIn() {
               <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
                 <th className="p-3 border-r border-slate-200">L.R. NO. & DATE</th>
-                <th className="p-3 border-r border-slate-200">MEMO NO</th>
-                <th className="p-3 border-r border-slate-200">VEHICLE & DRIVER</th>
                 <th className="p-3 border-r border-slate-200">CONSIGNOR</th>
                 <th className="p-3 border-r border-slate-200">CONSIGNEE</th>
                 <th className="p-3 border-r border-slate-200 text-center">STATION</th>
@@ -914,7 +912,7 @@ export default function StockIn() {
             <tbody className="divide-y divide-slate-100">
               {filteredStockIn.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="p-8 text-center text-xs text-slate-400">
+                  <td colSpan={10} className="p-8 text-center text-xs text-slate-400">
                     No Stock In Lorry Receipts match your filter criteria.
                   </td>
                 </tr>
@@ -939,15 +937,6 @@ export default function StockIn() {
                         <p className="text-[10px] text-slate-400 font-medium">
                           {new Date(item.date || item.createdAt).toLocaleDateString('en-IN')}
                         </p>
-                      </td>
-                      <td className="p-3 border-r border-slate-100">
-                        <p className="font-semibold text-slate-900">
-                          {item.memoNo || '-'}
-                        </p>
-                      </td>
-                      <td className="p-3 border-r border-slate-100">
-                        <p className="font-mono font-bold text-slate-900 text-[11px]">{item.vehicleNo || '-'}</p>
-                        <p className="text-[10px] text-slate-500">{item.driverName || '-'}</p>
                       </td>
                       <td className="p-3 border-r border-slate-100 font-semibold text-slate-900">
                         {item.consignorName}
@@ -1030,7 +1019,7 @@ export default function StockIn() {
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
               <tr className="bg-blue-50 text-blue-900 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
-                <td colSpan={7} className="p-3 text-right uppercase tracking-wider font-black text-slate-700">
+                <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-700">
                   TOTAL:
                 </td>
                 <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
