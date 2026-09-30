@@ -4,6 +4,7 @@ import {
   Plus, 
   Search, 
   Trash2, 
+  Edit2,
   Building2, 
   Store, 
   Truck, 
@@ -30,6 +31,7 @@ export default function Masters() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
   // New Record Form State
   const [formData, setFormData] = useState({
@@ -74,15 +76,28 @@ export default function Masters() {
     loadMasters();
   }, []);
 
-  const handleOpenAddModal = () => {
-    setFormData({
-      name: '',
-      vehicleNo: '',
-      address: '',
-      mobile: '',
-      gstin: '',
-      ownerName: ''
-    });
+  const handleOpenAddModal = (item = null) => {
+    if (item && item.id) {
+      setEditingId(item.id);
+      setFormData({
+        name: item.name || '',
+        vehicleNo: item.vehicleNo || '',
+        address: item.address || '',
+        mobile: item.mobile || '',
+        gstin: item.gstin || '',
+        ownerName: item.ownerName || ''
+      });
+    } else {
+      setEditingId(null);
+      setFormData({
+        name: '',
+        vehicleNo: '',
+        address: '',
+        mobile: '',
+        gstin: '',
+        ownerName: ''
+      });
+    }
     setShowAddModal(true);
   };
 
@@ -146,12 +161,18 @@ export default function Masters() {
         };
       }
 
-      await dataService.addMaster(activeTab, payload);
+      if (editingId) {
+        await dataService.updateMaster(activeTab, editingId, payload);
+      } else {
+        await dataService.addMaster(activeTab, payload);
+      }
+      
       await loadMasters();
       setShowAddModal(false);
+      setEditingId(null);
     } catch (err) {
-      console.error("Error adding master entry:", err);
-      alert('Failed to add master record.');
+      console.error("Error saving master entry:", err);
+      alert('Failed to save master record.');
     } finally {
       setIsSubmitting(false);
     }
@@ -349,13 +370,22 @@ export default function Masters() {
                     )}
 
                     <td className="py-4 px-4 sm:px-6 text-right">
-                      <button
-                        onClick={() => handleDelete(item.id, item.name || item.vehicleNo)}
-                        title="Delete record"
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors opacity-80 group-hover:opacity-100 cursor-pointer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleOpenAddModal(item)}
+                          title="Edit record"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors opacity-80 group-hover:opacity-100 cursor-pointer"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id, item.name || item.vehicleNo)}
+                          title="Delete record"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors opacity-80 group-hover:opacity-100 cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -373,10 +403,10 @@ export default function Masters() {
             <div className="px-6 py-4 bg-indigo-900 text-white flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
-                  <Plus className="w-4 h-4" />
+                  {editingId ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
                 <div>
-                  <h3 className="font-bold text-base">Add New {currentCategory.label.replace(/s$/, '')}</h3>
+                  <h3 className="font-bold text-base">{editingId ? 'Edit' : 'Add New'} {currentCategory.label.replace(/s$/, '')}</h3>
                   <p className="text-xs text-slate-400">Save details into Drop Box for fast form pre-filling</p>
                 </div>
               </div>

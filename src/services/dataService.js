@@ -395,6 +395,31 @@ export const dataService = {
     return newRecord;
   },
 
+  async updateMaster(category, id, record) {
+    initLocalStorageIfNeeded();
+    const currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    const categoryList = currentMasters[category] || [];
+    const idx = categoryList.findIndex(item => item.id === id);
+    if (idx !== -1) {
+      categoryList[idx] = { ...categoryList[idx], ...record };
+      const updatedMasters = {
+        ...currentMasters,
+        [category]: categoryList
+      };
+      setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
+
+      if (isFirebaseConfigured && db) {
+        try {
+          await setDoc(doc(db, 'masters', 'main'), updatedMasters);
+        } catch (err) {
+          console.error("Firestore update master error:", err);
+        }
+      }
+      return categoryList[idx];
+    }
+    return null;
+  },
+
   async deleteMaster(category, id) {
     initLocalStorageIfNeeded();
     const currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
