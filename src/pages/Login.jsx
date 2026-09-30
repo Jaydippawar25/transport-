@@ -170,16 +170,6 @@ export default function Login() {
                     />
                     <span>Remember</span>
                   </label>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      alert("Self-signup is disabled. Please contact your system administrator.");
-                    }}
-                    className="hover:underline cursor-pointer font-medium text-[#2a4393]"
-                  >
-                    Signup
-                  </button>
                 </div>
 
                 <div className="text-center pt-1">
