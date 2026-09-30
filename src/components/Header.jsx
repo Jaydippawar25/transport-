@@ -14,9 +14,14 @@ export default function Header({ onToggleSidebar }) {
           <Menu className="w-5 h-5" />
         </button>
 
-        <h2 className="sm:hidden text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">
-          ROYAL ROADLINES
-        </h2>
+        <div className="sm:hidden flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-700/30 font-black text-xs">
+            RR
+          </div>
+          <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">
+            ROYAL ROADLINES
+          </h2>
+        </div>
 
         <div className="hidden sm:block">
           <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">ROYAL ROADLINES</h2>
