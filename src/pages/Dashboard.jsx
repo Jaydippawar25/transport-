@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   PackagePlus, 
   Truck, 
@@ -31,6 +32,7 @@ import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [stockInList, setStockInList] = useState([]);
   const [stockOutList, setStockOutList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -186,7 +188,10 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         
         {/* Today's Stock In */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+        <div 
+          onClick={() => navigate('/stock-in')}
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-indigo-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Stock In</span>
             <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
@@ -207,7 +212,10 @@ export default function Dashboard() {
         </div>
 
         {/* Today's Stock Out */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+        <div 
+          onClick={() => navigate('/stock-out')}
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-emerald-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Stock Out</span>
             <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
@@ -228,7 +236,10 @@ export default function Dashboard() {
         </div>
 
         {/* Pending in Godown */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+        <div 
+          onClick={() => navigate('/stock-in')}
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-amber-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sitting in Godown</span>
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
@@ -249,7 +260,10 @@ export default function Dashboard() {
         </div>
 
         {/* Today's Total ToPay Freight */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+        <div 
+          onClick={() => navigate('/stock-in')}
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-purple-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's To-Pay Freight</span>
             <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
@@ -267,7 +281,10 @@ export default function Dashboard() {
         </div>
 
         {/* Today's Total Paid Freight */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+        <div 
+          onClick={() => navigate('/stock-in')}
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-emerald-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Paid Freight</span>
             <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
@@ -285,7 +302,10 @@ export default function Dashboard() {
         </div>
 
         {/* Today's Total T.B.B Freight */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md transition-shadow relative overflow-hidden group">
+        <div 
+          onClick={() => navigate('/stock-in')}
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-blue-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's T.B.B Freight</span>
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
