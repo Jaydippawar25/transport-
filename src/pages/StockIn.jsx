@@ -893,7 +893,7 @@ export default function StockIn() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="w-full">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
