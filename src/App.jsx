@@ -14,6 +14,8 @@ import Login from './pages/Login';
 import LRPrintModal from './components/LRPrintModal';
 import MemoPrintModal from './components/MemoPrintModal';
 
+import BottomNav from './components/BottomNav';
+
 // Protected Route Guard: If not authenticated, render Login directly
 function AuthenticatedRoute({ children }) {
   const { currentUser, loading } = useAuth();
@@ -44,15 +46,18 @@ function MainLayout({ children }) {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen pb-16 lg:pb-0">
         <Header 
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
           onSelectSearchResult={handleSearchResultSelect}
         />
 
-        <main className="flex-1 pb-12">
+        <main className="flex-1 pb-4">
           {children}
         </main>
+        
+        {/* Mobile Bottom Navigation */}
+        <BottomNav />
       </div>
 
       {/* Global Quick Search Result Modals */}
