@@ -1103,8 +1103,8 @@ export default function StockOut() {
           </div>
         </div>
 
-        <div className="w-full">
-          <table className="w-full text-xs text-left border-collapse">
+        <div className="hidden lg:block w-full overflow-x-auto">
+          <table className="w-full text-xs text-left border-collapse min-w-[1000px] whitespace-nowrap">
             <thead>
               <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
@@ -1212,6 +1212,98 @@ export default function StockOut() {
               </tr>
             </tfoot>
           </table>
+        </div>
+
+        {/* MOBILE CARDS VIEW */}
+        <div className="lg:hidden flex flex-col divide-y divide-slate-100">
+          {filteredMemos.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-400">
+              No Stock Out Memo records match your search criteria.
+            </div>
+          ) : (
+            filteredMemos.map((memo, idx) => (
+              <div key={idx} className="p-4 flex flex-col gap-3 hover:bg-slate-50 transition-colors">
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col">
+                    <span className="font-mono font-bold text-indigo-700 text-sm">{memo.memoNo}</span>
+                    <span className="text-xs text-slate-500 font-medium">
+                      {new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN')}
+                    </span>
+                  </div>
+                  <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-bold">
+                    #{idx + 1}
+                  </span>
+                </div>
+
+                <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-xs flex flex-col gap-1.5">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Vehicle:</span>
+                    <span className="font-bold text-slate-900">{memo.lorryNo}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Driver:</span>
+                    <span className="font-bold text-slate-900">{memo.driverName}</span>
+                  </div>
+                  <div className="flex justify-between pt-1.5 border-t border-slate-200/60 mt-0.5">
+                    <span className="text-slate-500">Total LRs / Pkgs:</span>
+                    <span className="font-bold text-slate-900">{(memo.entries || []).length} / {memo.totalPackages}</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-1">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setViewMemoData(memo)}
+                      className="p-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <FileText className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleEditMemo(memo)}
+                      className="p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setSelectedMemo(memo)}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <Printer className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={(e) => handleDeleteMemo(memo.id, e)}
+                      className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="font-mono font-bold text-emerald-700 text-sm">
+                      ₹{(memo.grandTotal || 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+          
+          {/* Mobile Totals Footer */}
+          {filteredMemos.length > 0 && (
+            <div className="bg-blue-50 p-4 flex flex-col gap-2">
+              <div className="flex justify-between items-center font-bold text-sm">
+                <span className="text-slate-700">Total LRs:</span>
+                <span className="text-slate-900">{filteredMemos.reduce((sum, m) => sum + (m.entries || []).length, 0)}</span>
+              </div>
+              <div className="flex justify-between items-center font-bold text-sm">
+                <span className="text-slate-700">Total Packages:</span>
+                <span className="text-slate-900">{regTotalPkgs}</span>
+              </div>
+              <div className="flex justify-between items-center font-bold text-sm">
+                <span className="text-slate-700">Grand Total:</span>
+                <span className="text-emerald-700">₹{regGrandTotal.toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       </>
