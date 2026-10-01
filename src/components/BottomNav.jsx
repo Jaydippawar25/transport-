@@ -19,13 +19,20 @@ export default function BottomNav() {
           <NavLink
             key={item.path}
             to={item.path}
+            end={item.path === '/'}
             className={({ isActive }) => ` 
-              flex flex-col items-center justify-center w-full py-2.5 gap-1 text-[10px] font-semibold transition-colors
-              
+              flex flex-col items-center justify-center w-full py-1.5 gap-0.5 text-[10px] font-semibold transition-colors
+              ${isActive ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-800'}
             `}
           >
-            <Icon className="w-5 h-5" />
-            <span className="truncate w-full text-center">{item.label}</span>
+            {({ isActive }) => (
+              <>
+                <div className={`p-1.5 rounded-xl transition-colors ${isActive ? 'bg-indigo-100 text-indigo-700' : 'bg-transparent text-slate-500'}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <span className="truncate w-full text-center">{item.label}</span>
+              </>
+            )}
           </NavLink>
         );
       })}
