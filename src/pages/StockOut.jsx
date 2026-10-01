@@ -1103,8 +1103,8 @@ export default function StockOut() {
           </div>
         </div>
 
-        <div className="hidden lg:block w-full overflow-x-auto">
-          <table className="w-full text-xs text-left border-collapse min-w-[1000px] whitespace-nowrap">
+        <div className="hidden lg:block w-full">
+          <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
