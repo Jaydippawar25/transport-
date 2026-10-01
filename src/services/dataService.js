@@ -373,8 +373,11 @@ export const dataService = {
   },
 
   async addMaster(category, record) {
-    initLocalStorageIfNeeded();
-    const currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    let currentMasters = await this.getMasters();
+    if (!currentMasters) {
+      initLocalStorageIfNeeded();
+      currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    }
     const categoryList = currentMasters[category] || [];
     const newRecord = { id: `m-${category.substring(0, 3)}-${Date.now()}`, ...record };
     const updatedCategoryList = [newRecord, ...categoryList];
@@ -382,8 +385,7 @@ export const dataService = {
       ...currentMasters,
       [category]: updatedCategoryList
     };
-    setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
-
+    
     if (isFirebaseConfigured && db) {
       try {
         await setDoc(doc(db, 'masters', 'main'), updatedMasters);
@@ -391,13 +393,17 @@ export const dataService = {
         console.error("Firestore save masters error:", err);
       }
     }
-
+    
+    setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
     return newRecord;
   },
 
   async updateMaster(category, id, record) {
-    initLocalStorageIfNeeded();
-    const currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    let currentMasters = await this.getMasters();
+    if (!currentMasters) {
+      initLocalStorageIfNeeded();
+      currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    }
     const categoryList = currentMasters[category] || [];
     const idx = categoryList.findIndex(item => item.id === id);
     if (idx !== -1) {
@@ -406,7 +412,6 @@ export const dataService = {
         ...currentMasters,
         [category]: categoryList
       };
-      setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
 
       if (isFirebaseConfigured && db) {
         try {
@@ -415,21 +420,25 @@ export const dataService = {
           console.error("Firestore update master error:", err);
         }
       }
+      
+      setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
       return categoryList[idx];
     }
     return null;
   },
 
   async deleteMaster(category, id) {
-    initLocalStorageIfNeeded();
-    const currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    let currentMasters = await this.getMasters();
+    if (!currentMasters) {
+      initLocalStorageIfNeeded();
+      currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    }
     const categoryList = currentMasters[category] || [];
     const updatedCategoryList = categoryList.filter(item => item.id !== id);
     const updatedMasters = {
       ...currentMasters,
       [category]: updatedCategoryList
     };
-    setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
 
     if (isFirebaseConfigured && db) {
       try {
@@ -439,6 +448,7 @@ export const dataService = {
       }
     }
 
+    setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
     return true;
   },
 
