@@ -310,8 +310,8 @@ export default function Accounting() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left border-collapse whitespace-nowrap">
+        <div className="hidden lg:block w-full">
+          <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="bg-blue-50 text-blue-800 font-bold text-[10px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200">{viewType === 'memo' ? 'Memo No.' : 'Station'}</th>
@@ -386,6 +386,48 @@ export default function Accounting() {
               </tfoot>
             )}
           </table>
+        </div>
+
+        {/* MOBILE CARDS VIEW */}
+        <div className="lg:hidden flex flex-col divide-y divide-slate-100">
+          {reportData.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-400">
+              No records found.
+            </div>
+          ) : (
+            reportData.map((row, idx) => (
+              <div key={idx} className="p-4 flex flex-col gap-3 hover:bg-slate-50 transition-colors">
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col">
+                    <span className="font-mono font-bold text-slate-900 text-sm">{row.label}</span>
+                    {viewType === 'memo' ? (
+                      <span className="text-xs text-slate-500 font-medium mt-1">
+                        {row.subLabel} | {row.date}
+                      </span>
+                    ) : (
+                      <span className="text-xs text-slate-500 font-medium mt-1">
+                        Memo Count: {row.memoCount}
+                      </span>
+                    )}
+                  </div>
+                  <div className={`px-2 py-1 rounded text-xs font-black ${row.profit >= 0 ? 'bg-indigo-50 text-indigo-700' : 'bg-rose-50 text-rose-700'}`}>
+                    {row.profit >= 0 ? '+' : ''}₹{row.profit.toLocaleString('en-IN')}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <div className="bg-emerald-50/50 p-2 rounded border border-emerald-100 flex flex-col items-center">
+                    <span className="text-[10px] font-bold text-emerald-700/70 uppercase">Total Booking</span>
+                    <span className="font-mono font-black text-emerald-700 text-sm">₹{row.totalIncome.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="bg-rose-50/50 p-2 rounded border border-rose-100 flex flex-col items-center">
+                    <span className="text-[10px] font-bold text-rose-700/70 uppercase">Total Expense</span>
+                    <span className="font-mono font-black text-rose-700 text-sm">₹{row.totalExpense.toLocaleString('en-IN')}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -253,8 +253,8 @@ export default function TransportAgent() {
               </div>
             </div>
             
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
+            <div className="hidden lg:block w-full">
+              <table className="w-full text-left text-sm border-collapse">
                 <thead>
                   <tr className="bg-blue-50 text-blue-800 uppercase text-[10px] tracking-wider">
                     <th className="p-3 font-bold border-r border-slate-200">DATE</th>
@@ -274,15 +274,15 @@ export default function TransportAgent() {
                   {filteredMemos.length > 0 ? (
                     filteredMemos.map(memo => (
                       <tr key={memo.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="p-3 text-slate-600 font-medium whitespace-nowrap border-r border-slate-100">
+                        <td className="p-3 text-slate-600 font-medium border-r border-slate-100">
                           {new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN')}
                         </td>
-                        <td className="p-3 whitespace-nowrap border-r border-slate-100">
+                        <td className="p-3 border-r border-slate-100">
                           <span className="text-blue-600 font-bold font-mono bg-blue-50 px-2 py-1 rounded">
                             {memo.memoNo}
                           </span>
                         </td>
-                        <td className="p-3 font-mono font-bold text-slate-700 whitespace-nowrap border-r border-slate-100">{memo.lorryNo}</td>
+                        <td className="p-3 font-mono font-bold text-slate-700 border-r border-slate-100">{memo.lorryNo}</td>
                         <td className="p-3 font-semibold text-slate-800 border-r border-slate-100">{memo.driverName}</td>
                         <td className="p-3 text-center font-bold text-slate-700 border-r border-slate-100">
                           {memo.entries?.length || 0}
@@ -299,13 +299,13 @@ export default function TransportAgent() {
                         <td className="p-3 text-right font-mono font-bold text-blue-700 border-r border-slate-100">
                           {Number(memo.totalTbb || 0).toLocaleString('en-IN')}
                         </td>
-                        <td className="p-3 text-right font-black font-mono text-indigo-700 bg-indigo-50/50 whitespace-nowrap border-r border-slate-100">
+                        <td className="p-3 text-right font-black font-mono text-indigo-700 bg-indigo-50/50 border-r border-slate-100">
                           ₹{((Number(memo.totalToPay) || 0) + (Number(memo.totalPaid) || 0) + (Number(memo.totalTbb) || 0)).toLocaleString('en-IN')}
                         </td>
                         <td className="p-3 text-center">
                           <button
                             onClick={() => setSelectedMemo(memo)}
-                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
                             title="View/Print Memo"
                           >
                             <FileText className="w-5 h-5" />
@@ -322,6 +322,75 @@ export default function TransportAgent() {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* MOBILE CARDS VIEW */}
+            <div className="lg:hidden flex flex-col divide-y divide-slate-100">
+              {filteredMemos.length === 0 ? (
+                <div className="p-8 text-center text-sm text-slate-400">
+                  No memos found for this agent in this date range.
+                </div>
+              ) : (
+                filteredMemos.map((memo, idx) => {
+                  const memoTotal = (Number(memo.totalToPay) || 0) + (Number(memo.totalPaid) || 0) + (Number(memo.totalTbb) || 0);
+                  
+                  return (
+                    <div key={memo.id} className="p-4 flex flex-col gap-3 hover:bg-slate-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <div className="flex flex-col">
+                          <span className="font-mono font-bold text-blue-700 text-sm bg-blue-50 px-2 py-0.5 rounded self-start">{memo.memoNo}</span>
+                          <span className="text-xs text-slate-500 font-medium mt-1">
+                            {new Date(memo.date || memo.createdAt).toLocaleDateString('en-IN')}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => setSelectedMemo(memo)}
+                          className="p-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors cursor-pointer"
+                        >
+                          <FileText className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-xs flex flex-col gap-1.5">
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Vehicle:</span>
+                          <span className="font-bold text-slate-900">{memo.lorryNo}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Driver:</span>
+                          <span className="font-bold text-slate-900">{memo.driverName}</span>
+                        </div>
+                        <div className="flex justify-between pt-1.5 border-t border-slate-200/60 mt-0.5">
+                          <span className="text-slate-500">Total LRs / Pkgs:</span>
+                          <span className="font-bold text-slate-900">{memo.entries?.length || 0} / {memo.totalPackages || 0}</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 mt-1">
+                        <div className="bg-amber-50 p-2 rounded flex flex-col items-center justify-center">
+                          <span className="text-[10px] font-bold text-amber-700/70 uppercase">To Pay</span>
+                          <span className="font-mono font-bold text-amber-700 text-xs">₹{Number(memo.totalToPay || 0).toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="bg-emerald-50 p-2 rounded flex flex-col items-center justify-center">
+                          <span className="text-[10px] font-bold text-emerald-700/70 uppercase">Paid</span>
+                          <span className="font-mono font-bold text-emerald-700 text-xs">₹{Number(memo.totalPaid || 0).toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="bg-blue-50 p-2 rounded flex flex-col items-center justify-center">
+                          <span className="text-[10px] font-bold text-blue-700/70 uppercase">T.B.B</span>
+                          <span className="font-mono font-bold text-blue-700 text-xs">₹{Number(memo.totalTbb || 0).toLocaleString('en-IN')}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center pt-2 border-t border-slate-100 mt-1">
+                        <span className="text-xs font-bold text-slate-600 uppercase">Grand Total</span>
+                        <span className="font-mono font-black text-indigo-700 text-sm">
+                          ₹{memoTotal.toLocaleString('en-IN')}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </>
