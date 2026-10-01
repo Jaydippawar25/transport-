@@ -893,8 +893,8 @@ export default function StockIn() {
           </div>
         </div>
 
-        <div className="w-full">
-          <table className="w-full text-xs text-left border-collapse">
+        <div className="hidden lg:block w-full overflow-x-auto">
+          <table className="w-full text-xs text-left border-collapse min-w-[800px] whitespace-nowrap">
             <thead>
               <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
                 <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
@@ -1040,6 +1040,102 @@ export default function StockIn() {
               </tr>
             </tfoot>
           </table>
+        </div>
+
+        {/* MOBILE CARDS VIEW */}
+        <div className="lg:hidden flex flex-col divide-y divide-slate-100">
+          {filteredStockIn.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-400">
+              No Stock In Lorry Receipts match your filter criteria.
+            </div>
+          ) : (
+            filteredStockIn.map((item, idx) => {
+              const amt = Number(item.charges?.total || item.freight || 0);
+              const isToPay = item.paymentType === 'ToPay';
+              const isPaid = item.paymentType === 'Paid';
+              const isTBB = item.paymentType === 'T.B.B';
+
+              return (
+                <div key={item.id || idx} className="p-4 flex flex-col gap-3 hover:bg-slate-50 transition-colors">
+                  <div className="flex justify-between items-start">
+                    <div className="flex flex-col">
+                      <span className="font-mono font-bold text-indigo-700 text-sm">{item.lrNo}</span>
+                      <span className="text-xs text-slate-500 font-medium">
+                        {new Date(item.date || item.createdAt).toLocaleDateString('en-IN')}
+                      </span>
+                    </div>
+                    <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-bold">
+                      #{idx + 1}
+                    </span>
+                  </div>
+
+                  <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-xs flex flex-col gap-1.5">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">From:</span>
+                      <span className="font-bold text-slate-900 truncate max-w-[180px]">{item.consignorName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">To:</span>
+                      <span className="font-bold text-slate-900 truncate max-w-[180px]">{item.consigneeName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-500">Station:</span>
+                      <span className="font-bold text-slate-800 uppercase px-1.5 py-0.5 bg-slate-200 rounded text-[9px]">{item.toStation}</span>
+                    </div>
+                    <div className="flex justify-between pt-1.5 border-t border-slate-200/60 mt-0.5">
+                      <span className="text-slate-500">Packages:</span>
+                      <span className="font-bold text-slate-900">{item.packages}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center mt-1">
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleEdit(item); }}
+                        className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-600 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSelectedLr(item); }}
+                        className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Printer className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteLr(item.id, e)}
+                        className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isToPay ? 'bg-amber-50 text-amber-700' : isPaid ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}`}>
+                        {item.paymentType}
+                      </span>
+                      <span className="font-mono font-bold text-slate-900 text-sm mt-0.5">
+                        ₹{amt.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+          
+          {/* Mobile Totals Footer */}
+          {filteredStockIn.length > 0 && (
+            <div className="bg-blue-50 p-4 flex flex-col gap-2">
+              <div className="flex justify-between items-center font-bold text-sm">
+                <span className="text-slate-700">Total Packages:</span>
+                <span className="text-slate-900">{totalPkgs}</span>
+              </div>
+              <div className="flex justify-between items-center font-bold text-sm">
+                <span className="text-slate-700">Grand Total:</span>
+                <span className="text-emerald-700">₹{grandTotal.toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

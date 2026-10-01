@@ -172,14 +172,6 @@ export default function Dashboard() {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={handleClearData}
-            disabled={isClearing}
-            className="flex items-center gap-2 px-3.5 py-2 bg-red-600/90 hover:bg-red-600 text-white text-xs font-semibold rounded-xl border border-red-400/30 transition-all shadow-md cursor-pointer"
-          >
-            <Trash2 className="w-4 h-4" />
-            {isClearing ? 'Clearing...' : 'Clear All Data'}
-          </button>
           
         </div>
       </div>
