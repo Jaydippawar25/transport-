@@ -198,11 +198,11 @@ export default function Accounting() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto">
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="border-2 border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 bg-white shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+            className="w-full sm:w-auto border-2 border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 bg-white shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
           >
             <option value="ALL">All Time</option>
             <option value="THIS_MONTH">This Month</option>
@@ -213,19 +213,19 @@ export default function Accounting() {
           </select>
 
           {dateFilter === 'CUSTOM' && (
-            <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border-2 border-slate-200 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white px-3 py-1.5 rounded-xl border-2 border-slate-200 shadow-sm">
               <input
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="text-sm font-bold text-slate-700 outline-none bg-transparent"
+                className="text-sm font-bold text-slate-700 outline-none bg-transparent w-full sm:w-auto"
               />
-              <span className="text-xs text-slate-400 font-bold">to</span>
+              <span className="text-xs text-slate-400 font-bold text-center sm:text-left">to</span>
               <input
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="text-sm font-bold text-slate-700 outline-none bg-transparent"
+                className="text-sm font-bold text-slate-700 outline-none bg-transparent w-full sm:w-auto"
               />
             </div>
           )}
@@ -233,7 +233,7 @@ export default function Accounting() {
           <select
             value={selectedStation}
             onChange={(e) => setSelectedStation(e.target.value)}
-            className="border-2 border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 bg-white shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+            className="w-full sm:w-auto border-2 border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 bg-white shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
           >
             <option value="ALL">All Stations</option>
             {stations.map(st => (
@@ -241,10 +241,10 @@ export default function Accounting() {
             ))}
           </select>
 
-          <div className="flex bg-slate-200 p-1 rounded-xl shadow-inner">
+          <div className="flex flex-col sm:flex-row bg-slate-200 p-1 rounded-xl shadow-inner">
             <button
               onClick={() => setViewType('memo')}
-              className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
+              className={`flex-1 sm:flex-none justify-center px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
                 viewType === 'memo' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -252,7 +252,7 @@ export default function Accounting() {
             </button>
             <button
               onClick={() => setViewType('station')}
-              className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
+              className={`flex-1 sm:flex-none justify-center px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-2 ${
                 viewType === 'station' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -262,7 +262,7 @@ export default function Accounting() {
           
           <button
             onClick={handleExportExcel}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-xl transition-all shadow-md active:scale-95 cursor-pointer ml-auto sm:ml-2"
+            className="w-full sm:w-auto flex justify-center items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-xl transition-all shadow-md active:scale-95 cursor-pointer sm:ml-2"
           >
             <FileSpreadsheet className="w-4 h-4" /> Export Excel
           </button>
