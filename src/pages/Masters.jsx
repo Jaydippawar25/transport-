@@ -309,7 +309,7 @@ export default function Masters() {
             <p className="text-xs text-slate-400">Click "Add New" above to save entries into Drop Box for auto-filling forms.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="hidden lg:block w-full">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
@@ -391,6 +391,64 @@ export default function Masters() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* MOBILE CARDS VIEW */}
+          <div className="lg:hidden flex flex-col divide-y divide-slate-100">
+            {filteredList.map((item, index) => (
+              <div key={item.id} className="p-4 flex flex-col gap-3 hover:bg-slate-50 transition-colors">
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-bold text-slate-400">#{index + 1}</span>
+                      <span className="font-bold text-slate-900 text-sm font-mono tracking-wide">
+                        {activeTab === 'vehicles' ? item.vehicleNo : item.name}
+                      </span>
+                    </div>
+                    {activeTab === 'vehicles' && item.ownerName && (
+                      <span className="text-xs text-slate-600 font-medium mt-1">Owner: {item.ownerName}</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleOpenAddModal(item)}
+                      className="p-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id, item.name || item.vehicleNo)}
+                      className="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {activeTab !== 'stations' && (
+                  <div className="bg-slate-50 border border-slate-100 rounded-lg p-3 text-xs flex flex-col gap-2 mt-1">
+                    {item.mobile && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-slate-500 min-w-16">Mobile:</span>
+                        <span className="font-mono font-bold text-slate-700">{item.mobile}</span>
+                      </div>
+                    )}
+                    {(activeTab === 'consignors' || activeTab === 'consignees' || activeTab === 'transportAgents') && item.gstin && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-slate-500 min-w-16">GSTIN:</span>
+                        <span className="font-mono font-bold text-blue-700">{item.gstin}</span>
+                      </div>
+                    )}
+                    {item.address && (
+                      <div className="flex items-start gap-2 pt-1.5 border-t border-slate-200/60 mt-1">
+                        <span className="text-slate-500 min-w-16">Address:</span>
+                        <span className="text-slate-700">{item.address}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
