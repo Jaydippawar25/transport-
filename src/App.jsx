@@ -41,12 +41,12 @@ function MainLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row font-sans text-slate-800">
+    <div className="min-h-dvh bg-slate-50 flex flex-col lg:flex-row font-sans text-slate-800">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen pb-24 lg:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 min-h-dvh pb-24 lg:pb-0">
         <Header 
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
           onSelectSearchResult={handleSearchResultSelect}
@@ -73,7 +73,7 @@ function MainLayout({ children }) {
 
 export default function App() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <AuthProvider>
         <Router>
           <Routes>
