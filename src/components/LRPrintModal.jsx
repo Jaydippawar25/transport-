@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Printer, Download } from 'lucide-react';
 import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
@@ -58,8 +59,8 @@ export default function LRPrintModal({ lr, onClose }) {
     { id: 3, title: 'DRIVER / BOOKING COPY' }
   ];
 
-  return (
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 overflow-hidden">
+  return createPortal(
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 overflow-hidden print:static print:block print:inset-auto print:bg-transparent">
       <div className="bg-white rounded-2xl print:rounded-none shadow-2xl print:shadow-none w-full max-w-4xl max-h-[92vh] print:max-h-none flex flex-col overflow-hidden my-auto print:my-0 border border-slate-300 print:border-none">
         
         {/* Top Control Bar (Sticky Header, Hidden in Print) */}
@@ -153,5 +154,5 @@ export default function LRPrintModal({ lr, onClose }) {
 
       </div>
     </div>
-  );
+  , document.body);
 }

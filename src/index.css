@@ -49,16 +49,11 @@
     overflow: visible;
   }
 
-  body * {
-    visibility: hidden;
+  #root {
+    display: none !important;
   }
-  .printable-area, .printable-area * {
-    visibility: visible;
-  }
+
   .printable-area {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     margin: 0;
     padding: 0 !important;

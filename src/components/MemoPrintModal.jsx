@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, Printer, Truck, Download } from 'lucide-react';
 import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
@@ -64,8 +65,8 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
     }
   };
 
-  return (
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden print:relative print:block print:bg-transparent print:p-0 print:inset-auto">
+  return createPortal(
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden print:static print:block print:bg-transparent print:p-0 print:inset-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[94vh] flex flex-col overflow-hidden my-auto border border-slate-300 print:max-h-none print:shadow-none print:border-none print:overflow-visible">
         
         {/* Modal Controls Bar (Hidden in Print) */}
@@ -255,5 +256,5 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
         </div>
       </div>
     </div>
-  );
+  , document.body);
 }
