@@ -60,8 +60,8 @@ export default function LRPrintModal({ lr, onClose }) {
   ];
 
   return createPortal(
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 overflow-hidden print:static print:block print:inset-auto print:bg-transparent">
-      <div className="bg-white rounded-2xl print:rounded-none shadow-2xl print:shadow-none w-full max-w-4xl max-h-[92vh] print:max-h-none flex flex-col overflow-hidden my-auto print:my-0 border border-slate-300 print:border-none">
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 print:p-0 overflow-hidden print:static print:block print:inset-auto print:bg-transparent print:overflow-visible">
+      <div className="bg-white rounded-2xl print:rounded-none shadow-2xl print:shadow-none w-full max-w-4xl max-h-[92vh] print:max-h-none flex flex-col overflow-hidden my-auto print:my-0 border border-slate-300 print:border-none print:block print:overflow-visible">
         
         {/* Top Control Bar (Sticky Header, Hidden in Print) */}
         <div className="p-3.5 sm:p-4 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-md no-print z-20">
@@ -121,7 +121,7 @@ export default function LRPrintModal({ lr, onClose }) {
         </div>
 
         {/* PRINTABLE PHYSICAL LR BILL SLIPS CONTAINER - SCROLLABLE AREA */}
-        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-[#fef9c3] text-black font-sans ${printCopies === 3 ? 'print-3-copies' : ''}`}>
+        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-[#fef9c3] text-black font-sans print:block print:overflow-visible print:h-auto ${printCopies === 3 ? 'print-3-copies' : ''}`}>
           
           <div className="mx-1 sm:mx-4 space-y-2 print:space-y-0 print:mx-0">
             {printCopies === 3 ? (

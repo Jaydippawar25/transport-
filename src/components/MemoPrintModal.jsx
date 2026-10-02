@@ -66,8 +66,8 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   };
 
   return createPortal(
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden print:static print:block print:bg-transparent print:p-0 print:inset-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[94vh] flex flex-col overflow-hidden my-auto border border-slate-300 print:max-h-none print:shadow-none print:border-none print:overflow-visible">
+    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-4 overflow-hidden print:static print:block print:bg-transparent print:p-0 print:inset-auto print:overflow-visible">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[94vh] flex flex-col overflow-hidden my-auto border border-slate-300 print:block print:max-h-none print:shadow-none print:border-none print:overflow-visible">
         
         {/* Modal Controls Bar (Hidden in Print) */}
         <div className="p-3.5 sm:p-4 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-md print:hidden z-20">
@@ -106,8 +106,8 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
         </div>
 
         {/* PRINTABLE BODY CONTENT */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 printable-area font-sans text-black bg-white print:overflow-visible print:h-auto print:p-0">
-          <div id="printable-memo-content" className="w-full max-w-[210mm] mx-auto print:w-full print:max-w-none print:m-0 print:p-0 bg-white">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 printable-area font-sans text-black bg-white print:block print:overflow-visible print:h-auto print:p-0">
+          <div id="printable-memo-content" className="w-full max-w-[210mm] mx-auto print:block print:w-full print:max-w-none print:m-0 print:p-0 bg-white">
             
             {pages.map((pageEntries, pageIndex) => {
               const isLastPage = pageIndex === pages.length - 1;
