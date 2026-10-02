@@ -46,7 +46,7 @@ function MainLayout({ children }) {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen pb-16 lg:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen pb-24 lg:pb-0">
         <Header 
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
           onSelectSearchResult={handleSearchResultSelect}
