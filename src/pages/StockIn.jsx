@@ -903,6 +903,7 @@ export default function StockIn() {
                 <th className="p-3 border-r border-slate-200">CONSIGNEE</th>
                 <th className="p-3 border-r border-slate-200 text-center">STATION</th>
                 <th className="p-3 border-r border-slate-200 text-center w-16">PKG</th>
+                <th className="p-3 border-r border-slate-200 text-center w-20">WEIGHT</th>
                 <th className="p-3 border-r border-slate-200 text-right w-28">TO PAY (₹)</th>
                 <th className="p-3 border-r border-slate-200 text-right w-28">PAID (₹)</th>
                 <th className="p-3 border-r border-slate-200 text-right w-28">T.B.B (₹)</th>
@@ -912,7 +913,7 @@ export default function StockIn() {
             <tbody className="divide-y divide-slate-100">
               {filteredStockIn.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="p-8 text-center text-xs text-slate-400">
+                  <td colSpan={11} className="p-8 text-center text-xs text-slate-400">
                     No Stock In Lorry Receipts match your filter criteria.
                   </td>
                 </tr>
@@ -951,6 +952,9 @@ export default function StockIn() {
                       </td>
                       <td className="p-3 border-r border-slate-100 text-center font-mono font-bold text-slate-900">
                         {item.packages}
+                      </td>
+                      <td className="p-3 border-r border-slate-100 text-center text-slate-600 text-[11px] font-medium">
+                        {item.weight || '-'}
                       </td>
                       <td className="p-3 border-r border-slate-100 text-right">
                         {toPayAmt > 0 ? (
