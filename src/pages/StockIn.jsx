@@ -380,6 +380,7 @@ export default function StockIn() {
 
   // Calculate Table Summary Totals
   const totalPkgs = filteredStockIn.reduce((sum, item) => sum + Number(item.packages || 0), 0);
+  const totalWeight = filteredStockIn.reduce((sum, item) => sum + Number(item.weight || 0), 0);
   
   const totalToPay = filteredStockIn.reduce((sum, item) => {
     return sum + (item.paymentType === 'ToPay' ? Number(item.charges?.total || 0) : 0);
@@ -889,6 +890,7 @@ export default function StockIn() {
           </h2>
           <div className="flex items-center gap-4 text-xs font-mono">
             <span className="text-slate-600">Total PKG: <strong className="text-slate-900">{totalPkgs}</strong></span>
+            <span className="text-slate-600">Total Weight: <strong className="text-slate-900">{totalWeight} kg</strong></span>
             <span className="text-emerald-700">Total Amount: <strong>₹{grandTotal.toLocaleString('en-IN')}</strong></span>
           </div>
         </div>
@@ -1029,6 +1031,9 @@ export default function StockIn() {
                 <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
                   {totalPkgs} Pkgs
                 </td>
+                <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
+                  {totalWeight} kg
+                </td>
                 <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-amber-700">
                   ₹{totalToPay.toLocaleString('en-IN')}
                 </td>
@@ -1133,6 +1138,10 @@ export default function StockIn() {
               <div className="flex justify-between items-center font-bold text-sm">
                 <span className="text-slate-700">Total Packages:</span>
                 <span className="text-slate-900">{totalPkgs}</span>
+              </div>
+              <div className="flex justify-between items-center font-bold text-sm">
+                <span className="text-slate-700">Total Weight:</span>
+                <span className="text-slate-900">{totalWeight} kg</span>
               </div>
               <div className="flex justify-between items-center font-bold text-sm">
                 <span className="text-slate-700">Grand Total:</span>
