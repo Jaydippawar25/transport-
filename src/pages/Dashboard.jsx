@@ -428,9 +428,9 @@ export default function Dashboard() {
             recentActivities.map((act) => (
               <div 
                 key={`${act.activityType}-${act.id}`}
-                className="p-4 hover:bg-slate-50/80 transition-colors flex items-center justify-between gap-4"
+                className="p-4 hover:bg-slate-50/80 transition-colors flex items-center justify-between gap-3 sm:gap-4"
               >
-                <div className="flex items-center gap-3.5">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
                     act.activityType === 'Stock In' 
                       ? 'bg-indigo-100 text-indigo-700' 
@@ -439,12 +439,12 @@ export default function Dashboard() {
                     {act.activityType === 'Stock In' ? <PackagePlus className="w-5 h-5" /> : <Truck className="w-5 h-5" />}
                   </div>
 
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-xs text-slate-900">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 sm:gap-2">
+                      <span className="font-mono font-bold text-xs text-slate-900 shrink-0">
                         {act.activityType === 'Stock In' ? act.lrNo : act.memoNo}
                       </span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
+                      <span className={`text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full font-semibold uppercase whitespace-nowrap shrink-0 ${
                         act.activityType === 'Stock In'
                           ? (act.status === 'dispatched' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700')
                           : 'bg-indigo-100 text-indigo-700'
@@ -453,29 +453,31 @@ export default function Dashboard() {
                       </span>
                     </div>
                     
-                    <p className="text-xs text-slate-600 mt-0.5">
+                    <p className="text-xs text-slate-600 mt-0.5 truncate">
                       {act.activityType === 'Stock In' 
-                        ? `${act.consignorName} ➔ ${act.consigneeName} (${act.toStation})`
+                        ? `${act.consignorName} → ${act.consigneeName} (${act.toStation})`
                         : `Lorry: ${act.lorryNo} | Driver: ${act.driverName} (${act.entries?.length || 0} LRs loaded)`}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-right">
-                  <div>
-                    <p className="text-xs font-bold text-slate-800">
-                      {act.activityType === 'Stock In' ? `${act.packages} pkgs` : `${act.totalPackages} total pkgs`}
+                <div className="flex items-center gap-3 sm:gap-4 text-right shrink-0">
+                  <div className="flex flex-col items-end justify-center">
+                    <p className="text-xs font-bold text-slate-800 whitespace-nowrap">
+                      {act.activityType === 'Stock In' ? `${act.packages} pkgs` : `${act.totalPackages} total`}
                     </p>
-                    <p className="text-[10px] text-slate-400">
+                    <p className="text-[10px] text-slate-400 whitespace-nowrap">
                       {new Date(act.date || act.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                     </p>
                   </div>
 
                   <button
                     onClick={() => act.activityType === 'Stock In' ? setSelectedLr(act) : setSelectedMemo(act)}
-                    className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
+                    className="p-1.5 sm:p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer shrink-0"
                   >
-                    <Printer className="w-3.5 h-3.5" /> View
+                    <Printer className="w-3.5 h-3.5 hidden sm:block" />
+                    <span className="sm:hidden text-[10px] font-bold">View</span>
+                    <span className="hidden sm:inline">View</span>
                   </button>
                 </div>
               </div>
