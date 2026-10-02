@@ -720,52 +720,54 @@ export default function StockIn() {
             </div>
 
             {/* PAYMENT BASIS SELECTOR (TOPAY / PAID / T.B.B) */}
-            <div className="pt-2 border-t border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <span className="text-xs font-bold text-slate-800">Payment Amount Type:</span>
+            <div className="pt-4 border-t border-indigo-100 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full xl:w-auto">
+                <span className="text-xs font-bold text-slate-800 shrink-0">Payment Type:</span>
                 
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
-                  <input
-                    type="radio"
-                    name="paymentType"
-                    value="ToPay"
-                    checked={formData.paymentType === 'ToPay'}
-                    onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
-                    className="text-indigo-600"
-                  />
-                  <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded font-bold">TO PAY</span>
-                </label>
+                <div className="flex flex-wrap items-center gap-3">
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      value="ToPay"
+                      checked={formData.paymentType === 'ToPay'}
+                      onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
+                      className="text-indigo-600"
+                    />
+                    <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded font-bold shrink-0">TO PAY</span>
+                  </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
-                  <input
-                    type="radio"
-                    name="paymentType"
-                    value="Paid"
-                    checked={formData.paymentType === 'Paid'}
-                    onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
-                    className="text-indigo-600"
-                  />
-                  <span className="px-2.5 py-1 bg-emerald-100 text-emerald-900 rounded font-bold">PAID</span>
-                </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      value="Paid"
+                      checked={formData.paymentType === 'Paid'}
+                      onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
+                      className="text-indigo-600"
+                    />
+                    <span className="px-2.5 py-1 bg-emerald-100 text-emerald-900 rounded font-bold shrink-0">PAID</span>
+                  </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
-                  <input
-                    type="radio"
-                    name="paymentType"
-                    value="T.B.B"
-                    checked={formData.paymentType === 'T.B.B'}
-                    onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
-                    className="text-indigo-600"
-                  />
-                  <span className="px-2.5 py-1 bg-blue-100 text-blue-900 rounded font-bold">T.B.B (To Be Billed)</span>
-                </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      value="T.B.B"
+                      checked={formData.paymentType === 'T.B.B'}
+                      onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
+                      className="text-indigo-600"
+                    />
+                    <span className="px-2.5 py-1 bg-blue-100 text-blue-900 rounded font-bold shrink-0">T.B.B</span>
+                  </label>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center justify-end gap-2 w-full xl:w-auto">
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                  className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer text-center"
                 >
                   Cancel
                 </button>
@@ -773,7 +775,7 @@ export default function StockIn() {
                   type="submit"
                   onClick={() => setPrintAfterSave(false)}
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer flex items-center gap-2"
+                  className="flex-1 sm:flex-none px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer flex items-center justify-center gap-2"
                 >
                   {isSubmitting && !printAfterSave ? 'Saving...' : 'Save'}
                 </button>
@@ -781,9 +783,9 @@ export default function StockIn() {
                   type="submit"
                   onClick={() => setPrintAfterSave(true)}
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/30 cursor-pointer flex items-center gap-2"
+                  className="flex-[2] sm:flex-none px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/30 cursor-pointer flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
                 >
-                  <Printer className="w-4 h-4" />
+                  <Printer className="w-4 h-4 shrink-0" />
                   {isSubmitting && printAfterSave ? 'Saving...' : 'Save & Print'}
                 </button>
               </div>
