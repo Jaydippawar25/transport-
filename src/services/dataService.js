@@ -143,20 +143,158 @@ export const dataService = {
       }
     };
 
+    let oldLrNo = null;
+
     if (isFirebaseConfigured && db) {
       try {
         const docRef = doc(db, 'stockIn', id);
+
+        // Fetch existing stockIn record to find old lrNo if changed
+        try {
+          const snap = await getDocs(collection(db, 'stockIn'));
+          const existingDoc = snap.docs.find(d => d.id === id);
+          if (existingDoc) {
+            oldLrNo = existingDoc.data()?.lrNo;
+          }
+        } catch (e) {
+          console.warn("Could not fetch existing stockIn record:", e);
+        }
+
         await updateDoc(docRef, formattedData);
+
+        // Synchronize linked stockOut memos in Firestore
+        try {
+          const stockOutSnap = await getDocs(collection(db, 'stockOut'));
+          if (!stockOutSnap.empty) {
+            const batch = writeBatch(db);
+            let hasChanges = false;
+
+            stockOutSnap.forEach((memoDoc) => {
+              const memoData = memoDoc.data();
+              const entries = memoData.entries || [];
+              let memoModified = false;
+
+              const updatedEntries = entries.map(e => {
+                const isMatch = e.lrId === id || e.id === id || (oldLrNo && e.lrNo === oldLrNo) || (formattedData.lrNo && e.lrNo === formattedData.lrNo);
+                if (isMatch) {
+                  memoModified = true;
+                  hasChanges = true;
+                  const totalCharge = Number(formattedData.charges?.total || 0);
+                  const pType = formattedData.paymentType || e.paymentType;
+                  return {
+                    ...e,
+                    lrNo: formattedData.lrNo || e.lrNo,
+                    consignor: formattedData.consignorName || e.consignor || '-',
+                    consignee: formattedData.consigneeName || e.consignee || '-',
+                    station: formattedData.toStation || e.station || '-',
+                    packages: Number(formattedData.packages || 0),
+                    weight: formattedData.weight || e.weight || '-',
+                    toPay: pType === 'ToPay' ? totalCharge : 0,
+                    paid: pType === 'Paid' ? totalCharge : 0,
+                    tbb: pType === 'T.B.B' ? totalCharge : 0
+                  };
+                }
+                return e;
+              });
+
+              if (memoModified) {
+                const totalPackages = updatedEntries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
+                const totalToPay = updatedEntries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
+                const totalPaid = updatedEntries.reduce((sum, e) => sum + Number(e.paid || 0), 0);
+                const totalTbb = updatedEntries.reduce((sum, e) => sum + Number(e.tbb || 0), 0);
+                const grandTotal = totalToPay + totalPaid + totalTbb;
+
+                batch.update(memoDoc.ref, {
+                  entries: updatedEntries,
+                  totalPackages,
+                  totalToPay,
+                  totalPaid,
+                  totalTbb,
+                  grandTotal,
+                  updatedAt: serverTimestamp()
+                });
+              }
+            });
+
+            if (hasChanges) {
+              await batch.commit();
+            }
+          }
+        } catch (mErr) {
+          console.error("Error synchronizing linked stockOut memos in Firestore:", mErr);
+        }
+
         return { id, ...formattedData };
       } catch (err) {
         console.error("Firestore update stockIn error:", err);
       }
     }
 
+    // Local Storage Fallback
     let current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
     if (!Array.isArray(current)) current = INITIAL_STOCK_IN;
+    const oldItem = current.find(item => item.id === id);
+    oldLrNo = oldItem?.lrNo || oldLrNo;
+
     const updated = current.map(item => item.id === id ? { ...item, ...formattedData } : item);
     setLocal(STORAGE_KEYS.STOCK_IN, updated);
+
+    // Synchronize linked stockOut memos locally
+    let currentMemos = getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
+    if (Array.isArray(currentMemos)) {
+      let memosChanged = false;
+      const updatedMemos = currentMemos.map(memo => {
+        const entries = memo.entries || [];
+        let memoModified = false;
+
+        const updatedEntries = entries.map(e => {
+          const isMatch = e.lrId === id || e.id === id || (oldLrNo && e.lrNo === oldLrNo) || (formattedData.lrNo && e.lrNo === formattedData.lrNo);
+          if (isMatch) {
+            memoModified = true;
+            memosChanged = true;
+            const totalCharge = Number(formattedData.charges?.total || 0);
+            const pType = formattedData.paymentType || e.paymentType;
+            return {
+              ...e,
+              lrNo: formattedData.lrNo || e.lrNo,
+              consignor: formattedData.consignorName || e.consignor || '-',
+              consignee: formattedData.consigneeName || e.consignee || '-',
+              station: formattedData.toStation || e.station || '-',
+              packages: Number(formattedData.packages || 0),
+              weight: formattedData.weight || e.weight || '-',
+              toPay: pType === 'ToPay' ? totalCharge : 0,
+              paid: pType === 'Paid' ? totalCharge : 0,
+              tbb: pType === 'T.B.B' ? totalCharge : 0
+            };
+          }
+          return e;
+        });
+
+        if (memoModified) {
+          const totalPackages = updatedEntries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
+          const totalToPay = updatedEntries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
+          const totalPaid = updatedEntries.reduce((sum, e) => sum + Number(e.paid || 0), 0);
+          const totalTbb = updatedEntries.reduce((sum, e) => sum + Number(e.tbb || 0), 0);
+          const grandTotal = totalToPay + totalPaid + totalTbb;
+
+          return {
+            ...memo,
+            entries: updatedEntries,
+            totalPackages,
+            totalToPay,
+            totalPaid,
+            totalTbb,
+            grandTotal,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return memo;
+      });
+
+      if (memosChanged) {
+        setLocal(STORAGE_KEYS.STOCK_OUT, updatedMemos);
+      }
+    }
 
     return { id, ...formattedData };
   },
@@ -250,20 +388,27 @@ export const dataService = {
   },
 
   async updateStockOut(id, memoData, originalLinkedLrNos = []) {
+    const entries = memoData.entries || [];
+    const calculatedTotalPkgs = entries.length > 0 ? entries.reduce((sum, e) => sum + Number(e.packages || 0), 0) : Number(memoData.totalPackages || 0);
+    const calculatedToPay = entries.length > 0 ? entries.reduce((sum, e) => sum + Number(e.toPay || 0), 0) : Number(memoData.totalToPay || 0);
+    const calculatedPaid = entries.length > 0 ? entries.reduce((sum, e) => sum + Number(e.paid || 0), 0) : Number(memoData.totalPaid || 0);
+    const calculatedTbb = entries.length > 0 ? entries.reduce((sum, e) => sum + Number(e.tbb || 0), 0) : Number(memoData.totalTbb || 0);
+    const calculatedGrandTotal = calculatedToPay + calculatedPaid + calculatedTbb;
+
     const formattedData = {
       ...memoData,
-      totalPackages: Number(memoData.totalPackages || 0),
-      totalToPay: Number(memoData.totalToPay || 0),
-      totalPaid: Number(memoData.totalPaid || 0),
-      totalTbb: Number(memoData.totalTbb || 0),
-      grandTotal: Number(memoData.grandTotal || 0),
+      totalPackages: calculatedTotalPkgs,
+      totalToPay: calculatedToPay,
+      totalPaid: calculatedPaid,
+      totalTbb: calculatedTbb,
+      grandTotal: calculatedGrandTotal,
       freight: Number(memoData.freight || 0),
       loadingCharges: Number(memoData.loadingCharges || 0),
       otherCharges: Number(memoData.otherCharges || 0),
       updatedAt: new Date().toISOString()
     };
 
-    const newLinkedLrNos = memoData.entries.map(e => e.lrNo);
+    const newLinkedLrNos = entries.map(e => e.lrNo);
 
     if (isFirebaseConfigured && db) {
       try {
@@ -271,7 +416,7 @@ export const dataService = {
         const memoDocRef = doc(db, 'stockOut', id);
         batch.update(memoDocRef, formattedData);
 
-        // Reset removed LRs
+        // Reset removed LRs back to godown
         const removedLrNos = originalLinkedLrNos.filter(lrNo => !newLinkedLrNos.includes(lrNo));
         for (const lrNo of removedLrNos) {
           const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
@@ -281,9 +426,8 @@ export const dataService = {
           });
         }
 
-        // Add new LRs
-        const addedLrNos = newLinkedLrNos.filter(lrNo => !originalLinkedLrNos.includes(lrNo));
-        for (const lrNo of addedLrNos) {
+        // Update all currently linked LRs with status 'dispatched' and updated memoNo
+        for (const lrNo of newLinkedLrNos) {
           const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
           const snap = await getDocs(q);
           snap.forEach(document => {
@@ -309,13 +453,12 @@ export const dataService = {
     // Update stockIn status locally
     const currentStockIn = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
     const removedLrNos = originalLinkedLrNos.filter(lrNo => !newLinkedLrNos.includes(lrNo));
-    const addedLrNos = newLinkedLrNos.filter(lrNo => !originalLinkedLrNos.includes(lrNo));
     
     const updatedStockIn = currentStockIn.map(item => {
       if (removedLrNos.includes(item.lrNo)) {
         return { ...item, status: 'in-godown', memoNo: '' };
       }
-      if (addedLrNos.includes(item.lrNo)) {
+      if (newLinkedLrNos.includes(item.lrNo)) {
         return { ...item, status: 'dispatched', memoNo: formattedData.memoNo };
       }
       return item;
@@ -507,10 +650,63 @@ export const dataService = {
 
   
   async deleteStockIn(id) {
+    let targetLrNo = null;
+
     if (isFirebaseConfigured && db) {
       try {
         const docRef = doc(db, 'stockIn', id);
+        try {
+          const snap = await getDocs(collection(db, 'stockIn'));
+          const existingDoc = snap.docs.find(d => d.id === id);
+          if (existingDoc) {
+            targetLrNo = existingDoc.data()?.lrNo;
+          }
+        } catch (e) {
+          console.warn("Could not fetch target stockIn record for delete:", e);
+        }
+
         await deleteDoc(docRef);
+
+        // Synchronize linked stockOut memos in Firestore
+        try {
+          const stockOutSnap = await getDocs(collection(db, 'stockOut'));
+          if (!stockOutSnap.empty) {
+            const batch = writeBatch(db);
+            let hasChanges = false;
+
+            stockOutSnap.forEach((memoDoc) => {
+              const memoData = memoDoc.data();
+              const entries = memoData.entries || [];
+              const filteredEntries = entries.filter(e => !(e.lrId === id || e.id === id || (targetLrNo && e.lrNo === targetLrNo)));
+
+              if (filteredEntries.length !== entries.length) {
+                hasChanges = true;
+                const totalPackages = filteredEntries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
+                const totalToPay = filteredEntries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
+                const totalPaid = filteredEntries.reduce((sum, e) => sum + Number(e.paid || 0), 0);
+                const totalTbb = filteredEntries.reduce((sum, e) => sum + Number(e.tbb || 0), 0);
+                const grandTotal = totalToPay + totalPaid + totalTbb;
+
+                batch.update(memoDoc.ref, {
+                  entries: filteredEntries,
+                  totalPackages,
+                  totalToPay,
+                  totalPaid,
+                  totalTbb,
+                  grandTotal,
+                  updatedAt: serverTimestamp()
+                });
+              }
+            });
+
+            if (hasChanges) {
+              await batch.commit();
+            }
+          }
+        } catch (mErr) {
+          console.error("Error removing deleted stockIn from stockOut memos in Firestore:", mErr);
+        }
+
       } catch (err) {
         console.error("Firestore delete stockIn error:", err);
         throw err;
@@ -519,19 +715,81 @@ export const dataService = {
     
     let current = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
     if (Array.isArray(current)) {
+      const itemToDelete = current.find(item => item.id === id);
+      targetLrNo = itemToDelete?.lrNo || targetLrNo;
       const updated = current.filter(item => item.id !== id);
       setLocal(STORAGE_KEYS.STOCK_IN, updated);
     }
+
+    // Synchronize linked stockOut memos locally
+    let currentMemos = getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
+    if (Array.isArray(currentMemos)) {
+      let memosChanged = false;
+      const updatedMemos = currentMemos.map(memo => {
+        const entries = memo.entries || [];
+        const filteredEntries = entries.filter(e => !(e.lrId === id || e.id === id || (targetLrNo && e.lrNo === targetLrNo)));
+
+        if (filteredEntries.length !== entries.length) {
+          memosChanged = true;
+          const totalPackages = filteredEntries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
+          const totalToPay = filteredEntries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
+          const totalPaid = filteredEntries.reduce((sum, e) => sum + Number(e.paid || 0), 0);
+          const totalTbb = filteredEntries.reduce((sum, e) => sum + Number(e.tbb || 0), 0);
+          const grandTotal = totalToPay + totalPaid + totalTbb;
+
+          return {
+            ...memo,
+            entries: filteredEntries,
+            totalPackages,
+            totalToPay,
+            totalPaid,
+            totalTbb,
+            grandTotal,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return memo;
+      });
+
+      if (memosChanged) {
+        setLocal(STORAGE_KEYS.STOCK_OUT, updatedMemos);
+      }
+    }
+
     return true;
   },
 
   async deleteStockOut(id) {
-    // Note: This deletes the Memo. To fully unlink LRs, one would update those LRs, 
-    // but a simple delete is provided here for the basic UI action.
+    let linkedLrNos = [];
+
     if (isFirebaseConfigured && db) {
       try {
-        const docRef = doc(db, 'stockOut', id);
-        await deleteDoc(docRef);
+        const batch = writeBatch(db);
+        const memoDocRef = doc(db, 'stockOut', id);
+
+        try {
+          const snap = await getDocs(collection(db, 'stockOut'));
+          const memoDoc = snap.docs.find(d => d.id === id);
+          if (memoDoc) {
+            const memoData = memoDoc.data();
+            linkedLrNos = (memoData.entries || []).map(e => e.lrNo).filter(Boolean);
+          }
+        } catch (e) {
+          console.warn("Could not fetch target memo for delete:", e);
+        }
+
+        batch.delete(memoDocRef);
+
+        // Reset linked LRs back to godown
+        for (const lrNo of linkedLrNos) {
+          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
+          const snap = await getDocs(q);
+          snap.forEach(document => {
+            batch.update(document.ref, { status: 'in-godown', memoNo: '' });
+          });
+        }
+
+        await batch.commit();
       } catch (err) {
         console.error("Firestore delete stockOut error:", err);
         throw err;
@@ -540,9 +798,26 @@ export const dataService = {
     
     let current = getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
     if (Array.isArray(current)) {
+      const memoToDelete = current.find(item => item.id === id);
+      if (memoToDelete && memoToDelete.entries) {
+        linkedLrNos = memoToDelete.entries.map(e => e.lrNo).filter(Boolean);
+      }
       const updated = current.filter(item => item.id !== id);
       setLocal(STORAGE_KEYS.STOCK_OUT, updated);
     }
+
+    // Reset linked LRs locally
+    if (linkedLrNos.length > 0) {
+      const currentStockIn = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+      const updatedStockIn = currentStockIn.map(item => {
+        if (linkedLrNos.includes(item.lrNo)) {
+          return { ...item, status: 'in-godown', memoNo: '' };
+        }
+        return item;
+      });
+      setLocal(STORAGE_KEYS.STOCK_IN, updatedStockIn);
+    }
+
     return true;
   },
 
