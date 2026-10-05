@@ -15,7 +15,8 @@ import {
   Calendar,
   Layers,
   Search,
-  Trash2
+  Trash2,
+  X
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -38,6 +39,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedLr, setSelectedLr] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isSeeding, setIsSeeding] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
 
@@ -146,12 +148,41 @@ export default function Dashboard() {
 
   const chartData = generate7DayData();
 
-  // Combined Recent Activity List (last 10 LRs and Memos)
-  const recentActivities = [
+  // Combined Activity List (all LRs and Memos)
+  const allActivities = [
     ...stockInList.map(l => ({ ...l, activityType: 'Stock In' })),
     ...stockOutList.map(m => ({ ...m, activityType: 'Stock Out' }))
-  ].sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt))
-  .slice(0, 10);
+  ].sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+
+  const filteredActivities = allActivities.filter(act => {
+    if (!searchTerm.trim()) return true;
+    const term = searchTerm.toLowerCase();
+    if (act.activityType === 'Stock In') {
+      return (
+        (act.lrNo || '').toLowerCase().includes(term) ||
+        (act.consignorName || '').toLowerCase().includes(term) ||
+        (act.consigneeName || '').toLowerCase().includes(term) ||
+        (act.toStation || '').toLowerCase().includes(term) ||
+        (act.vehicleNo || '').toLowerCase().includes(term) ||
+        (act.driverName || '').toLowerCase().includes(term)
+      );
+    } else {
+      return (
+        (act.memoNo || '').toLowerCase().includes(term) ||
+        (act.lorryNo || '').toLowerCase().includes(term) ||
+        (act.driverName || '').toLowerCase().includes(term) ||
+        (act.transportAgent || '').toLowerCase().includes(term) ||
+        (act.toStation || '').toLowerCase().includes(term) ||
+        (act.entries || []).some(e =>
+          (e.lrNo || '').toLowerCase().includes(term) ||
+          (e.consignor || '').toLowerCase().includes(term) ||
+          (e.consignee || '').toLowerCase().includes(term)
+        )
+      );
+    }
+  });
+
+  const displayedActivities = searchTerm.trim() ? filteredActivities : filteredActivities.slice(0, 10);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
@@ -173,6 +204,28 @@ export default function Dashboard() {
 
         <div className="flex items-center gap-2 shrink-0">
           
+        </div>
+      </div>
+
+      {/* Quick Search Bar */}
+      <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-xs border border-slate-200">
+        <div className="relative">
+          <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search LR No, Memo No, Consignor, Consignee, Vehicle No, Driver, Station..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-11 pr-10 py-2.5 bg-slate-50 focus:bg-white rounded-xl border border-slate-200 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-400"
+          />
+          {searchTerm && (
+            <button 
+              onClick={() => setSearchTerm('')}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -411,21 +464,29 @@ export default function Dashboard() {
 
       </div>
 
-      {/* Recent Activity List (Last 10 LRs and Memos) */}
+      {/* Recent Activity List (Last 10 LRs and Memos or Search Results) */}
       <div className="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Recent Activity Feed</h3>
-            <p className="text-xs text-slate-500">Latest Lorry Receipts and Truck Loading Memos</p>
+            <h3 className="text-sm font-bold text-slate-800">
+              {searchTerm.trim() ? `Search Results (${filteredActivities.length})` : 'Recent Activity Feed'}
+            </h3>
+            <p className="text-xs text-slate-500">
+              {searchTerm.trim() ? `Matching "${searchTerm}"` : 'Latest Lorry Receipts and Truck Loading Memos'}
+            </p>
           </div>
-          <span className="text-xs font-medium text-slate-500">Showing last 10 entries</span>
+          <span className="text-xs font-medium text-slate-500">
+            {searchTerm.trim() ? `Found ${filteredActivities.length} matching entries` : 'Showing last 10 entries'}
+          </span>
         </div>
 
         <div className="divide-y divide-slate-100 overflow-x-auto">
-          {recentActivities.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-500">No recent activity found.</div>
+          {displayedActivities.length === 0 ? (
+            <div className="p-8 text-center text-xs text-slate-500 font-medium">
+              {searchTerm.trim() ? `No records found matching "${searchTerm}"` : 'No recent activity found.'}
+            </div>
           ) : (
-            recentActivities.map((act) => (
+            displayedActivities.map((act) => (
               <div 
                 key={`${act.activityType}-${act.id}`}
                 className="p-4 hover:bg-slate-50/80 transition-colors flex items-center justify-between gap-3 sm:gap-4"
