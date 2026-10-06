@@ -224,13 +224,13 @@ export default function TransportAgent() {
                 Search Memos
               </label>
               <div className="relative">
-                <Search className="w-5 h-5 absolute left-3 top-2.5 text-slate-400" />
+                <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-600 stroke-[2.5]" />
                 <input
                   type="text"
                   placeholder="Memo No, Vehicle, Driver..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full pl-11 pr-4 py-2.5 bg-slate-50 focus:bg-white rounded-xl border-2 border-slate-300 focus:border-blue-600 text-sm font-bold text-slate-900 focus:ring-4 focus:ring-blue-500/15 outline-none transition-all placeholder:text-slate-400 placeholder:font-semibold shadow-xs"
                 />
               </div>
             </div>

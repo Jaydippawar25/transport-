@@ -850,13 +850,13 @@ export default function StockOut() {
             
             <div className="flex items-center gap-3 w-full pb-2">
               <div className="relative flex-1">
-                <Search className="w-5 h-5 text-slate-400 absolute left-4 top-3 pointer-events-none" />
+                <Search className="w-5 h-5 text-indigo-600 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
                 <input
                   type="text"
                   value={lrSearchTerm}
                   onChange={(e) => setLrSearchTerm(e.target.value)}
                   placeholder="Search incoming Memo No, or LR No to select..."
-                  className="w-full pl-12 pr-4 py-3 bg-slate-50 focus:bg-white text-base rounded-xl border-2 border-slate-200 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/20 transition-all shadow-inner"
+                  className="w-full pl-12 pr-4 py-3 bg-slate-50 focus:bg-white text-sm sm:text-base font-bold text-slate-900 rounded-xl border-2 border-slate-300 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-500/15 outline-none transition-all placeholder:text-slate-400 placeholder:font-semibold shadow-xs"
                 />
               </div>
               <button
@@ -1074,14 +1074,14 @@ export default function StockOut() {
       {!showForm && (<>
       {/* SEARCH BAR FOR STOCK OUT REGISTER */}
       <div className="bg-white p-4 rounded-2xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+        <div className="relative w-full sm:w-96">
+          <Search className="w-4.5 h-4.5 text-indigo-600 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search Memo No, Vehicle, Driver, or LR No..."
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 text-xs rounded-xl border border-slate-200 focus:border-emerald-500 focus:outline-none"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 text-xs sm:text-sm font-bold text-slate-900 rounded-xl border-2 border-slate-300 focus:border-emerald-600 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 outline-none transition-all placeholder:text-slate-400 placeholder:font-semibold shadow-xs"
           />
         </div>
 

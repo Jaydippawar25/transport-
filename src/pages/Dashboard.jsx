@@ -208,22 +208,22 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Search Bar */}
-      <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-xs border border-slate-200">
+      <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border-2 border-slate-300">
         <div className="relative">
-          <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-5 h-5 text-indigo-600 absolute left-3.5 top-1/2 -translate-y-1/2 stroke-[2.5]" />
           <input
             type="text"
             placeholder="Search LR No, Memo No, Consignor, Consignee, Vehicle No, Driver, Station..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-10 py-2.5 bg-slate-50 focus:bg-white rounded-xl border border-slate-200 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-400"
+            className="w-full pl-11 pr-10 py-3 bg-slate-50 focus:bg-white rounded-xl border-2 border-slate-300 focus:border-indigo-600 text-sm font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/15 outline-none transition-all placeholder:text-slate-400 placeholder:font-semibold shadow-xs"
           />
           {searchTerm && (
             <button 
               onClick={() => setSearchTerm('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer p-1"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 stroke-[2.5]" />
             </button>
           )}
         </div>

@@ -342,14 +342,14 @@ export default function Reports() {
             )}
 
             {/* SEARCH BAR */}
-            <div className="relative w-full sm:w-64">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+            <div className="relative w-full sm:w-80">
+              <Search className="w-4 h-4 text-indigo-600 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none stroke-[2.5]" />
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search LR, Consignor, Memo..."
-                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 text-slate-900 placeholder-slate-400 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 text-slate-900 font-bold placeholder:text-slate-400 placeholder:font-semibold text-xs sm:text-sm rounded-xl border-2 border-slate-300 focus:outline-none focus:border-indigo-600 focus:bg-white focus:ring-4 focus:ring-indigo-500/15 transition-all shadow-xs"
               />
             </div>
           </div>
