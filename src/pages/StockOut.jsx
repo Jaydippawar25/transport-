@@ -21,6 +21,7 @@ import {
 , Trash2 } from 'lucide-react';
 import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
+import { exportPdfFile } from '../utils/exportUtils';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
@@ -59,7 +60,7 @@ const LoadingMemoView = ({ memo, onClose }) => {
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
                 pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save(`Memo_${memo.memoNo}.pdf`);
+                await exportPdfFile(pdf, `Memo_${memo.memoNo}.pdf`);
               } catch(err) {
                 alert("Error saving PDF: " + err.message);
               }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Truck, Search, FileText, FileSpreadsheet } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { exportExcelFile } from '../utils/exportUtils';
 import { dataService } from '../services/dataService';
 import MemoPrintModal from '../components/MemoPrintModal';
 
@@ -135,7 +136,7 @@ export default function TransportAgent() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Agent Ledger");
     
     const fileName = `Agent_Ledger_${(selectedAgent || 'Unknown').replace(/\s+/g, '_')}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
+    exportExcelFile(workbook, fileName);
   };
 
   return (

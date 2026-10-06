@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { dataService } from '../services/dataService';
 import { Calculator, IndianRupee, MapPin, Truck, FileSpreadsheet } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { exportExcelFile } from '../utils/exportUtils';
 
 export default function Accounting() {
   const [memos, setMemos] = useState([]);
@@ -177,7 +178,7 @@ export default function Accounting() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Accounting Report");
     
     const fileName = viewType === 'memo' ? 'Accounting_Memo_Wise.xlsx' : 'Accounting_Station_Wise.xlsx';
-    XLSX.writeFile(workbook, fileName);
+    exportExcelFile(workbook, fileName);
   };
 
 

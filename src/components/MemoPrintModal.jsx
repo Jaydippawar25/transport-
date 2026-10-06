@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Printer, Truck, Download } from 'lucide-react';
 import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
+import { exportPdfFile } from '../utils/exportUtils';
 
 export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   if (!memo) return null;
@@ -59,7 +60,7 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
       }
       
-      pdf.save(`Memo_${memo.memoNo}.pdf`);
+      await exportPdfFile(pdf, `Memo_${memo.memoNo}.pdf`);
     } catch(err) {
       alert("Error saving PDF: " + err.message);
     }

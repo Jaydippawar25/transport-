@@ -11,6 +11,7 @@ import {
   Clock
 } from 'lucide-react';
 import { dataService } from '../services/dataService';
+import { exportCSVFile } from '../utils/exportUtils';
 import LRPrintModal from '../components/LRPrintModal';
 
 export default function Reports() {
@@ -159,14 +160,7 @@ export default function Reports() {
   };
 
   const downloadCSV = (content, filename) => {
-    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportCSVFile(content, filename);
   };
 
   const handleExportCSV = () => {

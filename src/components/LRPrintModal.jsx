@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Printer, Download } from 'lucide-react';
 import domtoimage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
+import { exportPdfFile } from '../utils/exportUtils';
 import LRBillSlip from './LRBillSlip';
 
 export default function LRPrintModal({ lr, onClose }) {
@@ -33,7 +34,7 @@ export default function LRPrintModal({ lr, onClose }) {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`LR_${lr.lrNo}.pdf`);
+      await exportPdfFile(pdf, `LR_${lr.lrNo}.pdf`);
     } catch(err) {
       alert("Error saving PDF: " + err.message);
     }
