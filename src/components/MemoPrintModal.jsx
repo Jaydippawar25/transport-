@@ -9,11 +9,13 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   if (!memo) return null;
 
   const PAGE_SIZE = 30;
+  const entries = memo?.entries || [];
+  const safeStockIn = Array.isArray(stockIn) ? stockIn : [];
   const norm = (s) => (s || '').trim().toUpperCase();
 
   // Resolve all entries with latest origLr details and amount fallbacks
   const resolvedEntries = entries.map(e => {
-    const origLr = stockIn.find(lr => (lr.id && e.lrId && lr.id === e.lrId) || (lr.id && e.id && lr.id === e.id) || (lr.lrNo && e.lrNo && norm(lr.lrNo) === norm(e.lrNo)));
+    const origLr = safeStockIn.find(lr => (lr.id && e.lrId && lr.id === e.lrId) || (lr.id && e.id && lr.id === e.id) || (lr.lrNo && e.lrNo && norm(lr.lrNo) === norm(e.lrNo)));
     const totalCharge = origLr?.charges?.total !== undefined ? Number(origLr.charges.total) : (Number(e.toPay || 0) + Number(e.paid || 0) + Number(e.tbb || 0));
     const pType = origLr?.paymentType || origLr?.paymentStatus || e.paymentType;
 
