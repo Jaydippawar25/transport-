@@ -178,7 +178,7 @@ export default function Accounting() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Accounting Report");
     
     const fileName = viewType === 'memo' ? 'Accounting_Memo_Wise.xlsx' : 'Accounting_Station_Wise.xlsx';
-    exportExcelFile(workbook, fileName);
+    exportExcelFile(workbook, fileName, exportData);
   };
 
 

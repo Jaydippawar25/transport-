@@ -136,7 +136,7 @@ export default function TransportAgent() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Agent Ledger");
     
     const fileName = `Agent_Ledger_${(selectedAgent || 'Unknown').replace(/\s+/g, '_')}.xlsx`;
-    exportExcelFile(workbook, fileName);
+    exportExcelFile(workbook, fileName, exportData);
   };
 
   return (

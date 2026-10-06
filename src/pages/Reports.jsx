@@ -159,10 +159,6 @@ export default function Reports() {
     window.print();
   };
 
-  const downloadCSV = (content, filename) => {
-    exportCSVFile(content, filename);
-  };
-
   const handleExportCSV = () => {
     if (activeSection === 'STOCK_IN') {
       const headers = ['LR No', 'Date', 'Consignor', 'Consignee', 'Station', 'Packages', 'Freight', 'Payment Type', 'Status'];
@@ -178,7 +174,18 @@ export default function Reports() {
         l.status
       ]);
       const csvStr = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-      downloadCSV(csvStr, `TransTrack_StockIn_Report.csv`);
+      const exportData = filteredStockIn.map(l => ({
+        'LR No': l.lrNo,
+        'Date': new Date(l.date || l.createdAt).toLocaleDateString('en-IN'),
+        'Consignor': l.consignorName,
+        'Consignee': l.consigneeName,
+        'Station': l.toStation,
+        'Packages': l.packages,
+        'Freight': l.charges?.total || 0,
+        'Payment Type': l.paymentType,
+        'Status': l.status
+      }));
+      exportCSVFile(csvStr, `TransTrack_StockIn_Report.csv`, exportData);
     } else if (activeSection === 'STOCK_OUT') {
       const headers = ['Memo No', 'Date', 'Lorry No', 'Driver Name', 'Loaded LRs', 'Total Packages', 'ToPay Total', 'Paid Total', 'TBB Total', 'Grand Total'];
       const rows = filteredStockOut.map(m => [
@@ -194,7 +201,19 @@ export default function Reports() {
         (m.totalToPay || 0) + (m.totalPaid || 0) + (m.totalTbb || 0)
       ]);
       const csvStr = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-      downloadCSV(csvStr, `TransTrack_StockOut_Report.csv`);
+      const exportData = filteredStockOut.map(m => ({
+        'Memo No': m.memoNo,
+        'Date': new Date(m.date || m.createdAt).toLocaleDateString('en-IN'),
+        'Lorry No': m.lorryNo,
+        'Driver Name': m.driverName,
+        'Loaded LRs': (m.entries || []).length,
+        'Total Packages': m.totalPackages,
+        'ToPay Total': m.totalToPay || 0,
+        'Paid Total': m.totalPaid || 0,
+        'TBB Total': m.totalTbb || 0,
+        'Grand Total': (m.totalToPay || 0) + (m.totalPaid || 0) + (m.totalTbb || 0)
+      }));
+      exportCSVFile(csvStr, `TransTrack_StockOut_Report.csv`, exportData);
     } else {
       const headers = ['LR No', 'Date', 'Consignor', 'Consignee', 'Destination Station', 'Packages', 'Pending Amount', 'Payment Basis'];
       const rows = pendingStockList.map(l => [
@@ -208,7 +227,17 @@ export default function Reports() {
         l.paymentType
       ]);
       const csvStr = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-      downloadCSV(csvStr, `TransTrack_PendingStock_Report.csv`);
+      const exportData = pendingStockList.map(l => ({
+        'LR No': l.lrNo,
+        'Date': new Date(l.date || l.createdAt).toLocaleDateString('en-IN'),
+        'Consignor': l.consignorName,
+        'Consignee': l.consigneeName,
+        'Destination Station': l.toStation,
+        'Packages': l.packages,
+        'Pending Amount': l.charges?.total || 0,
+        'Payment Basis': l.paymentType
+      }));
+      exportCSVFile(csvStr, `TransTrack_PendingStock_Report.csv`, exportData);
     }
   };
 
