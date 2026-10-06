@@ -9,22 +9,60 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
   if (!memo) return null;
 
   const PAGE_SIZE = 30;
-  const entries = memo.entries || [];
+  const norm = (s) => (s || '').trim().toUpperCase();
+
+  // Resolve all entries with latest origLr details and amount fallbacks
+  const resolvedEntries = entries.map(e => {
+    const origLr = stockIn.find(lr => (lr.id && e.lrId && lr.id === e.lrId) || (lr.id && e.id && lr.id === e.id) || (lr.lrNo && e.lrNo && norm(lr.lrNo) === norm(e.lrNo)));
+    const totalCharge = origLr?.charges?.total !== undefined ? Number(origLr.charges.total) : (Number(e.toPay || 0) + Number(e.paid || 0) + Number(e.tbb || 0));
+    const pType = origLr?.paymentType || origLr?.paymentStatus || e.paymentType;
+
+    let toPay = Number(e.toPay || 0);
+    let paid = Number(e.paid || 0);
+    let tbb = Number(e.tbb || 0);
+
+    if (toPay === 0 && paid === 0 && tbb === 0 && origLr) {
+      if (pType === 'ToPay') { toPay = totalCharge; paid = 0; tbb = 0; }
+      else if (pType === 'Paid') { paid = totalCharge; toPay = 0; tbb = 0; }
+      else if (pType === 'T.B.B') { tbb = totalCharge; toPay = 0; paid = 0; }
+      else if (totalCharge > 0) { toPay = totalCharge; }
+    } else if (origLr && totalCharge > 0 && (toPay > 0 || paid > 0 || tbb > 0)) {
+      // Sync payment amount if origLr was updated
+      if (pType === 'ToPay') { toPay = totalCharge; paid = 0; tbb = 0; }
+      else if (pType === 'Paid') { paid = totalCharge; toPay = 0; tbb = 0; }
+      else if (pType === 'T.B.B') { tbb = totalCharge; toPay = 0; paid = 0; }
+    }
+
+    return {
+      ...e,
+      lrNo: origLr?.lrNo || e.lrNo,
+      consignor: origLr?.consignorName || e.consignor || '-',
+      consignee: origLr?.consigneeName || e.consignee || '-',
+      station: origLr?.toStation || e.station || '-',
+      packages: Number(origLr?.packages ?? e.packages ?? 0),
+      weight: origLr?.weight || e.weight || '-',
+      toPay,
+      paid,
+      tbb
+    };
+  });
+
   const pages = [];
-  
-  if (entries.length === 0) {
+  if (resolvedEntries.length === 0) {
     pages.push([]);
   } else {
-    for (let i = 0; i < entries.length; i += PAGE_SIZE) {
-      pages.push(entries.slice(i, i + PAGE_SIZE));
+    for (let i = 0; i < resolvedEntries.length; i += PAGE_SIZE) {
+      pages.push(resolvedEntries.slice(i, i + PAGE_SIZE));
     }
   }
 
-  // Calculate total weight (fallback to stockIn if old memo lacks weight)
-  const calcTotalWeight = entries.reduce((acc, curr) => {
-    const origLr = stockIn.find(lr => lr.id === curr.lrId || lr.lrNo === curr.lrNo);
-    return acc + Number(origLr?.weight || curr.weight || 0);
-  }, 0);
+  // Calculate totals dynamically from resolvedEntries
+  const calcTotalPkgs = resolvedEntries.reduce((acc, curr) => acc + Number(curr.packages || 0), 0);
+  const calcTotalWeight = resolvedEntries.reduce((acc, curr) => acc + Number(curr.weight || 0), 0);
+  const calcTotalToPay = resolvedEntries.reduce((acc, curr) => acc + Number(curr.toPay || 0), 0);
+  const calcTotalPaid = resolvedEntries.reduce((acc, curr) => acc + Number(curr.paid || 0), 0);
+  const calcTotalTbb = resolvedEntries.reduce((acc, curr) => acc + Number(curr.tbb || 0), 0);
+  const calcTotalLrAmount = calcTotalToPay + calcTotalPaid + calcTotalTbb;
 
   const handlePrint = () => {
     window.print();
@@ -174,8 +212,7 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
                     </thead>
                     <tbody>
                       {pageEntries.map((e, idx) => {
-                        const origLr = stockIn.find(lr => lr.id === e.lrId || lr.lrNo === e.lrNo);
-                        const displayWeight = origLr?.weight || e.weight || '-';
+                        const displayWeight = e.weight || '-';
                         const globalIdx = (pageIndex * PAGE_SIZE) + idx + 1;
                         
                         return (
@@ -198,19 +235,17 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
                       <tfoot>
                         <tr className="font-bold border-t-2 border-black bg-slate-100">
                           <td colSpan={2} className="border-r border-black py-1.5 px-2 text-right">TOTAL</td>
-                          <td className="border-r border-black py-1.5 px-1 text-center">{memo.totalPackages}</td>
+                          <td className="border-r border-black py-1.5 px-1 text-center">{calcTotalPkgs}</td>
                           <td colSpan={3} className="border-r border-black py-1.5 px-1"></td>
                           <td className="border-r border-black py-1.5 px-1 text-center">{calcTotalWeight > 0 ? calcTotalWeight : ''}</td>
-                          <td className="border-r border-black py-1.5 px-1 text-right text-[11px]">{memo.totalToPay > 0 ? memo.totalToPay.toLocaleString('en-IN') : ''}</td>
-                          <td className="border-r border-black py-1.5 px-1 text-right text-[11px]">{memo.totalPaid > 0 ? memo.totalPaid.toLocaleString('en-IN') : ''}</td>
-                          <td className="py-1.5 px-1 text-right text-[11px]">{memo.totalTbb > 0 ? memo.totalTbb.toLocaleString('en-IN') : ''}</td>
+                          <td className="border-r border-black py-1.5 px-1 text-right text-[11px]">{calcTotalToPay > 0 ? calcTotalToPay.toLocaleString('en-IN') : ''}</td>
+                          <td className="border-r border-black py-1.5 px-1 text-right text-[11px]">{calcTotalPaid > 0 ? calcTotalPaid.toLocaleString('en-IN') : ''}</td>
+                          <td className="py-1.5 px-1 text-right text-[11px]">{calcTotalTbb > 0 ? calcTotalTbb.toLocaleString('en-IN') : ''}</td>
                         </tr>
                         <tr className="font-bold border-t-2 border-black bg-slate-100">
                           <td colSpan={7} className="border-r border-black py-1.5 px-2 text-right">TOTAL L.R. AMOUNT</td>
                           <td colSpan={3} className="py-1.5 px-1 text-center">
-                            { (Number(memo.totalToPay || 0) + Number(memo.totalPaid || 0) + Number(memo.totalTbb || 0)) > 0 
-                                ? (Number(memo.totalToPay || 0) + Number(memo.totalPaid || 0) + Number(memo.totalTbb || 0)).toLocaleString('en-IN') 
-                                : '' }
+                            { calcTotalLrAmount > 0 ? calcTotalLrAmount.toLocaleString('en-IN') : '' }
                           </td>
                         </tr>
                         <tr className="font-bold border-t-2 border-black bg-slate-100">

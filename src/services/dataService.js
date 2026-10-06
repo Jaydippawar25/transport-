@@ -174,15 +174,21 @@ export const dataService = {
               const entries = memoData.entries || [];
               let memoModified = false;
 
+              const norm = (s) => (s || '').trim().toUpperCase();
+              const oldNorm = oldLrNo ? norm(oldLrNo) : '';
+              const newNorm = formattedData.lrNo ? norm(formattedData.lrNo) : '';
+
               const updatedEntries = entries.map(e => {
-                const isMatch = e.lrId === id || e.id === id || (oldLrNo && e.lrNo === oldLrNo) || (formattedData.lrNo && e.lrNo === formattedData.lrNo);
+                const eNorm = norm(e.lrNo);
+                const isMatch = e.lrId === id || e.id === id || (oldNorm && eNorm === oldNorm) || (newNorm && eNorm === newNorm);
                 if (isMatch) {
                   memoModified = true;
                   hasChanges = true;
                   const totalCharge = Number(formattedData.charges?.total || 0);
-                  const pType = formattedData.paymentType || e.paymentType;
+                  const pType = formattedData.paymentType || formattedData.paymentStatus || e.paymentType;
                   return {
                     ...e,
+                    lrId: id,
                     lrNo: formattedData.lrNo || e.lrNo,
                     consignor: formattedData.consignorName || e.consignor || '-',
                     consignee: formattedData.consigneeName || e.consignee || '-',
@@ -243,19 +249,25 @@ export const dataService = {
     let currentMemos = getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
     if (Array.isArray(currentMemos)) {
       let memosChanged = false;
+      const norm = (s) => (s || '').trim().toUpperCase();
+      const oldNorm = oldLrNo ? norm(oldLrNo) : '';
+      const newNorm = formattedData.lrNo ? norm(formattedData.lrNo) : '';
+
       const updatedMemos = currentMemos.map(memo => {
         const entries = memo.entries || [];
         let memoModified = false;
 
         const updatedEntries = entries.map(e => {
-          const isMatch = e.lrId === id || e.id === id || (oldLrNo && e.lrNo === oldLrNo) || (formattedData.lrNo && e.lrNo === formattedData.lrNo);
+          const eNorm = norm(e.lrNo);
+          const isMatch = e.lrId === id || e.id === id || (oldNorm && eNorm === oldNorm) || (newNorm && eNorm === newNorm);
           if (isMatch) {
             memoModified = true;
             memosChanged = true;
             const totalCharge = Number(formattedData.charges?.total || 0);
-            const pType = formattedData.paymentType || e.paymentType;
+            const pType = formattedData.paymentType || formattedData.paymentStatus || e.paymentType;
             return {
               ...e,
+              lrId: id,
               lrNo: formattedData.lrNo || e.lrNo,
               consignor: formattedData.consignorName || e.consignor || '-',
               consignee: formattedData.consigneeName || e.consignee || '-',

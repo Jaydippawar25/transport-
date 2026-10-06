@@ -27,8 +27,42 @@ import LRPrintModal from '../components/LRPrintModal';
 import MemoPrintModal from '../components/MemoPrintModal';
 
 
-const LoadingMemoView = ({ memo, onClose }) => {
-  const entries = memo.entries || [];
+const LoadingMemoView = ({ memo, stockIn = [], onClose }) => {
+  const norm = (s) => (s || '').trim().toUpperCase();
+  const entries = (memo.entries || []).map(e => {
+    const origLr = stockIn.find(lr => (lr.id && e.lrId && lr.id === e.lrId) || (lr.id && e.id && lr.id === e.id) || (lr.lrNo && e.lrNo && norm(lr.lrNo) === norm(e.lrNo)));
+    const totalCharge = origLr?.charges?.total !== undefined ? Number(origLr.charges.total) : (Number(e.toPay || 0) + Number(e.paid || 0) + Number(e.tbb || 0));
+    const pType = origLr?.paymentType || origLr?.paymentStatus || e.paymentType;
+
+    let toPay = Number(e.toPay || 0);
+    let paid = Number(e.paid || 0);
+    let tbb = Number(e.tbb || 0);
+
+    if (toPay === 0 && paid === 0 && tbb === 0 && origLr) {
+      if (pType === 'ToPay') { toPay = totalCharge; paid = 0; tbb = 0; }
+      else if (pType === 'Paid') { paid = totalCharge; toPay = 0; tbb = 0; }
+      else if (pType === 'T.B.B') { tbb = totalCharge; toPay = 0; paid = 0; }
+      else if (totalCharge > 0) { toPay = totalCharge; }
+    } else if (origLr && totalCharge > 0 && (toPay > 0 || paid > 0 || tbb > 0)) {
+      if (pType === 'ToPay') { toPay = totalCharge; paid = 0; tbb = 0; }
+      else if (pType === 'Paid') { paid = totalCharge; toPay = 0; tbb = 0; }
+      else if (pType === 'T.B.B') { tbb = totalCharge; toPay = 0; paid = 0; }
+    }
+
+    return {
+      ...e,
+      lrNo: origLr?.lrNo || e.lrNo,
+      consignor: origLr?.consignorName || e.consignor || '-',
+      consignee: origLr?.consigneeName || e.consignee || '-',
+      station: origLr?.toStation || e.station || '-',
+      packages: Number(origLr?.packages ?? e.packages ?? 0),
+      weight: origLr?.weight || e.weight || '-',
+      toPay,
+      paid,
+      tbb
+    };
+  });
+
   const totalPackages = entries.reduce((sum, e) => sum + Number(e.packages || 0), 0);
   const totalToPay = entries.reduce((sum, e) => sum + Number(e.toPay || 0), 0);
   const totalPaid = entries.reduce((sum, e) => sum + Number(e.paid || 0), 0);
@@ -1313,7 +1347,7 @@ export default function StockOut() {
 
 
       {/* Print Modal */}
-      {viewMemoData && <LoadingMemoView memo={viewMemoData} onClose={() => setViewMemoData(null)} />}
+      {viewMemoData && <LoadingMemoView memo={viewMemoData} stockIn={allStockIn} onClose={() => setViewMemoData(null)} />}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
       {selectedMemo && <MemoPrintModal memo={selectedMemo} stockIn={allStockIn} onClose={() => setSelectedMemo(null)} />}
 
