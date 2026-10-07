@@ -95,8 +95,19 @@
   }
 }
 
-/* Remove arrows/spinners from number inputs globally */
+/* Remove arrows/spinners from number inputs globally and hide caret on static non-form elements */
 @layer base {
+  * {
+    caret-color: transparent;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable="true"] {
+    caret-color: auto;
+  }
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
