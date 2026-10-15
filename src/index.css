@@ -41,11 +41,12 @@
 /* Print specific rules for generating physical receipts & manifests */
 @page {
   size: A4 portrait;
+  margin: 3mm 4mm;
 }
 
 @media print {
   html, body {
-    height: auto;
+    height: 100%;
     margin: 0;
     padding: 0;
     overflow: visible;
@@ -56,8 +57,8 @@
   }
 
   .printable-area {
-    width: 100%;
-    margin: 0;
+    width: 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
     -webkit-print-color-adjust: exact !important;
@@ -73,21 +74,29 @@
   .printable-slip {
     page-break-inside: avoid;
     break-inside: avoid;
-    margin: 0 !important;
+    box-sizing: border-box;
   }
 
-  /* Force 3 copies to fit on exactly one page comfortably */
+  /* Force 3 copies to fit on exactly one page comfortably without clipping */
   .print-3-copies > div {
     display: flex;
     flex-direction: column;
-    height: 100vh !important; /* Dynamically fits the printable area */
-    overflow: hidden;
+    justify-content: space-between;
+    height: 98vh !important;
+    max-height: 290mm !important;
+    box-sizing: border-box;
   }
   
   .print-3-copies .printable-slip {
-    flex: 1 1 0% !important; /* Each copy takes exactly 1/3 of the available space */
+    flex: 1 1 0% !important;
     height: auto !important;
     min-height: 0 !important;
+    max-height: 32.5vh !important;
+    margin-bottom: 1.5mm !important;
+  }
+
+  .print-3-copies .printable-slip:last-child {
+    margin-bottom: 0 !important;
   }
 
   .no-print {
