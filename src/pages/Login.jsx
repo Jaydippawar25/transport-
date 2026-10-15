@@ -90,7 +90,7 @@ export default function Login() {
               <img 
                 src="/logo.png" 
                 alt="Royal Roadlines Logo" 
-                className="w-12 h-12 rounded-full object-cover shadow-md border border-amber-500/40 md:hidden shrink-0" 
+                className="w-14 h-14 object-contain drop-shadow-md md:hidden shrink-0" 
               />
               <div>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2a4393] tracking-wide uppercase">
@@ -247,7 +247,7 @@ export default function Login() {
             <img 
               src="/logo.png" 
               alt="Royal Roadlines" 
-              className="w-24 h-24 rounded-full object-cover mx-auto shadow-2xl border-2 border-amber-400/50 bg-black/50"
+              className="w-32 h-32 object-contain mx-auto drop-shadow-[0_12px_28px_rgba(0,0,0,0.65)] hover:scale-105 transition-transform duration-300" 
             />
             <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
             <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003</p>

@@ -17,14 +17,14 @@ export default function Header({ onToggleSidebar }) {
         <img 
           src="/logo.png" 
           alt="Royal Roadlines Logo" 
-          className="w-9 h-9 rounded-full object-cover shadow-sm border border-amber-500/30 shrink-0 hidden sm:block lg:hidden"
+          className="w-10 h-10 object-contain drop-shadow-sm shrink-0 hidden sm:block lg:hidden"
         />
 
         <div className="sm:hidden flex items-center gap-2">
           <img 
             src="/logo.png" 
             alt="Royal Roadlines Logo" 
-            className="w-8 h-8 rounded-full object-cover shadow-sm border border-amber-500/30 shrink-0" 
+            className="w-9 h-9 object-contain drop-shadow-sm shrink-0" 
           />
           <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">
             ROYAL ROADLINES

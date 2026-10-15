@@ -55,7 +55,7 @@ export default function Sidebar({ isOpen, onClose }) {
               <img 
                 src="/logo.png" 
                 alt="Royal Roadlines Logo" 
-                className="w-10 h-10 rounded-full object-cover shadow-lg border border-amber-400/40 bg-black/60 shrink-0" 
+                className="w-11 h-11 object-contain drop-shadow-md shrink-0" 
               />
               <div className="overflow-hidden">
                 <h1 className="font-extrabold text-white tracking-wide text-sm leading-tight truncate">ROYAL ROADLINES</h1>
