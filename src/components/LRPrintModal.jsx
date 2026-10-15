@@ -8,6 +8,7 @@ import LRBillSlip from './LRBillSlip';
 
 export default function LRPrintModal({ lr, onClose }) {
   const [printCopies, setPrintCopies] = useState(3); // 3 copies on 1 page by default
+  const [paperColor, setPaperColor] = useState('yellow'); // 'yellow' | 'white' (default: yellow like physical bilty)
 
   if (!lr) return null;
 
@@ -21,7 +22,7 @@ export default function LRPrintModal({ lr, onClose }) {
       const scale = 2;
       const imgData = await domtoimage.toJpeg(element, {
         quality: 1.0,
-        bgcolor: '#ffffff',
+        bgcolor: paperColor === 'yellow' ? '#fef9c3' : '#ffffff',
         width: element.clientWidth * scale,
         height: element.clientHeight * scale,
         style: {
@@ -66,18 +67,42 @@ export default function LRPrintModal({ lr, onClose }) {
         
         {/* Top Control Bar (Sticky Header, Hidden in Print) */}
         <div className="p-3.5 sm:p-4 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-md no-print z-20">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <span className="font-bold text-sm sm:text-base">Stock In LR Bill Preview</span>
-            <span className={`px-2.5 py-0.5 rounded text-xs font-bold uppercase ${
-              lr.status === 'dispatched' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+            <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase ${
+              lr.status === 'dispatched' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-700 text-slate-300 border border-slate-600'
             }`}>
               {lr.status || 'in-godown'}
             </span>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Paper Color Selector Toggle */}
+            <div className="flex items-center bg-slate-800 p-0.5 rounded-lg border border-slate-700 text-xs">
+              <button
+                type="button"
+                onClick={() => setPaperColor('yellow')}
+                className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                  paperColor === 'yellow' ? 'bg-yellow-400 text-slate-900 shadow-sm font-black' : 'text-slate-400 hover:text-white'
+                }`}
+                title="Classic Yellow Bilty Paper"
+              >
+                <span>🟡</span> Yellow
+              </button>
+              <button
+                type="button"
+                onClick={() => setPaperColor('white')}
+                className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                  paperColor === 'white' ? 'bg-white text-slate-900 shadow-sm font-black' : 'text-slate-400 hover:text-white'
+                }`}
+                title="Plain White Paper"
+              >
+                <span>⚪</span> White
+              </button>
+            </div>
+
             {/* Copies Selector Toggle */}
-            <div className="flex items-center bg-slate-800 p-1 rounded-lg border border-slate-700 text-xs">
+            <div className="flex items-center bg-slate-800 p-0.5 rounded-lg border border-slate-700 text-xs">
               <button
                 type="button"
                 onClick={() => setPrintCopies(3)}
@@ -85,7 +110,7 @@ export default function LRPrintModal({ lr, onClose }) {
                   printCopies === 3 ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                3 Copies (1 Page)
+                3 Copies
               </button>
               <button
                 type="button"
@@ -100,13 +125,13 @@ export default function LRPrintModal({ lr, onClose }) {
 
             <button
               onClick={handleDownloadPdf}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <Download className="w-4 h-4" /> Save PDF
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs sm:text-sm transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <Printer className="w-4 h-4" /> Print Document
             </button>
@@ -114,7 +139,7 @@ export default function LRPrintModal({ lr, onClose }) {
             <button
               onClick={onClose}
               aria-label="Close modal"
-              className="p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -122,7 +147,7 @@ export default function LRPrintModal({ lr, onClose }) {
         </div>
 
         {/* PRINTABLE PHYSICAL LR BILL SLIPS CONTAINER - SCROLLABLE AREA */}
-        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-slate-100 print:bg-white text-black font-serif print:block print:overflow-visible print:h-auto ${printCopies === 3 ? 'print-3-copies' : ''}`}>
+        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area ${paperColor === 'yellow' ? 'bg-slate-200/90' : 'bg-slate-100'} print:bg-white text-black font-serif print:block print:overflow-visible print:h-auto ${printCopies === 3 ? 'print-3-copies' : ''}`}>
           
           <div className="mx-1 sm:mx-4 space-y-3 print:space-y-0 print:mx-0">
             {printCopies === 3 ? (
@@ -132,6 +157,7 @@ export default function LRPrintModal({ lr, onClose }) {
                     lr={lr}
                     copyTitle={copyItem.title}
                     formattedDate={formattedDate}
+                    paperColor={paperColor}
                   />
                   {index < copiesList.length - 1 && (
                     <div className="my-1 print:my-0 flex items-center justify-center gap-2 text-slate-500 text-[9px] font-mono print:hidden">
@@ -147,6 +173,7 @@ export default function LRPrintModal({ lr, onClose }) {
                 lr={lr}
                 copyTitle="ORIGINAL LR COPY"
                 formattedDate={formattedDate}
+                paperColor={paperColor}
               />
             )}
           </div>

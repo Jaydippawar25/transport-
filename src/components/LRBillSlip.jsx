@@ -30,7 +30,7 @@ export function BarcodeSVG({ value }) {
 }
 
 // Single LR Bill Slip Copy Component matching physical LR bill slip
-export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
+export default function LRBillSlip({ lr, copyTitle, formattedDate, paperColor = 'yellow' }) {
   if (!lr) return null;
 
   // Normalize LR data fields from either StockIn or StockOut Memo format
@@ -70,16 +70,24 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
     return '-';
   };
 
+  const isYellow = paperColor === 'yellow';
+  const paperBg = isYellow ? 'bg-[#fef9c3]' : 'bg-white';
+  const headerBg = isYellow ? 'bg-[#fef08a]/70' : 'bg-slate-100/60';
+  const subHeaderBg = isYellow ? 'bg-[#fef9c3]' : 'bg-slate-50';
+  const totalRowBg = isYellow ? 'bg-[#fef08a]' : 'bg-slate-100';
+  const bookingBoxBg = isYellow ? 'bg-[#fff099]' : 'bg-slate-50/50';
+  const badgeBg = isYellow ? 'bg-yellow-400 text-black border border-black font-black' : 'bg-slate-50 text-black border border-black font-bold';
+
   return (
     <div 
-      className="border-2 border-black relative flex flex-col bg-white text-black text-[9px] sm:text-[10px] leading-tight select-none my-1 print:my-0 printable-slip"
+      className={`border-2 border-black relative flex flex-col ${paperBg} text-black text-[9px] sm:text-[10px] leading-tight select-none my-1 print:my-0 printable-slip`}
       style={{ fontFamily: "'Times New Roman', Times, serif" }}
     >
       
       {/* TOP JURISDICTION & COPY TITLE HEADER */}
       <div className="flex justify-between items-center px-2 py-0.5 border-b border-black text-[8px] sm:text-[9px]">
         <span className="italic font-bold">Subject to Ichalkaranji Jurisdiction</span>
-        <span className="font-bold tracking-wider uppercase border border-black px-1.5 py-0 rounded text-[7.5px] sm:text-[8px] bg-slate-50">
+        <span className={`tracking-wider uppercase px-1.5 py-0 rounded text-[7.5px] sm:text-[8px] ${badgeBg}`}>
           {copyTitle || 'CONSIGNOR COPY'}
         </span>
       </div>
@@ -143,7 +151,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
         </div>
 
         {/* LR Booking Details Box (Right 4 Cols) */}
-        <div className="col-span-4 p-1 sm:p-1.5 flex flex-col justify-center space-y-1 bg-slate-50/50">
+        <div className={`col-span-4 p-1 sm:p-1.5 flex flex-col justify-center space-y-1 ${bookingBoxBg}`}>
           <div>
             <span className="font-bold">LR NO: </span>
             <span className="font-bold text-[10.5px] sm:text-[12px] uppercase">{lrNo}</span>
@@ -163,14 +171,14 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       {/* MAIN GOODS & CHARGES TABLE */}
       <table className="w-full border-collapse border-b-2 border-black text-[9px] sm:text-[10px]">
         <thead>
-          <tr className="border-b border-black font-bold divide-x-2 divide-black bg-slate-100/60 text-center">
+          <tr className={`border-b border-black font-bold divide-x-2 divide-black ${headerBg} text-center`}>
             <th className="py-1 px-1 w-[8%] text-center">PKGS</th>
             <th className="py-1 px-1 w-[38%] text-center">Description</th>
             <th className="py-1 px-1 w-[12%] text-center">Weight</th>
             <th className="py-1 px-1 w-[22%] text-center">Charges</th>
             <th className="py-1 px-1 w-[20%] text-center uppercase tracking-wider">{paymentType}</th>
           </tr>
-          <tr className="border-b border-black font-bold divide-x-2 divide-black bg-slate-50 text-center text-[8.5px] sm:text-[9px]">
+          <tr className={`border-b border-black font-bold divide-x-2 divide-black ${subHeaderBg} text-center text-[8.5px] sm:text-[9px]`}>
             <th className="p-0 border-r-2 border-black"></th>
             <th className="p-0 border-r-2 border-black"></th>
             <th className="p-0 border-r-2 border-black"></th>
@@ -215,7 +223,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
 
           {/* Total Row & Note Section */}
           <tr className="divide-x-2 divide-black border-t-2 border-black">
-            <td colSpan={3} className="p-1.5 align-middle bg-white">
+            <td colSpan={3} className={`p-1.5 align-middle ${paperBg}`}>
               <div className="flex items-center justify-between gap-2">
                 <div className="space-y-0.5 text-[8px] sm:text-[8.5px] leading-tight">
                   <div className="font-bold underline">Note :</div>
@@ -234,16 +242,16 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
                 </div>
               </div>
             </td>
-            <td className="py-1 px-2 font-black uppercase text-left bg-slate-100 text-[10px] sm:text-[11px]">
+            <td className={`py-1 px-2 font-black uppercase text-left ${totalRowBg} text-[10px] sm:text-[11px]`}>
               Total
             </td>
-            <td className="py-1 px-2 text-right font-black bg-slate-100 text-[10.5px] sm:text-[12px]">
+            <td className={`py-1 px-2 text-right font-black ${totalRowBg} text-[10.5px] sm:text-[12px]`}>
               {formatAmount(totalAmt)}
             </td>
           </tr>
 
           {/* GST Liability Footer Row */}
-          <tr className="border-t border-black bg-slate-50">
+          <tr className={`border-t border-black ${subHeaderBg}`}>
             <td colSpan={3} className="border-r-2 border-black"></td>
             <td colSpan={2} className="py-0.5 px-2 text-center font-bold text-[8px] sm:text-[8.5px] uppercase">
               GST Liability - Consignee
@@ -254,7 +262,7 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate }) {
       </table>
 
       {/* TERMS & SIGNATURE FOOTER SECTION */}
-      <div className="p-1 sm:p-1.5 space-y-1 text-[7.5px] sm:text-[8px] leading-tight bg-white">
+      <div className={`p-1 sm:p-1.5 space-y-1 text-[7.5px] sm:text-[8px] leading-tight ${paperBg}`}>
         <p className="text-justify text-slate-800">
           <span className="font-bold">T&C* : 1)</span> All consignment are carried entirely at owner's risk. Consignment should take out their own insurance 
           <span className="font-bold"> 2)</span> The company is not responsible for the content of packages and delivered in the same apparent conditions in which they are tendered by or dispatched by the consignor. 
