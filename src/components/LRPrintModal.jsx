@@ -122,9 +122,9 @@ export default function LRPrintModal({ lr, onClose }) {
         </div>
 
         {/* PRINTABLE PHYSICAL LR BILL SLIPS CONTAINER - SCROLLABLE AREA */}
-        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-[#fef9c3] text-black font-sans print:block print:overflow-visible print:h-auto ${printCopies === 3 ? 'print-3-copies' : ''}`}>
+        <div id="printable-lr-content" className={`p-3 sm:p-6 print:p-0 overflow-y-auto flex-1 printable-area bg-slate-100 print:bg-white text-black font-serif print:block print:overflow-visible print:h-auto ${printCopies === 3 ? 'print-3-copies' : ''}`}>
           
-          <div className="mx-1 sm:mx-4 space-y-2 print:space-y-0 print:mx-0">
+          <div className="mx-1 sm:mx-4 space-y-3 print:space-y-0 print:mx-0">
             {printCopies === 3 ? (
               copiesList.map((copyItem, index) => (
                 <React.Fragment key={copyItem.id}>
