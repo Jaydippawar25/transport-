@@ -14,10 +14,18 @@ export default function Header({ onToggleSidebar }) {
           <Menu className="w-5 h-5" />
         </button>
 
+        <img 
+          src="/logo.png" 
+          alt="Royal Roadlines Logo" 
+          className="w-9 h-9 rounded-full object-cover shadow-sm border border-amber-500/30 shrink-0 hidden sm:block lg:hidden"
+        />
+
         <div className="sm:hidden flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-700/30 font-black text-xs">
-            RR
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Royal Roadlines Logo" 
+            className="w-8 h-8 rounded-full object-cover shadow-sm border border-amber-500/30 shrink-0" 
+          />
           <h2 className="text-sm font-extrabold text-[#2a4393] uppercase tracking-wide">
             ROYAL ROADLINES
           </h2>

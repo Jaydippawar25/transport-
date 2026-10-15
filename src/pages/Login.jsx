@@ -85,10 +85,20 @@ export default function Login() {
         <div className="w-full md:w-3/5 p-8 sm:p-12 md:p-14 flex flex-col justify-between z-10 bg-white">
           <div className="space-y-6 my-auto max-w-sm w-full mx-auto md:mx-0">
             
-            {/* Header Title */}
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2a4393] tracking-wide uppercase">
-              SIGN IN
-            </h1>
+            {/* Header Title with Mobile Logo */}
+            <div className="flex items-center gap-3.5">
+              <img 
+                src="/logo.png" 
+                alt="Royal Roadlines Logo" 
+                className="w-12 h-12 rounded-full object-cover shadow-md border border-amber-500/40 md:hidden shrink-0" 
+              />
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2a4393] tracking-wide uppercase">
+                  SIGN IN
+                </h1>
+                <span className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase md:hidden block">ROYAL ROADLINES</span>
+              </div>
+            </div>
 
             {/* Error Notification */}
             {error && (
@@ -233,10 +243,12 @@ export default function Login() {
           </div>
 
           {/* Center Brand Badge */}
-          <div className="relative z-10 text-center text-white space-y-2">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mx-auto shadow-xl">
-              <span className="text-2xl font-black text-cyan-300">RR</span>
-            </div>
+          <div className="relative z-10 text-center text-white space-y-3">
+            <img 
+              src="/logo.png" 
+              alt="Royal Roadlines" 
+              className="w-24 h-24 rounded-full object-cover mx-auto shadow-2xl border-2 border-amber-400/50 bg-black/50"
+            />
             <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
             <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003</p>
           </div>

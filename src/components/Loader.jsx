@@ -105,10 +105,10 @@ export default function Loader({
             <line x1="92" y1="48" x2="92" y2="86" stroke="#1e40af" strokeWidth="1.5" />
             <line x1="112" y1="48" x2="112" y2="86" stroke="#1e40af" strokeWidth="1.5" />
 
-            {/* Branded "AR" on trailer */}
+            {/* Branded "RR" on trailer */}
             <rect x="80" y="56" width="28" height="18" rx="3" fill="#2563eb" />
             <text x="94" y="69" fill="#ffffff" fontSize="10" fontWeight="900" textAnchor="middle" fontFamily="sans-serif">
-              AR
+              RR
             </text>
 
             {/* Truck Cabin Base */}

@@ -52,9 +52,11 @@ export default function Sidebar({ isOpen, onClose }) {
         <div className="flex flex-col flex-1 min-h-0">
           <div className="h-16 px-5 flex items-center justify-between border-b border-slate-800 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-blue-700 flex items-center justify-center text-white shadow-lg shadow-blue-700/30 font-black text-sm">
-                RR
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="Royal Roadlines Logo" 
+                className="w-10 h-10 rounded-full object-cover shadow-lg border border-amber-400/40 bg-black/60 shrink-0" 
+              />
               <div className="overflow-hidden">
                 <h1 className="font-extrabold text-white tracking-wide text-sm leading-tight truncate">ROYAL ROADLINES</h1>
                 <span className="text-[9.5px] text-cyan-400 font-semibold tracking-wider uppercase truncate block">MUMBAI-400 003</span>
