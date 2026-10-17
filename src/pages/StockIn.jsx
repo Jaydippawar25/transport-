@@ -101,8 +101,8 @@ export default function StockIn() {
       setStations(stationData);
       if (masterData) setMasters(masterData);
 
-      // Auto-generate sequential LR No.
-      if (inData && inData.length > 0) {
+      // Auto-generate sequential LR No. (only when creating new entry, not when editing)
+      if (!editingId && inData && inData.length > 0) {
         const maxLr = inData.reduce((max, item) => {
           if (!item.lrNo) return max;
           const match = String(item.lrNo).match(/\d+/);
@@ -173,10 +173,39 @@ export default function StockIn() {
       return;
     }
 
+    const norm = (s) => (s || '').trim().toUpperCase();
+    const cleanLrNo = norm(formData.lrNo);
+
+    // Duplicate check: check if exact LR Number already exists
+    const exactDup = stockInList.find(item => item.id !== editingId && norm(item.lrNo) === cleanLrNo);
+    if (exactDup) {
+      alert(`⚠️ Duplicate LR Error: LR Number "${formData.lrNo}" already exists in the system!\nConsignor: ${exactDup.consignorName}\nConsignee: ${exactDup.consigneeName}\n\nPlease enter a unique LR number.`);
+      return;
+    }
+
+    // Sequence check: alert if numeric sequence is already used across any station
+    const seqMatch = cleanLrNo.match(/\d+/);
+    if (seqMatch) {
+      const seqNum = parseInt(seqMatch[0], 10);
+      if (seqNum < 10000) {
+        const dupSeq = stockInList.find(item => {
+          if (item.id === editingId) return false;
+          const m = String(item.lrNo).match(/\d+/);
+          return m && parseInt(m[0], 10) === seqNum;
+        });
+        if (dupSeq) {
+          const proceed = window.confirm(
+            `⚠️ Sequence Number Alert:\nLR sequence "${seqMatch[0]}" is already assigned to "${dupSeq.lrNo}" (${dupSeq.consignorName} -> ${dupSeq.consigneeName}).\n\nDo you want to save this LR as "${formData.lrNo}" anyway? Click Cancel to enter a unique number.`
+          );
+          if (!proceed) return;
+        }
+      }
+    }
+
     setIsSubmitting(true);
     try {
       const lrPayload = {
-        lrNo: formData.lrNo,
+        lrNo: cleanLrNo,
         date: formData.date,
         transporterName: formData.transporterName,
         memoNo: formData.memoNo,
@@ -217,31 +246,23 @@ export default function StockIn() {
       if (printAfterSave) {
         setSelectedLr(savedLr);
       } else {
-        setToastMsg(`Stock In Entry ${formData.lrNo} ${editingId ? 'updated' : 'saved'} successfully!`);
+        setToastMsg(`Stock In Entry ${cleanLrNo} ${editingId ? 'updated' : 'saved'} successfully!`);
         setTimeout(() => setToastMsg(''), 3000);
       }
       
-      // Generate Next Sequential LR No (only if not editing, or if editing just fetch the max)
-      let nextLrNo = formData.lrNo;
-      if (!editingId) {
-        const safeLrNo = String(formData.lrNo || '');
-        const currentMatch = safeLrNo.match(/\d+/);
-        const nextNum = currentMatch ? parseInt(currentMatch[0], 10) + 1 : 1;
-        nextLrNo = `${getStationPrefix('SANGLI')}/${String(nextNum).padStart(5, '0')}`;
-      } else {
-        // If we just finished editing, find the true max LR number to resume auto-increment
-        const maxLr = stockInList.reduce((max, item) => {
-          if (!item.lrNo) return max;
-          const match = String(item.lrNo).match(/\d+/);
-          if (match) {
-            const num = parseInt(match[0], 10);
-            if (num >= 10000) return max; // Ignore legacy series to allow fresh start
-            return num > max ? num : max;
-          }
-          return max;
-        }, 0);
-        nextLrNo = `${getStationPrefix('SANGLI')}/${String(maxLr + 1).padStart(5, '0')}`;
-      }
+      // Generate Next Sequential LR No
+      const combinedList = savedLr ? [savedLr, ...stockInList] : stockInList;
+      const maxLr = combinedList.reduce((max, item) => {
+        if (!item.lrNo) return max;
+        const match = String(item.lrNo).match(/\d+/);
+        if (match) {
+          const num = parseInt(match[0], 10);
+          if (num >= 10000) return max; // Ignore legacy series to allow fresh start
+          return num > max ? num : max;
+        }
+        return max;
+      }, 0);
+      const nextLrNo = `${getStationPrefix('SANGLI')}/${String(maxLr + 1).padStart(5, '0')}`;
 
       // Reset form
       setFormData({
@@ -274,7 +295,7 @@ export default function StockIn() {
       });
       setEditingId(null);
       setShowForm(false);
-      loadData();
+      await loadData();
     } catch (err) {
       console.error("Error saving stock in:", err);
       alert(`Failed to save entry: ${err.message || err}`);
@@ -487,13 +508,17 @@ export default function StockIn() {
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-slate-700">L.R. NO. *</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-bold text-slate-700">L.R. NO. *</label>
+                  <span className="text-[10px] text-indigo-600 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded">Auto / Editable</span>
+                </div>
                 <input
                   type="text"
                   required
-                  readOnly
                   value={formData.lrNo}
-                  className="w-full mt-1 p-2 bg-slate-100 rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900 cursor-not-allowed"
+                  onChange={(e) => setFormData({ ...formData, lrNo: e.target.value.toUpperCase() })}
+                  placeholder="e.g. SNG/01802"
+                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900 focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
             </div>
