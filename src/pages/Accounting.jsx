@@ -9,7 +9,7 @@ export default function Accounting() {
   const [loading, setLoading] = useState(true);
   const [viewType, setViewType] = useState('memo'); // 'memo' or 'station'
   const [selectedStation, setSelectedStation] = useState('ALL');
-  const [dateFilter, setDateFilter] = useState('ALL');
+  const [dateFilter, setDateFilter] = useState('THIS_MONTH');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [stations, setStations] = useState([]);
@@ -44,12 +44,35 @@ export default function Accounting() {
     }
   };
 
+  // Robust date parser handling YYYY-MM-DD, DD/MM/YYYY, ISO, and Firestore Timestamps
+  const parseItemDate = (dateVal, createdVal) => {
+    if (dateVal) {
+      if (typeof dateVal === 'string' && /^\d{4}-\d{2}-\d{2}/.test(dateVal)) {
+        const parts = dateVal.split('T')[0].split('-');
+        return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      }
+      if (typeof dateVal === 'string' && /^\d{2}\/\d{2}\/\d{4}/.test(dateVal)) {
+        const parts = dateVal.split('/');
+        return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+      }
+      const d = new Date(dateVal);
+      if (!isNaN(d.getTime())) return d;
+    }
+    if (createdVal) {
+      if (typeof createdVal.toDate === 'function') return createdVal.toDate();
+      if (createdVal.seconds) return new Date(createdVal.seconds * 1000);
+      const d = new Date(createdVal);
+      if (!isNaN(d.getTime())) return d;
+    }
+    return null;
+  };
+
   const filteredMemos = memos.filter(m => {
     if (selectedStation !== 'ALL' && m.toStation !== selectedStation) return false;
     
     if (dateFilter !== 'ALL') {
-      const d = new Date(m.date || m.createdAt);
-      if (isNaN(d.getTime())) return false;
+      const d = parseItemDate(m.date, m.createdAt);
+      if (!d || isNaN(d.getTime())) return false;
 
       const now = new Date();
       const currentYear = now.getFullYear();
@@ -100,7 +123,10 @@ export default function Accounting() {
         id: m.id || m.memoNo,
         label: m.memoNo,
         subLabel: m.toStation,
-        date: new Date(m.date || m.createdAt).toLocaleDateString('en-IN'),
+        date: (() => {
+          const dt = parseItemDate(m.date, m.createdAt);
+          return dt ? dt.toLocaleDateString('en-IN') : '-';
+        })(),
         toPay: Number(m.totalToPay || 0),
         tbb: Number(m.totalTbb || 0),
         paid: Number(m.totalPaid || 0),
