@@ -1,31 +1,24 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
-import Loader from './components/Loader';
 import Login from './pages/Login';
-
-// Lazy-loaded routes for performance & fast mobile loading
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const StockIn = lazy(() => import('./pages/StockIn'));
-const StockOut = lazy(() => import('./pages/StockOut'));
-const Reports = lazy(() => import('./pages/Reports'));
-const Accounting = lazy(() => import('./pages/Accounting'));
-const Masters = lazy(() => import('./pages/Masters'));
-const TransportAgent = lazy(() => import('./pages/TransportAgent'));
+import Dashboard from './pages/Dashboard';
+import StockIn from './pages/StockIn';
+import StockOut from './pages/StockOut';
+import Reports from './pages/Reports';
+import Accounting from './pages/Accounting';
+import Masters from './pages/Masters';
+import TransportAgent from './pages/TransportAgent';
 
 // Protected Route Guard: If not authenticated, render Login directly
 function AuthenticatedRoute({ children }) {
   const { currentUser, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader fullScreen message="Loading ROYAL ROADLINES..." subMessage="Authenticating operator session" />
-      </div>
-    );
+    return null;
   }
 
   if (!currentUser) {
@@ -49,13 +42,7 @@ function MainLayout({ children }) {
         <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
         <main className="flex-1 pb-4">
-          <Suspense fallback={
-            <div className="flex items-center justify-center p-12">
-              <Loader fullScreen={false} message="Loading Section..." subMessage="Fetching ledger & inventory records" />
-            </div>
-          }>
-            {children}
-          </Suspense>
+          {children}
         </main>
         
         {/* Mobile Bottom Navigation */}
