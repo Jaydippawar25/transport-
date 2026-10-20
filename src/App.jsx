@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useState, Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import Dashboard from './pages/Dashboard';
-import StockIn from './pages/StockIn';
-import StockOut from './pages/StockOut';
-import Reports from './pages/Reports';
-import Accounting from './pages/Accounting';
-import Masters from './pages/Masters';
-import TransportAgent from './pages/TransportAgent';
-import Login from './pages/Login';
-import LRPrintModal from './components/LRPrintModal';
-import MemoPrintModal from './components/MemoPrintModal';
-
 import BottomNav from './components/BottomNav';
+import Loader from './components/Loader';
+import Login from './pages/Login';
+
+// Lazy-loaded routes for performance & fast mobile loading
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const StockIn = lazy(() => import('./pages/StockIn'));
+const StockOut = lazy(() => import('./pages/StockOut'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Accounting = lazy(() => import('./pages/Accounting'));
+const Masters = lazy(() => import('./pages/Masters'));
+const TransportAgent = lazy(() => import('./pages/TransportAgent'));
+const LRPrintModal = lazy(() => import('./components/LRPrintModal'));
+const MemoPrintModal = lazy(() => import('./components/MemoPrintModal'));
 
 // Protected Route Guard: If not authenticated, render Login directly
 function AuthenticatedRoute({ children }) {
   const { currentUser, loading } = useAuth();
 
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader fullScreen message="Loading ROYAL ROADLINES..." subMessage="Authenticating operator session" />
+      </div>
+    );
   }
 
   if (!currentUser) {
@@ -53,7 +59,13 @@ function MainLayout({ children }) {
         />
 
         <main className="flex-1 pb-4">
-          {children}
+          <Suspense fallback={
+            <div className="flex items-center justify-center p-12">
+              <Loader fullScreen={false} message="Loading Section..." subMessage="Fetching ledger & inventory records" />
+            </div>
+          }>
+            {children}
+          </Suspense>
         </main>
         
         {/* Mobile Bottom Navigation */}
@@ -62,10 +74,14 @@ function MainLayout({ children }) {
 
       {/* Global Quick Search Result Modals */}
       {activeSearchResult && activeSearchResult.type === 'LR' && (
-        <LRPrintModal lr={activeSearchResult} onClose={() => setActiveSearchResult(null)} />
+        <Suspense fallback={null}>
+          <LRPrintModal lr={activeSearchResult} onClose={() => setActiveSearchResult(null)} />
+        </Suspense>
       )}
       {activeSearchResult && activeSearchResult.type === 'Memo' && (
-        <MemoPrintModal memo={activeSearchResult} onClose={() => setActiveSearchResult(null)} />
+        <Suspense fallback={null}>
+          <MemoPrintModal memo={activeSearchResult} onClose={() => setActiveSearchResult(null)} />
+        </Suspense>
       )}
     </div>
   );

@@ -361,14 +361,17 @@ export const dataService = {
           createdAt: serverTimestamp()
         });
 
-        // Find stockIn docs with matching lrNo and update status to 'dispatched'
-        for (const lrNo of linkedLrNos) {
-          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
-          const snap = await getDocs(q);
-          snap.forEach(document => {
-            batch.update(document.ref, {
-              status: 'dispatched',
-              memoNo: formattedData.memoNo
+        // Find stockIn docs with matching lrNo and update status to 'dispatched' in parallel
+        if (linkedLrNos.length > 0) {
+          const snaps = await Promise.all(
+            linkedLrNos.map(lrNo => getDocs(query(collection(db, 'stockIn'), where('lrNo', '==', lrNo))))
+          );
+          snaps.forEach(snap => {
+            snap.forEach(document => {
+              batch.update(document.ref, {
+                status: 'dispatched',
+                memoNo: formattedData.memoNo
+              });
             });
           });
         }
@@ -428,22 +431,28 @@ export const dataService = {
         const memoDocRef = doc(db, 'stockOut', id);
         batch.update(memoDocRef, formattedData);
 
-        // Reset removed LRs back to godown
+        // Reset removed LRs back to godown in parallel
         const removedLrNos = originalLinkedLrNos.filter(lrNo => !newLinkedLrNos.includes(lrNo));
-        for (const lrNo of removedLrNos) {
-          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
-          const snap = await getDocs(q);
-          snap.forEach(document => {
-            batch.update(document.ref, { status: 'in-godown', memoNo: '' });
+        if (removedLrNos.length > 0) {
+          const removedSnaps = await Promise.all(
+            removedLrNos.map(lrNo => getDocs(query(collection(db, 'stockIn'), where('lrNo', '==', lrNo))))
+          );
+          removedSnaps.forEach(snap => {
+            snap.forEach(document => {
+              batch.update(document.ref, { status: 'in-godown', memoNo: '' });
+            });
           });
         }
 
-        // Update all currently linked LRs with status 'dispatched' and updated memoNo
-        for (const lrNo of newLinkedLrNos) {
-          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
-          const snap = await getDocs(q);
-          snap.forEach(document => {
-            batch.update(document.ref, { status: 'dispatched', memoNo: formattedData.memoNo });
+        // Update all currently linked LRs with status 'dispatched' and updated memoNo in parallel
+        if (newLinkedLrNos.length > 0) {
+          const linkedSnaps = await Promise.all(
+            newLinkedLrNos.map(lrNo => getDocs(query(collection(db, 'stockIn'), where('lrNo', '==', lrNo))))
+          );
+          linkedSnaps.forEach(snap => {
+            snap.forEach(document => {
+              batch.update(document.ref, { status: 'dispatched', memoNo: formattedData.memoNo });
+            });
           });
         }
 
@@ -792,12 +801,15 @@ export const dataService = {
 
         batch.delete(memoDocRef);
 
-        // Reset linked LRs back to godown
-        for (const lrNo of linkedLrNos) {
-          const q = query(collection(db, 'stockIn'), where('lrNo', '==', lrNo));
-          const snap = await getDocs(q);
-          snap.forEach(document => {
-            batch.update(document.ref, { status: 'in-godown', memoNo: '' });
+        // Reset linked LRs back to godown in parallel
+        if (linkedLrNos.length > 0) {
+          const snaps = await Promise.all(
+            linkedLrNos.map(lrNo => getDocs(query(collection(db, 'stockIn'), where('lrNo', '==', lrNo))))
+          );
+          snaps.forEach(snap => {
+            snap.forEach(document => {
+              batch.update(document.ref, { status: 'in-godown', memoNo: '' });
+            });
           });
         }
 

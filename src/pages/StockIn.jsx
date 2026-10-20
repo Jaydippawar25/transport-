@@ -307,7 +307,13 @@ export default function StockIn() {
 
   const handleDeleteLr = async (id, e) => {
     e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this record? This action cannot be undone.")) {
+    const itemToDelete = stockInList.find(item => item.id === id);
+    let confirmMsg = "Are you sure you want to delete this record? This action cannot be undone.";
+    if (itemToDelete && (itemToDelete.status === 'dispatched' || itemToDelete.memoNo)) {
+      confirmMsg = `⚠️ ALERT: This LR (${itemToDelete.lrNo}) is currently DISPATCHED in Loading Memo "${itemToDelete.memoNo || ''}"!\n\nDeleting it will remove it from both Godown Stock and that Loading Memo, and recalculate the Memo's grand total.\n\nAre you sure you want to proceed?`;
+    }
+
+    if (window.confirm(confirmMsg)) {
       try {
         await dataService.deleteStockIn(id);
         await loadData();
