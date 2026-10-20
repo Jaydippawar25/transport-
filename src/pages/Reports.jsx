@@ -244,6 +244,19 @@ export default function Reports() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       
+      {/* Print-only Company Header */}
+      <div className="hidden print:block border-b-2 border-black pb-3 mb-4 text-center">
+        <h1 className="text-2xl font-black uppercase tracking-wider text-black">ROYAL ROADLINES</h1>
+        <p className="text-[11px] font-semibold text-slate-700">
+          MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Mumbai-400 003
+        </p>
+        <div className="flex justify-between items-center text-xs font-bold text-slate-800 mt-2 pt-2 border-t border-slate-300">
+          <span>SECTION: {activeSection.replace('_', ' ')}</span>
+          <span>DATE RANGE: {dateRange}</span>
+          <span>PRINTED ON: {new Date().toLocaleDateString('en-IN')}</span>
+        </div>
+      </div>
+      
       {/* Page Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
         <div>

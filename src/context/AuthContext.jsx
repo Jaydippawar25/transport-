@@ -8,14 +8,8 @@ import {
   signOut as firebaseSignOut, 
   onAuthStateChanged,
   setPersistence,
-  browserSessionPersistence
+  browserLocalPersistence
 } from 'firebase/auth';
-
-// Clear any legacy persistent storage keys
-try {
-  localStorage.removeItem('transtrack_user');
-  localStorage.removeItem('user');
-} catch (e) {}
 
 const AuthContext = createContext(null);
 
@@ -24,45 +18,51 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if the current browser session is active
-    const isSessionActive = sessionStorage.getItem('transtrack_active_session');
-
     if (isFirebaseConfigured && auth) {
-      // If browser was closed and reopened, sessionStorage was wiped.
-      // Force sign-out of any residual Firebase IndexedDB local session.
-      if (!isSessionActive) {
-        firebaseSignOut(auth).catch(() => {});
-        setCurrentUser(null);
-        setLoading(false);
-      } else {
-        setPersistence(auth, browserSessionPersistence).catch(() => {});
-      }
+      // Set persistence to local so multi-tab usage is seamless
+      setPersistence(auth, browserLocalPersistence).catch((err) => {
+        console.warn("Could not set auth persistence:", err);
+      });
 
       const unsubscribe = onAuthStateChanged(auth, (user) => {
-        const stillActive = sessionStorage.getItem('transtrack_active_session');
-        if (user && stillActive) {
-          const userObj = { uid: user.uid, email: user.email, name: user.displayName || user.email.split('@')[0] };
+        if (user) {
+          const userObj = {
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName || user.email.split('@')[0]
+          };
           setCurrentUser(userObj);
+          localStorage.setItem('transtrack_active_session', 'true');
         } else {
           setCurrentUser(null);
+          localStorage.removeItem('transtrack_active_session');
         }
         setLoading(false);
       });
       return unsubscribe;
     } else {
+      // Demo / Local Fallback Mode
+      const isSessionActive = localStorage.getItem('transtrack_active_session') || sessionStorage.getItem('transtrack_active_session');
+      if (isSessionActive) {
+        setCurrentUser({
+          uid: 'demo-staff-123',
+          email: 'admin@123.com',
+          name: 'Godown Operator / Admin'
+        });
+      }
       setLoading(false);
     }
   }, []);
 
   const login = async (email, password) => {
-    // Mark session as active for the lifetime of this browser session
+    localStorage.setItem('transtrack_active_session', 'true');
     sessionStorage.setItem('transtrack_active_session', 'true');
 
     if (isFirebaseConfigured && auth) {
       try {
-        await setPersistence(auth, browserSessionPersistence);
+        await setPersistence(auth, browserLocalPersistence);
       } catch (e) {
-        console.warn('Could not set browserSessionPersistence:', e);
+        console.warn('Could not set browserLocalPersistence:', e);
       }
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const userObj = {
@@ -84,9 +84,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    localStorage.removeItem('transtrack_active_session');
     sessionStorage.removeItem('transtrack_active_session');
     if (isFirebaseConfigured && auth) {
-      await firebaseSignOut(auth);
+      try {
+        await firebaseSignOut(auth);
+      } catch (err) {
+        console.warn("Sign out error:", err);
+      }
     }
     setCurrentUser(null);
   };

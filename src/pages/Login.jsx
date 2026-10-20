@@ -11,6 +11,8 @@ import {
   EyeOff
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth, isFirebaseConfigured } from '../firebase';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -24,6 +26,8 @@ export default function Login() {
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotSubmitted, setForgotSubmitted] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotError, setForgotError] = useState('');
 
   const { currentUser, login } = useAuth();
   const navigate = useNavigate();
@@ -69,10 +73,30 @@ export default function Login() {
     }
   };
 
-  const handleForgotSubmit = (e) => {
+  const handleForgotSubmit = async (e) => {
     e.preventDefault();
     if (!forgotEmail) return;
-    setForgotSubmitted(true);
+    setForgotError('');
+    setForgotLoading(true);
+
+    try {
+      if (isFirebaseConfigured && auth) {
+        await sendPasswordResetEmail(auth, forgotEmail);
+      }
+      setForgotSubmitted(true);
+    } catch (err) {
+      console.error("Password reset error:", err);
+      const code = err?.code || '';
+      if (code.includes('auth/user-not-found')) {
+        setForgotError('No registered account found with this email.');
+      } else if (code.includes('auth/invalid-email')) {
+        setForgotError('Please enter a valid email address.');
+      } else {
+        setForgotError('Failed to send reset link. Please check your network and try again.');
+      }
+    } finally {
+      setForgotLoading(false);
+    }
   };
 
   return (
@@ -294,6 +318,12 @@ export default function Login() {
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Enter your registered user email address below to receive password reset instructions.
                 </p>
+                {forgotError && (
+                  <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                    <span>{forgotError}</span>
+                  </div>
+                )}
                 <div>
                   <label className="text-xs font-bold text-slate-700">Work Email</label>
                   <input
@@ -315,9 +345,17 @@ export default function Login() {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#2a4393] hover:bg-[#203373] text-white text-xs font-bold rounded-lg shadow-sm cursor-pointer"
+                    disabled={forgotLoading}
+                    className="px-4 py-2 bg-[#2a4393] hover:bg-[#203373] text-white text-xs font-bold rounded-lg shadow-sm cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                   >
-                    Send Reset Link
+                    {forgotLoading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      'Send Reset Link'
+                    )}
                   </button>
                 </div>
               </form>

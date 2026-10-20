@@ -137,7 +137,7 @@ const LoadingMemoView = ({ memo, stockIn = [], onClose }) => {
               <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.memoNo}</div>
             </div>
             <div className="grid grid-cols-2 divide-x-2 divide-black">
-              <div className="p-1.5 uppercase text-center flex items-center justify-center">VEHICAL NO.</div>
+              <div className="p-1.5 uppercase text-center flex items-center justify-center">VEHICLE NO.</div>
               <div className="p-1.5 text-center flex items-center justify-center font-mono">{memo.lorryNo}</div>
             </div>
             <div className="grid grid-cols-2 divide-x-2 divide-black">
@@ -232,7 +232,7 @@ const LoadingMemoView = ({ memo, stockIn = [], onClose }) => {
             </div>
           </div>
           <div className="flex flex-col text-center border-r-2 border-black col-span-1">
-            <div className="p-1 border-b-2 border-black">VEHICAL FREIGHT</div>
+            <div className="p-1 border-b-2 border-black">VEHICLE FREIGHT</div>
             <div className="p-1 flex-1 flex items-center justify-center"></div>
           </div>
           <div className="flex flex-col text-center border-r-2 border-black col-span-1 relative">
@@ -606,10 +606,37 @@ export default function StockOut() {
       return;
     }
 
+    const norm = (s) => (s || '').trim().toUpperCase();
+    const cleanMemoNo = norm(formData.memoNo);
+
+    // Duplicate check: check if exact Memo Number already exists
+    const exactDup = stockOutList.find(memo => memo.id !== editingMemoId && norm(memo.memoNo) === cleanMemoNo);
+    if (exactDup) {
+      alert(`⚠️ Duplicate Memo Error: Memo Number "${formData.memoNo}" already exists in the system!\nVehicle: ${exactDup.lorryNo}\nDriver: ${exactDup.driverName}\n\nPlease enter a unique Memo number.`);
+      return;
+    }
+
+    // Sequence check: alert if numeric sequence is already used across any station
+    const seqMatch = cleanMemoNo.match(/\d+/);
+    if (seqMatch) {
+      const seqNum = parseInt(seqMatch[0], 10);
+      const dupSeq = stockOutList.find(memo => {
+        if (memo.id === editingMemoId) return false;
+        const m = String(memo.memoNo).match(/\d+/);
+        return m && parseInt(m[0], 10) === seqNum;
+      });
+      if (dupSeq) {
+        const proceed = window.confirm(
+          `⚠️ Sequence Number Alert:\nMemo sequence "${seqMatch[0]}" is already assigned to "${dupSeq.memoNo}" (Vehicle: ${dupSeq.lorryNo}, Driver: ${dupSeq.driverName}).\n\nDo you want to save this Memo as "${formData.memoNo}" anyway? Click Cancel to enter a unique number.`
+        );
+        if (!proceed) return;
+      }
+    }
+
     setIsSubmitting(true);
     try {
       const memoPayload = {
-        memoNo: formData.memoNo,
+        memoNo: cleanMemoNo,
         date: formData.date,
         lorryNo: formData.lorryNo.toUpperCase(),
         ownerName: formData.ownerName,
@@ -747,17 +774,22 @@ export default function StockOut() {
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-slate-700">MEMO NO.</label>
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-bold text-slate-700">MEMO NO. *</label>
+                <span className="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded">Auto / Editable</span>
+              </div>
               <input
                 type="text"
-                readOnly
+                required
                 value={formData.memoNo}
-                className="w-full mt-1 p-2 bg-slate-100 rounded-lg border border-slate-300 text-xs font-mono font-bold text-emerald-900 cursor-not-allowed"
+                onChange={(e) => setFormData({ ...formData, memoNo: e.target.value.toUpperCase() })}
+                placeholder="e.g. SNG-00001"
+                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono font-bold text-emerald-900 focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-slate-700">VEHICAL NO. *</label>
+              <label className="text-[11px] font-bold text-slate-700">VEHICLE NO. *</label>
               <input
                 type="text"
                 required

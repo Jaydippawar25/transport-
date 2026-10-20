@@ -837,13 +837,16 @@ export const dataService = {
     if (isFirebaseConfigured && db) {
       try {
         const collectionsToClear = ['stockIn', 'stockOut'];
+        const CHUNK_SIZE = 400; // Chunking to safely stay well under Firestore's 500-operation writeBatch limit
         for (const collName of collectionsToClear) {
           const querySnapshot = await getDocs(collection(db, collName));
-          const batch = writeBatch(db);
-          querySnapshot.forEach((docSnap) => {
-            batch.delete(docSnap.ref);
-          });
-          if (!querySnapshot.empty) {
+          const docs = querySnapshot.docs;
+          for (let i = 0; i < docs.length; i += CHUNK_SIZE) {
+            const chunk = docs.slice(i, i + CHUNK_SIZE);
+            const batch = writeBatch(db);
+            chunk.forEach((docSnap) => {
+              batch.delete(docSnap.ref);
+            });
             await batch.commit();
           }
         }

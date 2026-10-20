@@ -52,7 +52,16 @@
     overflow: visible;
   }
 
-  #root {
+  /* When a portal modal (LR or Memo) is open outside #root, hide #root so only the modal prints */
+  body:has(.printable-area) #root {
+    display: none !important;
+  }
+
+  /* Hide app navigation, sidebar, header, and non-printable elements when printing any page */
+  aside,
+  header,
+  nav,
+  .no-print {
     display: none !important;
   }
 
@@ -97,10 +106,6 @@
 
   .print-3-copies .printable-slip:last-child {
     margin-bottom: 0 !important;
-  }
-
-  .no-print {
-    display: none !important;
   }
 }
 
