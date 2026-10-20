@@ -13,6 +13,7 @@ import {
 import { dataService } from '../services/dataService';
 import { exportCSVFile } from '../utils/exportUtils';
 import LRPrintModal from '../components/LRPrintModal';
+import MemoPrintModal from '../components/MemoPrintModal';
 
 export default function Reports() {
   const [stockInList, setStockInList] = useState([]);
@@ -20,6 +21,7 @@ export default function Reports() {
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLr, setSelectedLr] = useState(null);
+  const [selectedMemo, setSelectedMemo] = useState(null);
 
   // Active Report Section Tab ('STOCK_IN' | 'STOCK_OUT' | 'PENDING_STOCK')
   const [activeSection, setActiveSection] = useState('STOCK_IN');
@@ -596,7 +598,8 @@ export default function Reports() {
                   <th className="p-3 border-r border-slate-200 text-right w-28">TOPAY (₹)</th>
                   <th className="p-3 border-r border-slate-200 text-right w-28">PAID (₹)</th>
                   <th className="p-3 border-r border-slate-200 text-right w-28">T.B.B (₹)</th>
-                  <th className="p-3 text-right w-32">TOTAL OUT (₹)</th>
+                  <th className="p-3 border-r border-slate-200 text-right w-32">TOTAL OUT (₹)</th>
+                  <th className="p-3 text-center w-16">PRINT</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -625,7 +628,16 @@ export default function Reports() {
                         <td className="p-3 border-r border-slate-100 text-right font-mono text-amber-800 font-semibold">₹{(memo.totalToPay || 0).toLocaleString('en-IN')}</td>
                         <td className="p-3 border-r border-slate-100 text-right font-mono text-emerald-800 font-semibold">₹{(memo.totalPaid || 0).toLocaleString('en-IN')}</td>
                         <td className="p-3 border-r border-slate-100 text-right font-mono text-blue-800 font-semibold">₹{(memo.totalTbb || 0).toLocaleString('en-IN')}</td>
-                        <td className="p-3 text-right font-mono text-slate-900 font-bold">₹{memoGrand.toLocaleString('en-IN')}</td>
+                        <td className="p-3 border-r border-slate-100 text-right font-mono text-slate-900 font-bold">₹{memoGrand.toLocaleString('en-IN')}</td>
+                        <td className="p-3 text-center">
+                          <button
+                            onClick={() => setSelectedMemo(memo)}
+                            className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+                            title="Print / View Loading Memo"
+                          >
+                            <Printer className="w-4 h-4" />
+                          </button>
+                        </td>
                       </tr>
                     );
                   })
@@ -639,7 +651,7 @@ export default function Reports() {
                   <td className="p-3 border-r border-slate-200 text-right font-mono text-amber-700">₹{outTotalToPay.toLocaleString('en-IN')}</td>
                   <td className="p-3 border-r border-slate-200 text-right font-mono text-emerald-700">₹{outTotalPaid.toLocaleString('en-IN')}</td>
                   <td className="p-3 border-r border-slate-200 text-right font-mono text-blue-700">₹{outTotalTbb.toLocaleString('en-IN')}</td>
-                  <td className="p-3 text-right font-mono font-black text-indigo-700">₹{outGrandTotal.toLocaleString('en-IN')}</td>
+                  <td colSpan={2} className="p-3 text-right font-mono font-black text-indigo-700">₹{outGrandTotal.toLocaleString('en-IN')}</td>
                 </tr>
               </tfoot>
             </table>
@@ -732,6 +744,7 @@ export default function Reports() {
 
       {/* Print Modal */}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
+      {selectedMemo && <MemoPrintModal memo={selectedMemo} stockIn={stockInList} onClose={() => setSelectedMemo(null)} />}
     </div>
   );
 }

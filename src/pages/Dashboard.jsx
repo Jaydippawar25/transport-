@@ -537,7 +537,7 @@ export default function Dashboard() {
 
       {/* Print Modals */}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
-      {selectedMemo && <MemoPrintModal memo={selectedMemo} onClose={() => setSelectedMemo(null)} />}
+      {selectedMemo && <MemoPrintModal memo={selectedMemo} stockIn={stockInList} onClose={() => setSelectedMemo(null)} />}
 
     </div>
   );
