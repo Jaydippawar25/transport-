@@ -32,12 +32,19 @@ export default function TransportAgent() {
         dataService.getStockOut(),
         dataService.getStockIn()
       ]);
-      setAgents(masters.transportAgents || []);
+      const masterAgents = masters.transportAgents || [];
+      const memoAgentNames = [...new Set((outData || []).map(m => m.transportAgent).filter(Boolean))];
+      const existingNames = new Set(masterAgents.map(a => (a.name || '').trim().toLowerCase()));
+      const extraAgents = memoAgentNames
+        .filter(name => !existingNames.has(name.trim().toLowerCase()))
+        .map(name => ({ id: `memo-${name}`, name }));
+      const combinedAgents = [...masterAgents, ...extraAgents].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      setAgents(combinedAgents);
       setStockOutList(outData);
       setAllStockIn(inData);
       
-      if (masters.transportAgents && masters.transportAgents.length > 0) {
-        setSelectedAgent(masters.transportAgents[0].name);
+      if (combinedAgents.length > 0) {
+        setSelectedAgent(combinedAgents[0].name);
       }
     } catch (err) {
       console.error("Error loading agent data:", err);
@@ -47,7 +54,9 @@ export default function TransportAgent() {
   };
 
   const normalize = str => (str || '').trim().toLowerCase();
-  const agentMemos = stockOutList.filter(memo => normalize(memo.transportAgent) === normalize(selectedAgent));
+  const agentMemos = (!selectedAgent || selectedAgent === 'ALL')
+    ? stockOutList
+    : stockOutList.filter(memo => normalize(memo.transportAgent) === normalize(selectedAgent));
   
   const filteredMemos = agentMemos.filter(memo => {
     // Search Term Filter
@@ -135,7 +144,8 @@ export default function TransportAgent() {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Agent Ledger");
     
-    const fileName = `Agent_Ledger_${(selectedAgent || 'Unknown').replace(/\s+/g, '_')}.xlsx`;
+    const agentTag = selectedAgent === 'ALL' ? 'All_Agents' : (selectedAgent || 'Unknown');
+    const fileName = `Agent_Ledger_${agentTag.replace(/\s+/g, '_')}.xlsx`;
     exportExcelFile(workbook, fileName, exportData);
   };
 
@@ -175,8 +185,9 @@ export default function TransportAgent() {
                 onChange={(e) => setSelectedAgent(e.target.value)}
                 className="w-full p-2.5 bg-slate-50 rounded-lg border border-slate-300 text-sm font-bold text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none"
               >
+                <option value="ALL">All Transport Agents ({agents.length})</option>
                 {agents.map(a => (
-                  <option key={a.id} value={a.name}>{a.name}</option>
+                  <option key={a.id || a.name} value={a.name}>{a.name}</option>
                 ))}
                 {agents.length === 0 && <option value="">No Agents Available</option>}
               </select>

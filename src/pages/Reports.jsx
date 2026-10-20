@@ -111,6 +111,7 @@ export default function Reports() {
       memo.memoNo?.toLowerCase().includes(term) ||
       memo.lorryNo?.toLowerCase().includes(term) ||
       memo.driverName?.toLowerCase().includes(term) ||
+      memo.toStation?.toLowerCase().includes(term) ||
       memo.fromStation?.toLowerCase().includes(term) ||
       (memo.entries || []).some(e => 
         e.lrNo?.toLowerCase().includes(term) || 
@@ -185,7 +186,7 @@ export default function Reports() {
         'Payment Type': l.paymentType,
         'Status': l.status
       }));
-      exportCSVFile(csvStr, `TransTrack_StockIn_Report.csv`, exportData);
+      exportCSVFile(csvStr, `RoyalRoadlines_StockIn_Report.csv`, exportData);
     } else if (activeSection === 'STOCK_OUT') {
       const headers = ['Memo No', 'Date', 'Lorry No', 'Driver Name', 'Loaded LRs', 'Total Packages', 'ToPay Total', 'Paid Total', 'TBB Total', 'Grand Total'];
       const rows = filteredStockOut.map(m => [
@@ -213,7 +214,7 @@ export default function Reports() {
         'TBB Total': m.totalTbb || 0,
         'Grand Total': (m.totalToPay || 0) + (m.totalPaid || 0) + (m.totalTbb || 0)
       }));
-      exportCSVFile(csvStr, `TransTrack_StockOut_Report.csv`, exportData);
+      exportCSVFile(csvStr, `RoyalRoadlines_StockOut_Report.csv`, exportData);
     } else {
       const headers = ['LR No', 'Date', 'Consignor', 'Consignee', 'Destination Station', 'Packages', 'Pending Amount', 'Payment Basis'];
       const rows = pendingStockList.map(l => [
@@ -237,7 +238,7 @@ export default function Reports() {
         'Pending Amount': l.charges?.total || 0,
         'Payment Basis': l.paymentType
       }));
-      exportCSVFile(csvStr, `TransTrack_PendingStock_Report.csv`, exportData);
+      exportCSVFile(csvStr, `RoyalRoadlines_PendingStock_Report.csv`, exportData);
     }
   };
 

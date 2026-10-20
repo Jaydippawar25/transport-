@@ -10,12 +10,8 @@ import {
   ArrowDownRight, 
   Clock, 
   CheckCircle2, 
-  Sparkles,
   Printer,
-  Calendar,
-  Layers,
   Search,
-  Trash2,
   X
 } from 'lucide-react';
 import { 
@@ -40,8 +36,7 @@ export default function Dashboard() {
   const [selectedLr, setSelectedLr] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isSeeding, setIsSeeding] = useState(false);
-  const [isClearing, setIsClearing] = useState(false);
+
 
   const loadData = async () => {
     setLoading(true);
@@ -65,14 +60,7 @@ export default function Dashboard() {
 
   
 
-  const handleClearData = async () => {
-    if (window.confirm("Are you sure you want to delete ALL Stock In and Stock Out records? This cannot be undone.")) {
-      setIsClearing(true);
-      await dataService.clearDatabase();
-      await loadData();
-      setIsClearing(false);
-    }
-  };
+
 
   // Helper date matching (Today)
   const isToday = (dateStr) => {

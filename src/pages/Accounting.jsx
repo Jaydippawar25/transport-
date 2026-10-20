@@ -13,6 +13,18 @@ export default function Accounting() {
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [stations, setStations] = useState([]);
+  const [commissionRate, setCommissionRate] = useState(() => {
+    const saved = localStorage.getItem('accounting_commission_rate');
+    return saved !== null && !isNaN(Number(saved)) ? Number(saved) : 17;
+  });
+
+  const handleCommissionRateChange = (newVal) => {
+    const val = newVal === '' ? '' : Math.max(0, Math.min(100, Number(newVal)));
+    setCommissionRate(val);
+    if (val !== '') {
+      localStorage.setItem('accounting_commission_rate', val.toString());
+    }
+  };
 
   useEffect(() => {
     loadData();
@@ -81,7 +93,8 @@ export default function Accounting() {
     reportData = filteredMemos.map(m => {
       const income = Number(m.grandTotal || 0);
       const expense = Number(m.freight || 0) + Number(m.loadingCharges || 0) + Number(m.otherCharges || 0);
-      const commission = Math.round(income * 0.17);
+      const rateMultiplier = (Number(commissionRate) || 0) / 100;
+      const commission = Math.round(income * rateMultiplier);
       const profit = income - expense - commission;
       return {
         id: m.id || m.memoNo,
@@ -118,7 +131,8 @@ export default function Accounting() {
       }
       const income = Number(m.grandTotal || 0);
       const expense = Number(m.freight || 0) + Number(m.loadingCharges || 0) + Number(m.otherCharges || 0);
-      const commission = Math.round(income * 0.17);
+      const rateMultiplier = (Number(commissionRate) || 0) / 100;
+      const commission = Math.round(income * rateMultiplier);
       const profit = income - expense - commission;
 
       stationMap[st].memoCount += 1;
@@ -155,7 +169,7 @@ export default function Accounting() {
       'Freight': row.freight,
       'Loading/Other': row.loading + row.other,
       'Total Expense': row.totalExpense,
-      'Commission': row.commission,
+      [`Commission (${commissionRate || 0}%)`]: row.commission,
       'Profit/Loss': row.profit
     }));
 
@@ -169,7 +183,7 @@ export default function Accounting() {
       'Freight': reportData.reduce((sum, r) => sum + (r.freight || 0), 0),
       'Loading/Other': reportData.reduce((sum, r) => sum + ((r.loading || 0) + (r.other || 0)), 0),
       'Total Expense': gtExpense,
-      'Commission': gtCommission,
+      [`Commission (${commissionRate || 0}%)`]: gtCommission,
       'Profit/Loss': gtProfit
     });
 
@@ -200,6 +214,25 @@ export default function Accounting() {
         </div>
 
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto">
+          {/* Configurable Commission Rate */}
+          <div className="flex items-center justify-between sm:justify-start gap-1.5 bg-white px-3 py-2 rounded-xl border-2 border-slate-200 shadow-sm">
+            <span className="text-xs font-bold text-slate-600 whitespace-nowrap">Commission:</span>
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                min="0"
+                max="100"
+                step="0.5"
+                value={commissionRate}
+                onChange={(e) => handleCommissionRateChange(e.target.value)}
+                placeholder="17"
+                className="w-14 text-sm font-black text-indigo-700 bg-indigo-50/70 rounded-lg px-2 py-1 text-center outline-none border border-indigo-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                title="Set custom commission percentage"
+              />
+              <span className="text-xs font-bold text-slate-600">%</span>
+            </div>
+          </div>
+
           <select
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
@@ -291,7 +324,7 @@ export default function Accounting() {
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Commission (17%)</h3>
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Commission ({commissionRate || 0}%)</h3>
           <div className="text-3xl font-black text-orange-600 flex items-center">
             <IndianRupee className="w-6 h-6 mr-1 opacity-50" />
             {gtCommission.toLocaleString('en-IN')}
@@ -325,7 +358,7 @@ export default function Accounting() {
                 <th className="p-3 border-r border-slate-200 text-right bg-rose-50 text-rose-700">Freight</th>
                 <th className="p-3 border-r border-slate-200 text-right bg-rose-50 text-rose-700">Loading/Other</th>
                 <th className="p-3 border-r border-slate-200 text-right bg-rose-100 text-rose-700 font-black">TOTAL EXPENSE</th>
-                <th className="p-3 border-r border-slate-200 text-right text-orange-700 font-black">COMMISSION</th>
+                <th className="p-3 border-r border-slate-200 text-right text-orange-700 font-black">COMMISSION ({commissionRate || 0}%)</th>
                 <th className="p-3 text-right text-indigo-700 font-black">PROFIT / LOSS</th>
               </tr>
             </thead>

@@ -15,8 +15,6 @@ const Reports = lazy(() => import('./pages/Reports'));
 const Accounting = lazy(() => import('./pages/Accounting'));
 const Masters = lazy(() => import('./pages/Masters'));
 const TransportAgent = lazy(() => import('./pages/TransportAgent'));
-const LRPrintModal = lazy(() => import('./components/LRPrintModal'));
-const MemoPrintModal = lazy(() => import('./components/MemoPrintModal'));
 
 // Protected Route Guard: If not authenticated, render Login directly
 function AuthenticatedRoute({ children }) {
@@ -40,11 +38,6 @@ function AuthenticatedRoute({ children }) {
 // App Layout Shell
 function MainLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeSearchResult, setActiveSearchResult] = useState(null);
-
-  const handleSearchResultSelect = (result) => {
-    setActiveSearchResult(result);
-  };
 
   return (
     <div className="min-h-dvh bg-slate-50 flex flex-col lg:flex-row font-sans text-slate-800">
@@ -53,10 +46,7 @@ function MainLayout({ children }) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 min-h-dvh pb-24 lg:pb-0">
-        <Header 
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} 
-          onSelectSearchResult={handleSearchResultSelect}
-        />
+        <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
         <main className="flex-1 pb-4">
           <Suspense fallback={
@@ -71,18 +61,6 @@ function MainLayout({ children }) {
         {/* Mobile Bottom Navigation */}
         <BottomNav />
       </div>
-
-      {/* Global Quick Search Result Modals */}
-      {activeSearchResult && activeSearchResult.type === 'LR' && (
-        <Suspense fallback={null}>
-          <LRPrintModal lr={activeSearchResult} onClose={() => setActiveSearchResult(null)} />
-        </Suspense>
-      )}
-      {activeSearchResult && activeSearchResult.type === 'Memo' && (
-        <Suspense fallback={null}>
-          <MemoPrintModal memo={activeSearchResult} onClose={() => setActiveSearchResult(null)} />
-        </Suspense>
-      )}
     </div>
   );
 }
