@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
+import ErrorBoundary from './components/ErrorBoundary';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import StockIn from './pages/StockIn';
@@ -42,7 +43,9 @@ function MainLayout({ children }) {
         <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
         <main className="flex-1 pb-4">
-          {children}
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </main>
         
         {/* Mobile Bottom Navigation */}
