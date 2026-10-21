@@ -165,7 +165,7 @@ export default function StockIn() {
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, stationFilter, statusFilter, dateFilter, customStartDate, customEndDate]);
+  }, [searchTerm, stationFilter, statusFilter, dateFilter]);
 
   // Compute Auto Total Charges
   const totalCharges = Number(formData.freight || 0) + 
