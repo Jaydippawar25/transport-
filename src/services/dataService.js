@@ -51,6 +51,21 @@ const setLocal = (key, val) => {
   }
 };
 
+// In-memory cache store for 0ms tab navigation & minimal Firestore reads
+const cache = {
+  stockIn: null,
+  stockInTime: 0,
+  stockOut: null,
+  stockOutTime: 0,
+  stations: null,
+  stationsTime: 0,
+  masters: null,
+  mastersTime: 0
+};
+
+const CACHE_TTL_STOCK_MS = 60 * 1000; // 60s cache for stock records
+const CACHE_TTL_STATIC_MS = 5 * 60 * 1000; // 5 min cache for masters/stations
+
 // Initialize LocalStorage if empty
 const initLocalStorageIfNeeded = () => {
   if (!localStorage.getItem(STORAGE_KEYS.SEEDED)) {
@@ -64,15 +79,38 @@ const initLocalStorageIfNeeded = () => {
 
 // Core Data Service API
 export const dataService = {
+  invalidateCache(type = 'all') {
+    if (type === 'all' || type === 'stockIn') {
+      cache.stockIn = null;
+      cache.stockInTime = 0;
+    }
+    if (type === 'all' || type === 'stockOut') {
+      cache.stockOut = null;
+      cache.stockOutTime = 0;
+    }
+    if (type === 'all' || type === 'masters') {
+      cache.masters = null;
+      cache.mastersTime = 0;
+      cache.stations = null;
+      cache.stationsTime = 0;
+    }
+    if (type === 'all' || type === 'stations') {
+      cache.stations = null;
+      cache.stationsTime = 0;
+    }
+  },
   // -------------------------------------------------------------
   // STOCK IN (Lorry Receipts - LR)
   // -------------------------------------------------------------
-  async getStockIn() {
+  async getStockIn({ forceRefresh = false } = {}) {
+    if (!forceRefresh && cache.stockIn && (Date.now() - cache.stockInTime < CACHE_TTL_STOCK_MS)) {
+      return cache.stockIn;
+    }
     if (isFirebaseConfigured && db) {
       try {
         const q = query(collection(db, 'stockIn'), orderBy('createdAt', 'desc'));
         const snap = await getDocs(q);
-        return snap.docs.map(doc => {
+        const list = snap.docs.map(doc => {
           const data = doc.data();
           return {
             id: doc.id,
@@ -81,15 +119,22 @@ export const dataService = {
             createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt
           };
         });
+        cache.stockIn = list;
+        cache.stockInTime = Date.now();
+        return list;
       } catch (err) {
         console.warn("Firestore fetch error, reading local fallback:", err);
       }
     }
     initLocalStorageIfNeeded();
-    return getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    const fallback = getLocal(STORAGE_KEYS.STOCK_IN, INITIAL_STOCK_IN);
+    cache.stockIn = fallback;
+    cache.stockInTime = Date.now();
+    return fallback;
   },
 
   async addStockIn(lrData) {
+    this.invalidateCache('stockIn');
     const formattedData = {
       ...lrData,
       packages: Number(lrData.packages || 0),
@@ -314,12 +359,15 @@ export const dataService = {
   // -------------------------------------------------------------
   // STOCK OUT (Loading Memos)
   // -------------------------------------------------------------
-  async getStockOut() {
+  async getStockOut({ forceRefresh = false } = {}) {
+    if (!forceRefresh && cache.stockOut && (Date.now() - cache.stockOutTime < CACHE_TTL_STOCK_MS)) {
+      return cache.stockOut;
+    }
     if (isFirebaseConfigured && db) {
       try {
         const q = query(collection(db, 'stockOut'), orderBy('createdAt', 'desc'));
         const snap = await getDocs(q);
-        return snap.docs.map(doc => {
+        const list = snap.docs.map(doc => {
           const data = doc.data();
           return {
             id: doc.id,
@@ -328,15 +376,22 @@ export const dataService = {
             createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt
           };
         });
+        cache.stockOut = list;
+        cache.stockOutTime = Date.now();
+        return list;
       } catch (err) {
         console.warn("Firestore fetch stockOut error:", err);
       }
     }
     initLocalStorageIfNeeded();
-    return getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
+    const fallback = getLocal(STORAGE_KEYS.STOCK_OUT, INITIAL_STOCK_OUT);
+    cache.stockOut = fallback;
+    cache.stockOutTime = Date.now();
+    return fallback;
   },
 
   async addStockOut(memoData) {
+    this.invalidateCache('all');
     const formattedData = {
       ...memoData,
       totalPackages: Number(memoData.totalPackages || 0),
@@ -403,6 +458,7 @@ export const dataService = {
   },
 
   async updateStockOut(id, memoData, originalLinkedLrNos = []) {
+    this.invalidateCache('all');
     const entries = memoData.entries || [];
     const calculatedTotalPkgs = entries.length > 0 ? entries.reduce((sum, e) => sum + Number(e.packages || 0), 0) : Number(memoData.totalPackages || 0);
     const calculatedToPay = entries.length > 0 ? entries.reduce((sum, e) => sum + Number(e.toPay || 0), 0) : Number(memoData.totalToPay || 0);
@@ -520,23 +576,33 @@ export const dataService = {
   // -------------------------------------------------------------
   // MASTERS (Drop Box Records)
   // -------------------------------------------------------------
-  async getMasters() {
+  async getMasters({ forceRefresh = false } = {}) {
+    if (!forceRefresh && cache.masters && (Date.now() - cache.mastersTime < CACHE_TTL_STATIC_MS)) {
+      return cache.masters;
+    }
     if (isFirebaseConfigured && db) {
       try {
         const snap = await getDocs(collection(db, 'masters'));
         if (!snap.empty) {
           const mainDoc = snap.docs.find(d => d.id === 'main') || snap.docs[0];
-          return mainDoc.data();
+          const data = mainDoc.data();
+          cache.masters = data;
+          cache.mastersTime = Date.now();
+          return data;
         }
       } catch (err) {
         console.warn("Firestore fetch masters error:", err);
       }
     }
     initLocalStorageIfNeeded();
-    return getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    const fallback = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    cache.masters = fallback;
+    cache.mastersTime = Date.now();
+    return fallback;
   },
 
   async addMaster(category, record) {
+    this.invalidateCache('masters');
     let currentMasters = await this.getMasters();
     if (!currentMasters) {
       initLocalStorageIfNeeded();
@@ -592,6 +658,7 @@ export const dataService = {
   },
 
   async deleteMaster(category, id) {
+    this.invalidateCache('masters');
     let currentMasters = await this.getMasters();
     if (!currentMasters) {
       initLocalStorageIfNeeded();
@@ -671,6 +738,7 @@ export const dataService = {
 
   
   async deleteStockIn(id) {
+    this.invalidateCache('all');
     let targetLrNo = null;
 
     if (isFirebaseConfigured && db) {
@@ -781,6 +849,7 @@ export const dataService = {
   },
 
   async deleteStockOut(id) {
+    this.invalidateCache('all');
     let linkedLrNos = [];
 
     if (isFirebaseConfigured && db) {

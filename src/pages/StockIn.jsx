@@ -34,6 +34,8 @@ const getStationPrefix = (stationName) => {
 
 export default function StockIn() {
   const [stockInList, setStockInList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50); // 50 records per page by default
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -159,6 +161,11 @@ export default function StockIn() {
   useEffect(() => {
     loadData();
   }, []);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, stationFilter, statusFilter, dateFilter, customStartDate, customEndDate]);
 
   // Compute Auto Total Charges
   const totalCharges = Number(formData.freight || 0) + 
@@ -422,6 +429,19 @@ export default function StockIn() {
   }, 0);
 
   const grandTotal = totalToPay + totalPaid + totalTBB;
+
+  // Pagination calculations
+  const totalRecords = filteredStockIn.length;
+  const isAllPages = pageSize === 'ALL';
+  const effectivePageSize = isAllPages ? totalRecords : Number(pageSize);
+  const totalPages = isAllPages || totalRecords === 0 ? 1 : Math.ceil(totalRecords / effectivePageSize);
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+  const paginatedStockIn = isAllPages
+    ? filteredStockIn
+    : filteredStockIn.slice((safeCurrentPage - 1) * effectivePageSize, safeCurrentPage * effectivePageSize);
+
+  const pageStartIndex = isAllPages ? 0 : (safeCurrentPage - 1) * effectivePageSize;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
@@ -953,7 +973,8 @@ export default function StockIn() {
                   </td>
                 </tr>
               ) : (
-                filteredStockIn.map((item, idx) => {
+                paginatedStockIn.map((item, localIdx) => {
+                  const idx = pageStartIndex + localIdx;
                   const amt = Number(item.charges?.total || item.freight || 0);
                   const toPayAmt = item.paymentType === 'ToPay' ? amt : 0;
                   const paidAmt = item.paymentType === 'Paid' ? amt : 0;
@@ -1091,7 +1112,8 @@ export default function StockIn() {
               No Stock In Lorry Receipts match your filter criteria.
             </div>
           ) : (
-            filteredStockIn.map((item, idx) => {
+            paginatedStockIn.map((item, localIdx) => {
+              const idx = pageStartIndex + localIdx;
               const amt = Number(item.charges?.total || item.freight || 0);
               const isToPay = item.paymentType === 'ToPay';
               const isPaid = item.paymentType === 'Paid';
@@ -1182,6 +1204,81 @@ export default function StockIn() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* PAGINATION TOOLBAR */}
+        <div className="bg-slate-50 border-t border-slate-200 p-3 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+            <span>Showing</span>
+            <span className="font-bold text-slate-900 font-mono">
+              {totalRecords === 0 ? 0 : pageStartIndex + 1} - {Math.min(pageStartIndex + paginatedStockIn.length, totalRecords)}
+            </span>
+            <span>of</span>
+            <span className="font-bold text-slate-900 font-mono">{totalRecords}</span>
+            <span>records</span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="flex items-center gap-1 bg-white px-2 py-1 rounded-lg border border-slate-200">
+              <span className="text-slate-500 font-bold">Rows:</span>
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  const val = e.target.value === 'ALL' ? 'ALL' : Number(e.target.value);
+                  setPageSize(val);
+                  setCurrentPage(1);
+                }}
+                className="bg-transparent font-black text-indigo-700 outline-none cursor-pointer"
+              >
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+                <option value="ALL">All ({totalRecords})</option>
+              </select>
+            </div>
+
+            {!isAllPages && totalPages > 1 && (
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(1)}
+                  disabled={safeCurrentPage === 1}
+                  className="px-2 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors cursor-pointer"
+                  title="First Page"
+                >
+                  «
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={safeCurrentPage === 1}
+                  className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  Prev
+                </button>
+                <span className="px-2 text-slate-600 font-bold font-mono">
+                  {safeCurrentPage} / {totalPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={safeCurrentPage === totalPages}
+                  className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={safeCurrentPage === totalPages}
+                  className="px-2 py-1 bg-white border border-slate-200 rounded-lg font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors cursor-pointer"
+                  title="Last Page"
+                >
+                  »
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
