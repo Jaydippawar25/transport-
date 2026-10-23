@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   PackagePlus, 
   Plus, 
@@ -19,7 +19,7 @@ import {
   FileSpreadsheet,
   Edit,
   Eye
-, Trash2 } from 'lucide-react';
+, Trash2, X } from 'lucide-react';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
 
@@ -44,6 +44,15 @@ export default function StockIn() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
+  const [quickAddModal, setQuickAddModal] = useState({
+    isOpen: false,
+    type: '', // 'station' | 'consignor' | 'consignee'
+    name: '',
+    address: '',
+    gstin: ''
+  });
+
+  const formRef = useRef(null);
 
   // Filters & Search
   const [searchTerm, setSearchTerm] = useState('');
@@ -149,6 +158,75 @@ export default function StockIn() {
     }));
   };
 
+  const handleSaveQuickAdd = async (e) => {
+    e.preventDefault();
+    if (!quickAddModal.name.trim()) return;
+    const name = quickAddModal.name.trim();
+
+    try {
+      if (quickAddModal.type === 'station' || quickAddModal.type === 'toStation') {
+        const stationName = name.toUpperCase();
+        await dataService.addMaster('stations', { name: stationName });
+        const updatedStations = await dataService.getStations();
+        setStations(updatedStations);
+        const prefix = getStationPrefix(stationName);
+        const currentMatch = formData.lrNo.match(/\d+/);
+        const currentNumber = currentMatch ? String(parseInt(currentMatch[0], 10)).padStart(5, '0') : '00001';
+        setFormData(prev => ({ 
+          ...prev, 
+          toStation: stationName,
+          lrNo: `${prefix}/${currentNumber}`
+        }));
+      } else if (quickAddModal.type === 'fromStation') {
+        const stationName = name.toUpperCase();
+        await dataService.addMaster('stations', { name: stationName });
+        const updatedStations = await dataService.getStations();
+        setStations(updatedStations);
+        setFormData(prev => ({ 
+          ...prev, 
+          fromStation: stationName
+        }));
+      } else if (quickAddModal.type === 'consignor') {
+        const newRecord = {
+          name: name,
+          address: quickAddModal.address.trim(),
+          gstin: quickAddModal.gstin.trim().toUpperCase()
+        };
+        await dataService.addMaster('consignors', newRecord);
+        const updatedMasters = await dataService.getMasters();
+        setMasters(updatedMasters);
+        setFormData(prev => ({
+          ...prev,
+          consignorName: newRecord.name,
+          consignorAddress: newRecord.address || prev.consignorAddress,
+          consignorGSTIN: newRecord.gstin || prev.consignorGSTIN
+        }));
+      } else if (quickAddModal.type === 'consignee') {
+        const newRecord = {
+          name: name,
+          address: quickAddModal.address.trim(),
+          gstin: quickAddModal.gstin.trim().toUpperCase()
+        };
+        await dataService.addMaster('consignees', newRecord);
+        const updatedMasters = await dataService.getMasters();
+        setMasters(updatedMasters);
+        setFormData(prev => ({
+          ...prev,
+          consigneeName: newRecord.name,
+          consigneeAddress: newRecord.address || prev.consigneeAddress,
+          consigneeGSTIN: newRecord.gstin || prev.consigneeGSTIN
+        }));
+      }
+      setToastMsg(`Added "${name}" successfully!`);
+      setTimeout(() => setToastMsg(''), 3000);
+    } catch (err) {
+      console.error("Error adding quick master:", err);
+      alert("Failed to add entry. Please try again.");
+    } finally {
+      setQuickAddModal({ isOpen: false, type: '', name: '', address: '', gstin: '' });
+    }
+  };
+
   const handleVehicleChange = (val) => {
     const matched = (masters.vehicles || []).find(v => v.vehicleNo.toLowerCase() === val.toLowerCase());
     setFormData(prev => ({
@@ -172,6 +250,77 @@ export default function StockIn() {
                        Number(formData.hamali || 0) + 
                        Number(formData.other || 0) + 
                        Number(formData.stCharges || 0);
+
+  // Rapid Keyboard Data Entry Navigation (Enter / Tab sequentially, Auto-save on last field)
+  const handleFormKeyDown = (e) => {
+    // If quick add or print modal is open, don't interfere
+    if (quickAddModal.isOpen || selectedLr) return;
+
+    // Alt key shortcuts for instant payment type switching
+    if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+      if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        setFormData(prev => ({ ...prev, paymentType: 'ToPay' }));
+        return;
+      }
+      if (e.key === 'p' || e.key === 'P') {
+        e.preventDefault();
+        setFormData(prev => ({ ...prev, paymentType: 'Paid' }));
+        return;
+      }
+      if (e.key === 'b' || e.key === 'B') {
+        e.preventDefault();
+        setFormData(prev => ({ ...prev, paymentType: 'T.B.B' }));
+        return;
+      }
+    }
+
+    // Only process Enter and Tab
+    if (e.key !== 'Enter' && e.key !== 'Tab') return;
+    if (e.ctrlKey || e.metaKey) return;
+
+    const target = e.target;
+    if (target.tagName === 'TEXTAREA' || target.tagName === 'BUTTON') return;
+
+    const currentIdxAttr = target.getAttribute('data-entry-idx');
+    if (!currentIdxAttr) return;
+
+    const currentIdx = parseInt(currentIdxAttr, 10);
+    if (isNaN(currentIdx)) return;
+
+    // Shift + Tab: Navigate to previous field
+    if (e.key === 'Tab' && e.shiftKey) {
+      if (currentIdx > 1) {
+        e.preventDefault();
+        const prevInput = document.querySelector(`[data-entry-idx="${currentIdx - 1}"]`);
+        if (prevInput) {
+          prevInput.focus();
+          prevInput.select?.();
+        }
+      }
+      return;
+    }
+
+    const totalFields = 16;
+
+    // Last field (Index 16: Stat. Charges) -> Auto-save LR and start next LR!
+    if (currentIdx === totalFields) {
+      e.preventDefault();
+      if (isSubmitting) return;
+      if (formRef.current) {
+        formRef.current.requestSubmit();
+      }
+      return;
+    }
+
+    // Forward navigation on Enter or Tab (Fields 1 to 15)
+    e.preventDefault();
+    const nextInput = document.querySelector(`[data-entry-idx="${currentIdx + 1}"]`);
+    if (nextInput) {
+      nextInput.focus();
+      nextInput.select?.();
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -269,25 +418,32 @@ export default function StockIn() {
         }
         return max;
       }, 0);
-      const nextLrNo = `${getStationPrefix('SANGLI')}/${String(maxLr + 1).padStart(5, '0')}`;
+      const currentDest = formData.toStation || 'SANGLI';
+      const nextLrNo = `${getStationPrefix(currentDest)}/${String(maxLr + 1).padStart(5, '0')}`;
+
+      // Retain route & preferences for rapid multi-LR entry
+      const retainedStationFrom = formData.fromStation || 'MUMBAI';
+      const retainedStationTo = formData.toStation || 'SANGLI';
+      const retainedDate = formData.date || new Date().toISOString().split('T')[0];
+      const retainedPaymentType = formData.paymentType || 'ToPay';
 
       // Reset form
       setFormData({
         lrNo: nextLrNo,
-        date: new Date().toISOString().split('T')[0],
+        date: retainedDate,
         transporterName: '',
         memoNo: '',
         vehicleNo: '',
         driverName: '',
         ownerName: '',
-        fromStation: 'MUMBAI',
+        fromStation: retainedStationFrom,
         consignorName: '',
         consignorAddress: '',
         consignorGSTIN: '',
         consigneeName: '',
         consigneeAddress: '',
         consigneeGSTIN: '',
-        toStation: 'SANGLI',
+        toStation: retainedStationTo,
         packages: 1,
         weight: '',
         description: '',
@@ -298,10 +454,24 @@ export default function StockIn() {
         hamali: '',
         other: '',
         stCharges: '',
-        paymentType: 'ToPay'
+        paymentType: retainedPaymentType
       });
-      setEditingId(null);
-      setShowForm(false);
+
+      if (editingId) {
+        setEditingId(null);
+        setShowForm(false);
+      } else {
+        // CONTINUOUS DATA ENTRY: keep form open, incremented LR ready, focus first input!
+        setShowForm(true);
+        setEditingId(null);
+        setTimeout(() => {
+          const firstInput = document.querySelector('input[data-entry-idx="1"]');
+          if (firstInput) {
+            firstInput.focus();
+            firstInput.select?.();
+          }
+        }, 120);
+      }
       await loadData();
     } catch (err) {
       console.error("Error saving stock in:", err);
@@ -461,7 +631,16 @@ export default function StockIn() {
         </div>
 
         <button
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            const nextShow = !showForm;
+            setShowForm(nextShow);
+            if (nextShow) {
+              setTimeout(() => {
+                const el = document.querySelector('input[data-entry-idx="1"]');
+                if (el) { el.focus(); el.select?.(); }
+              }, 120);
+            }
+          }}
           className="flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold text-xs transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
         >
           {showForm ? 'Close Entry Form' : '+ New Stock In Entry'}
@@ -470,52 +649,74 @@ export default function StockIn() {
 
       {/* NEW STOCK IN FORM (Accordion / Toggleable) */}
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-md border border-slate-200 space-y-6 animate-in slide-in-from-top-4 duration-200">
+        <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="bg-white rounded-2xl p-5 sm:p-7 shadow-md border border-slate-200/90 space-y-6 animate-in slide-in-from-top-4 duration-200">
           
-          <div className="border-b border-slate-200 pb-4 flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-              <FileSpreadsheet className="w-4 h-4 text-indigo-600" /> Stock In Register Form
-            </h2>
-            <span className="text-xs text-slate-400 font-mono">Status: in-godown</span>
+          <div className="border-b border-slate-200 pb-3.5 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                <FileSpreadsheet className="w-4 h-4 text-indigo-600" /> Stock In Register Form
+              </h2>
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
+                ↵ Enter / Tab: Next Input • Auto-save on Stat. Charges
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400 font-mono">Status: in-godown</span>
+            </div>
           </div>
 
-          {/* SECTION 1: HEADER INWARD SLIP FIELDS */}
-          <div className="bg-slate-50/80 p-4 rounded-xl border border-slate-200 space-y-3">
-            <h3 className="text-xs font-bold text-indigo-900 uppercase tracking-wide flex items-center gap-1.5">
-              <Truck className="w-4 h-4 text-indigo-600" /> Transporter & Vehicle Header Details
-            </h3>
+          {/* PRIMARY 4-COLUMN REGISTER ENTRY */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            
+            {/* ROW 1: SR NO | FROM (ORIGIN) | DESTINATION / CT TO | LR NO */}
+            {/* SR NO. */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">SR NO.</label>
+              <div className="w-full mt-1.5 h-11 px-3.5 bg-slate-100/90 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 flex items-center justify-center select-none shadow-xs">
+                {editingId ? (stockInList.findIndex(x => x.id === editingId) + 1 || 1) : (stockInList.length + 1)}
+              </div>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div>
-                <label className="text-[11px] font-bold text-slate-700">DATE *</label>
+            {/* FROM (ORIGIN STATION) * (Typeable + Dropdown + Plus Button) */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">FROM (Origin Station) *</label>
+              <div className="flex items-center gap-1.5 mt-1.5">
                 <input
-                  type="date"
+                  type="text"
                   required
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-medium"
-                />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-bold text-slate-700">FROM (Origin Station) *</label>
-                <select
+                  data-entry-idx="1"
+                  tabIndex={1}
+                  list="stations-datalist"
                   value={formData.fromStation}
-                  onChange={(e) => setFormData({ ...formData, fromStation: e.target.value })}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
+                  onChange={(e) => setFormData({ ...formData, fromStation: e.target.value.toUpperCase() })}
+                  placeholder="Select or type origin..."
+                  className="w-full h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-bold uppercase text-slate-800 placeholder:text-slate-400 placeholder:font-normal focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
+                />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setQuickAddModal({ isOpen: true, type: 'fromStation', name: '', address: '', gstin: '' })}
+                  title="Add New Origin Station"
+                  className="w-11 h-11 min-w-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 active:bg-slate-300 border border-slate-200 rounded-xl text-slate-700 font-bold transition-all cursor-pointer shadow-xs"
                 >
-                  {stations.map(st => (
-                    <option key={st} value={st}>{st}</option>
-                  ))}
-                </select>
+                  <Plus className="w-4 h-4 text-slate-700" />
+                </button>
               </div>
+            </div>
 
-              <div>
-                <label className="text-[11px] font-bold text-slate-700">STATION (Destination) *</label>
-                <select
+            {/* DESTINATION / CT TO * (Typeable + Dropdown + Plus Button) */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">DESTINATION / CT TO *</label>
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <input
+                  type="text"
+                  required
+                  data-entry-idx="2"
+                  tabIndex={2}
+                  list="stations-datalist"
                   value={formData.toStation}
                   onChange={(e) => {
-                    const newStation = e.target.value;
+                    const newStation = e.target.value.toUpperCase();
                     const prefix = getStationPrefix(newStation);
                     const currentMatch = formData.lrNo.match(/\d+/);
                     const currentNumber = currentMatch ? String(parseInt(currentMatch[0], 10)).padStart(5, '0') : '00001';
@@ -525,305 +726,348 @@ export default function StockIn() {
                       lrNo: `${prefix}/${currentNumber}`
                     });
                   }}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-bold uppercase"
-                >
-                  {stations.map(st => (
-                    <option key={st} value={st}>{st}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-bold text-slate-700">L.R. NO. *</label>
-                  <span className="text-[10px] text-indigo-600 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded">Auto / Editable</span>
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={formData.lrNo}
-                  onChange={(e) => setFormData({ ...formData, lrNo: e.target.value.toUpperCase() })}
-                  placeholder="e.g. SNG/01802"
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono font-bold text-indigo-900 focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Select or type destination..."
+                  className="w-full h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-bold uppercase text-slate-800 placeholder:text-slate-400 placeholder:font-normal focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setQuickAddModal({ isOpen: true, type: 'toStation', name: '', address: '', gstin: '' })}
+                  title="Add New Destination Station"
+                  className="w-11 h-11 min-w-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 active:bg-slate-300 border border-slate-200 rounded-xl text-slate-700 font-bold transition-all cursor-pointer shadow-xs"
+                >
+                  <Plus className="w-4 h-4 text-slate-700" />
+                </button>
               </div>
             </div>
-          </div>
 
-          {/* SECTION 2: LR PARTICULAR & CONSIGNOR / CONSIGNEE */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/70 p-4 rounded-xl border border-slate-200">
-            
-            {/* Consignor (Sender) */}
-            <div className="space-y-3">
+            {/* LR NO. * (Positioned after Destination) */}
+            <div>
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-indigo-900 uppercase tracking-wide">Consignor Details (Sender)</h3>
-                <span className="text-[10px] text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-100">Drop Box Auto-Fill Active</span>
+                <label className="text-xs font-bold text-blue-700 uppercase tracking-wide">LR NO. *</label>
+                <span className="text-[10px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">Auto / Editable</span>
               </div>
-              
-              <div>
-                <label className="text-[11px] font-semibold text-slate-600">Consignor Name *</label>
+              <input
+                type="text"
+                required
+                data-entry-idx="3"
+                tabIndex={3}
+                value={formData.lrNo}
+                onChange={(e) => setFormData({ ...formData, lrNo: e.target.value.toUpperCase() })}
+                placeholder="E.G. 13941"
+                className="w-full mt-1.5 h-11 px-3.5 bg-[#f0f7ff] rounded-xl border border-blue-200/80 text-xs font-mono font-bold text-blue-900 placeholder:text-blue-300 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all uppercase shadow-xs"
+              />
+            </div>
+
+            {/* ROW 2: DATE | INVOICE NO | CONSIGNOR | CONSIGNEE */}
+            {/* DATE */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">DATE</label>
+              <input
+                type="date"
+                required
+                data-entry-idx="4"
+                tabIndex={4}
+                value={formData.date}
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
+              />
+            </div>
+
+            {/* INVOICE NO. */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">INVOICE NO.</label>
+              <input
+                type="text"
+                data-entry-idx="5"
+                tabIndex={5}
+                value={formData.invoiceNo}
+                onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })}
+                placeholder="E.G. INV-902"
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
+              />
+            </div>
+
+            {/* CONSIGNOR (SENDER) */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">CONSIGNOR (SENDER) *</label>
+              <div className="flex items-center gap-1.5 mt-1.5">
                 <input
                   type="text"
                   required
+                  data-entry-idx="6"
+                  tabIndex={6}
                   list="consignors-datalist"
                   value={formData.consignorName}
                   onChange={(e) => handleConsignorChange(e.target.value)}
                   placeholder="Select from Drop Box or type..."
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-medium"
+                  className="w-full h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold text-slate-600">Address</label>
-                <input
-                  type="text"
-                  value={formData.consignorAddress}
-                  onChange={(e) => setFormData({ ...formData, consignorAddress: e.target.value })}
-                  placeholder="Sender factory / office address..."
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs"
-                />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold text-slate-600">GSTIN No</label>
-                <input
-                  type="text"
-                  value={formData.consignorGSTIN || ''}
-                  onChange={(e) => setFormData({ ...formData, consignorGSTIN: e.target.value })}
-                  placeholder="e.g. 27AAACG1234F1Z5"
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono uppercase"
-                />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setQuickAddModal({ isOpen: true, type: 'consignor', name: '', address: '', gstin: '' })}
+                  title="Add New Consignor"
+                  className="w-11 h-11 min-w-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 active:bg-slate-300 border border-slate-200 rounded-xl text-slate-700 font-bold transition-all cursor-pointer shadow-xs"
+                >
+                  <Plus className="w-4 h-4 text-slate-700" />
+                </button>
               </div>
             </div>
 
-            {/* Consignee (Receiver) */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-indigo-900 uppercase tracking-wide">Consignee Details (Receiver)</h3>
-                <span className="text-[10px] text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-100">Drop Box Auto-Fill Active</span>
-              </div>
-              
-              <div>
-                <label className="text-[11px] font-semibold text-slate-600">Consignee Name *</label>
+            {/* CONSIGNEE (RECEIVER) */}
+            <div>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">CONSIGNEE (RECEIVER) *</label>
+              <div className="flex items-center gap-1.5 mt-1.5">
                 <input
                   type="text"
                   required
+                  data-entry-idx="7"
+                  tabIndex={7}
                   list="consignees-datalist"
                   value={formData.consigneeName}
                   onChange={(e) => handleConsigneeChange(e.target.value)}
                   placeholder="Select from Drop Box or type..."
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-medium"
+                  className="w-full h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold text-slate-600">Address</label>
-                <input
-                  type="text"
-                  value={formData.consigneeAddress}
-                  onChange={(e) => setFormData({ ...formData, consigneeAddress: e.target.value })}
-                  placeholder="Destination delivery address..."
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs"
-                />
-              </div>
-
-              <div>
-                <label className="text-[11px] font-semibold text-slate-600">GSTIN No</label>
-                <input
-                  type="text"
-                  value={formData.consigneeGSTIN || ''}
-                  onChange={(e) => setFormData({ ...formData, consigneeGSTIN: e.target.value })}
-                  placeholder="e.g. 27BBBPS5678K1Z9"
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono uppercase"
-                />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setQuickAddModal({ isOpen: true, type: 'consignee', name: '', address: '', gstin: '' })}
+                  title="Add New Consignee"
+                  className="w-11 h-11 min-w-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 active:bg-slate-300 border border-slate-200 rounded-xl text-slate-700 font-bold transition-all cursor-pointer shadow-xs"
+                >
+                  <Plus className="w-4 h-4 text-slate-700" />
+                </button>
               </div>
             </div>
 
           </div>
 
-          {/* SECTION 3: LR NUMBER & GOODS PARTICULAR */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* GOODS PARTICULARS (PACKAGES, WEIGHT, DESCRIPTION, VALUE, EWAY BILL) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
             <div>
-              <label className="text-xs font-bold text-slate-700">PKG (Packages) *</label>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">PACKAGES (PKG) *</label>
               <input
                 type="text"
                 inputMode="numeric"
                 required
+                data-entry-idx="8"
+                tabIndex={8}
                 value={formData.packages}
                 onChange={(e) => setFormData({ ...formData, packages: e.target.value.replace(/[^0-9]/g, '') })}
-                className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono font-bold"
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700">Weight</label>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">Weight</label>
               <input
                 type="text"
+                data-entry-idx="9"
+                tabIndex={9}
                 value={formData.weight}
                 onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
                 placeholder="e.g. 450 Kg"
-                className="w-full mt-1 p-2 bg-slate-50 rounded-lg border border-slate-300 text-xs font-mono"
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700">Description of Goods</label>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">Description of Goods</label>
               <input
                 type="text"
+                data-entry-idx="10"
+                tabIndex={10}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="e.g. Plastic Moulded Goods"
-                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs"
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700">Invoice No.</label>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">Goods Value (Rs.)</label>
               <input
                 type="text"
-                value={formData.invoiceNo}
-                onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })}
-                placeholder="e.g. 592"
-                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
-              />
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-700">Goods Value (Rs.)</label>
-              <input
-                type="text"
+                data-entry-idx="11"
+                tabIndex={11}
                 value={formData.goodsValue}
                 onChange={(e) => setFormData({ ...formData, goodsValue: e.target.value })}
                 placeholder="e.g. 11663"
-                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700">E-way Bill No.</label>
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">E-way Bill No.</label>
               <input
                 type="text"
+                data-entry-idx="12"
+                tabIndex={12}
                 value={formData.ewayBillNo}
                 onChange={(e) => setFormData({ ...formData, ewayBillNo: e.target.value })}
                 placeholder="e.g. 123456789012"
-                className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+                className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
               />
             </div>
           </div>
 
-          {/* SECTION 4: CHARGES BREAKDOWN & PAYMENT TYPE */}
-          <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 space-y-4">
-            <h3 className="text-xs font-bold text-indigo-900 uppercase tracking-wide">
-              Amount Charges & Payment Type Breakdown
-            </h3>
+          {/* ADDITIONAL CHARGES & PAYMENT TYPE BREAKDOWN */}
+          <div className="bg-slate-50/70 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-indigo-900 uppercase tracking-wide">
+                Additional Charges & Payment Type Breakdown
+              </h3>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+                Auto-calculated in Total Row
+              </span>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <div>
-                <label className="text-[11px] font-semibold text-slate-700">Freight (₹)</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-800 uppercase tracking-wide">Freight (₹) *</label>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                    formData.paymentType === 'ToPay' ? 'bg-amber-100 text-amber-900' :
+                    formData.paymentType === 'Paid' ? 'bg-emerald-100 text-emerald-900' : 'bg-blue-100 text-blue-900'
+                  }`}>
+                    {formData.paymentType === 'ToPay' ? 'TO PAY' : formData.paymentType === 'Paid' ? 'PAID' : 'T.B.B'}
+                  </span>
+                </div>
                 <input
                   type="text"
                   inputMode="numeric"
+                  data-entry-idx="13"
+                  tabIndex={13}
                   value={formData.freight}
                   onChange={(e) => setFormData({ ...formData, freight: e.target.value.replace(/[^0-9]/g, '') })}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+                  placeholder="0.00"
+                  className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-700">Hamali / Labor (₹)</label>
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Hamali / Labor (₹)</label>
                 <input
                   type="text"
                   inputMode="numeric"
+                  data-entry-idx="14"
+                  tabIndex={14}
                   value={formData.hamali}
                   onChange={(e) => setFormData({ ...formData, hamali: e.target.value.replace(/[^0-9]/g, '') })}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+                  placeholder="0"
+                  className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-700">Other Charges (₹)</label>
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Other Charges (₹)</label>
                 <input
                   type="text"
                   inputMode="numeric"
+                  data-entry-idx="15"
+                  tabIndex={15}
                   value={formData.other}
                   onChange={(e) => setFormData({ ...formData, other: e.target.value.replace(/[^0-9]/g, '') })}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+                  placeholder="0"
+                  className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-semibold text-slate-700">Stat. Charges (₹)</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Stat. Charges (₹)</label>
+                  <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1 rounded">↵ Saves LR</span>
+                </div>
                 <input
                   type="text"
                   inputMode="numeric"
+                  data-entry-idx="16"
+                  tabIndex={16}
                   value={formData.stCharges}
                   onChange={(e) => setFormData({ ...formData, stCharges: e.target.value.replace(/[^0-9]/g, '') })}
-                  className="w-full mt-1 p-2 bg-white rounded-lg border border-slate-300 text-xs font-mono"
+                  placeholder="0"
+                  className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-medium text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-bold text-indigo-900">Total Freight (₹)</label>
-                <div className="w-full mt-1 p-2 bg-indigo-900 text-white rounded-lg text-sm font-mono font-bold">
-                  ₹{totalCharges.toLocaleString('en-IN')}
+                <label className="text-xs font-bold text-indigo-900 uppercase tracking-wide">Total Freight (₹)</label>
+                <div className="w-full mt-1.5 h-11 px-4 bg-indigo-950 text-white rounded-xl text-sm font-mono font-bold flex items-center justify-end shadow-xs">
+                  ₹{totalCharges.toFixed(2)}
                 </div>
               </div>
             </div>
 
-            {/* PAYMENT BASIS SELECTOR (TOPAY / PAID / T.B.B) */}
-            <div className="pt-4 border-t border-indigo-100 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-6">
+            {/* PAYMENT TYPE RADIO SELECTOR & ACTIONS */}
+            <div className="pt-4 border-t border-slate-200 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full xl:w-auto">
-                <span className="text-xs font-bold text-slate-800 shrink-0">Payment Type:</span>
+                <span className="text-xs font-bold text-slate-800 uppercase tracking-wide shrink-0">Payment Type:</span>
                 
                 <div className="flex flex-wrap items-center gap-3">
                   <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
                     <input
                       type="radio"
+                      tabIndex={-1}
                       name="paymentType"
                       value="ToPay"
                       checked={formData.paymentType === 'ToPay'}
                       onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
-                      className="text-indigo-600"
+                      className="text-amber-600 focus:ring-amber-500"
                     />
-                    <span className="px-2.5 py-1 bg-amber-100 text-amber-900 rounded font-bold shrink-0">TO PAY</span>
+                    <span className="px-3 py-1.5 bg-amber-100 text-amber-900 rounded-lg font-bold shrink-0 text-xs shadow-xs">
+                      TO PAY <span className="opacity-60 text-[10px] font-normal">(Alt+T)</span>
+                    </span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
                     <input
                       type="radio"
+                      tabIndex={-1}
                       name="paymentType"
                       value="Paid"
                       checked={formData.paymentType === 'Paid'}
                       onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
-                      className="text-indigo-600"
+                      className="text-emerald-600 focus:ring-emerald-500"
                     />
-                    <span className="px-2.5 py-1 bg-emerald-100 text-emerald-900 rounded font-bold shrink-0">PAID</span>
+                    <span className="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg font-bold shrink-0 text-xs shadow-xs">
+                      PAID <span className="opacity-60 text-[10px] font-normal">(Alt+P)</span>
+                    </span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer text-xs font-medium">
                     <input
                       type="radio"
+                      tabIndex={-1}
                       name="paymentType"
                       value="T.B.B"
                       checked={formData.paymentType === 'T.B.B'}
                       onChange={(e) => setFormData({ ...formData, paymentType: e.target.value })}
-                      className="text-indigo-600"
+                      className="text-blue-600 focus:ring-blue-500"
                     />
-                    <span className="px-2.5 py-1 bg-blue-100 text-blue-900 rounded font-bold shrink-0">T.B.B</span>
+                    <span className="px-3 py-1.5 bg-blue-100 text-blue-900 rounded-lg font-bold shrink-0 text-xs shadow-xs">
+                      T.B.B <span className="opacity-60 text-[10px] font-normal">(Alt+B)</span>
+                    </span>
                   </label>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center justify-end gap-2 w-full xl:w-auto">
+              <div className="flex flex-wrap items-center justify-end gap-2.5 w-full xl:w-auto">
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)}
-                  className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer text-center"
+                  tabIndex={-1}
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditingId(null);
+                  }}
+                  className="flex-1 sm:flex-none px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors cursor-pointer text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
+                  tabIndex={-1}
                   onClick={() => setPrintAfterSave(false)}
                   disabled={isSubmitting}
                   className="flex-1 sm:flex-none px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer flex items-center justify-center gap-2"
@@ -832,6 +1076,7 @@ export default function StockIn() {
                 </button>
                 <button
                   type="submit"
+                  tabIndex={-1}
                   onClick={() => setPrintAfterSave(true)}
                   disabled={isSubmitting}
                   className="flex-[2] sm:flex-none px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/30 cursor-pointer flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
@@ -844,7 +1089,12 @@ export default function StockIn() {
 
           </div>
 
-          {/* MASTERS DATALISTS FOR AUTOFILL */}
+                    {/* MASTERS DATALISTS FOR AUTOFILL */}
+          <datalist id="stations-datalist">
+            {stations.map((st, idx) => (
+              <option key={idx} value={st}>{st}</option>
+            ))}
+          </datalist>
           <datalist id="consignors-datalist">
             {(masters.consignors || []).map(c => (
               <option key={c.id} value={c.name}>{c.address ? `${c.name} (${c.address})` : c.name}</option>
@@ -1281,6 +1531,87 @@ export default function StockIn() {
           </div>
         </div>
       </div>
+
+            {/* Quick Add Master Modal */}
+      {quickAddModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <Plus className="w-4 h-4 text-indigo-600" />
+                {quickAddModal.type === 'station' ? 'Quick Add Station' :
+                 quickAddModal.type === 'consignor' ? 'Quick Add Consignor (Sender)' :
+                 quickAddModal.type === 'consignee' ? 'Quick Add Consignee (Receiver)' : 'Quick Add Master'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setQuickAddModal({ isOpen: false, type: '', name: '', address: '', gstin: '' })}
+                className="text-slate-400 hover:text-slate-600 text-lg font-bold p-1 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveQuickAdd} className="space-y-3.5">
+              <div>
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+                  {quickAddModal.type === 'station' ? 'Station Name *' : 'Party / Company Name *'}
+                </label>
+                <input
+                  type="text"
+                  required
+                  autoFocus
+                  value={quickAddModal.name}
+                  onChange={(e) => setQuickAddModal({ ...quickAddModal, name: e.target.value })}
+                  placeholder={quickAddModal.type === 'station' ? 'e.g. KOLHAPUR' : 'e.g. Acme Transport Co.'}
+                  className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-semibold uppercase text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
+                />
+              </div>
+
+              {quickAddModal.type !== 'station' && (
+                <>
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">Address</label>
+                    <input
+                      type="text"
+                      value={quickAddModal.address}
+                      onChange={(e) => setQuickAddModal({ ...quickAddModal, address: e.target.value })}
+                      placeholder="Office or factory location..."
+                      className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wide">GSTIN No</label>
+                    <input
+                      type="text"
+                      value={quickAddModal.gstin}
+                      onChange={(e) => setQuickAddModal({ ...quickAddModal, gstin: e.target.value.toUpperCase() })}
+                      placeholder="e.g. 27AAACG1234F1Z5"
+                      className="w-full mt-1.5 h-11 px-3.5 bg-white rounded-xl border border-slate-200 text-xs font-mono font-bold uppercase text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all shadow-xs"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setQuickAddModal({ isOpen: false, type: '', name: '', address: '', gstin: '' })}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+                >
+                  Add & Select
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Print Modal */}
       {selectedLr && <LRPrintModal lr={selectedLr} onClose={() => setSelectedLr(null)} />}
