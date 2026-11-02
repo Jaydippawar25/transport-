@@ -207,14 +207,16 @@ export default function SplashScreen({ onFinish }) {
 
         {/* Company Title & Brand Presence */}
         <div className="space-y-2 flex flex-col items-center">
-          <img 
-            src="/logo.png" 
-            alt="Royal Roadlines" 
-            className="w-24 h-24 object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.65)] mb-2" 
-          />
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-500/30 text-[11px] font-semibold text-cyan-300">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span>CONNECTING DISPATCH & LOGISTICS</span>
+          <div className="max-w-[240px] mb-2">
+            <img 
+              src="/logo.png" 
+              alt="Royal Roadlines" 
+              className="w-full h-auto object-contain" 
+            />
+          </div>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#0c1636] border border-amber-400/40 text-[11px] font-extrabold text-amber-300 shadow-md">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span>RELIABLE • SAFE • ON TIME</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-blue-200 uppercase">

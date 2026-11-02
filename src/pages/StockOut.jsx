@@ -116,7 +116,8 @@ const LoadingMemoView = ({ memo, stockIn = [], onClose }) => {
       <div id="printable-loading-memo" className="overflow-x-auto printable-area bg-white p-4">
       <div className="min-w-[800px] max-w-[1000px] mx-auto border-2 border-black p-1 print:min-w-0 print:w-full print:border-none">
         {/* Header section */}
-        <div className="text-center border-b-2 border-black pb-2 mb-2">
+        <div className="text-center border-b-2 border-black pb-2 mb-2 flex flex-col items-center">
+          <img src="/logo.png" alt="Royal Roadlines" className="h-11 w-auto object-contain mb-1" />
           <h1 className="text-4xl font-extrabold uppercase tracking-tight" style={{ fontFamily: 'Times New Roman, serif' }}>
             ROYAL ROADLINES
           </h1>
@@ -726,20 +727,27 @@ export default function StockOut() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-emerald-100 text-emerald-700 font-bold">
-              <Truck className="w-5 h-5" />
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/80 font-bold shadow-2xs">
+              <Truck className="w-5 h-5 stroke-[2.2]" />
             </span>
-            <h1 className="text-xl font-bold text-slate-900">Stock Out (Loading Memo & Dispatch)</h1>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-black text-slate-900 uppercase tracking-tight">Stock Out (Loading Memo & Dispatch)</h1>
+                <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-extrabold text-[#1b3280] uppercase">
+                  OUTGOING FLEET
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Dispatch godown stock by assigning delivery persons, vehicle numbers, and payment status.
+              </p>
+            </div>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Dispatch godown stock by assigning delivery persons, vehicle numbers, and payment status.
-          </p>
         </div>
 
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold text-xs transition-all shadow-md shadow-emerald-600/20 cursor-pointer"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-xl transition-all shadow-md shadow-amber-500/20 cursor-pointer hover:scale-[1.01]"
         >
           {showForm ? 'Close Dispatch Builder' : '+ New Stock Out Dispatch'}
         </button>

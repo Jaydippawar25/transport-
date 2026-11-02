@@ -12,7 +12,10 @@ import {
   CheckCircle2, 
   Printer,
   Search,
-  X
+  X,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -21,8 +24,7 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer, 
-  Legend 
+  ResponsiveContainer 
 } from 'recharts';
 import { dataService } from '../services/dataService';
 import LRPrintModal from '../components/LRPrintModal';
@@ -36,7 +38,6 @@ export default function Dashboard() {
   const [selectedLr, setSelectedLr] = useState(null);
   const [selectedMemo, setSelectedMemo] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-
 
   const loadData = async () => {
     setLoading(true);
@@ -57,10 +58,6 @@ export default function Dashboard() {
   useEffect(() => {
     loadData();
   }, []);
-
-  
-
-
 
   // Helper date matching (Today)
   const isToday = (dateStr) => {
@@ -114,7 +111,6 @@ export default function Dashboard() {
       d.setDate(d.getDate() - i);
       const dateStr = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
       
-      // Filter items matching day
       const inCount = stockInList.filter(item => {
         const itemDate = new Date(item.date || item.createdAt);
         return itemDate.toDateString() === d.toDateString();
@@ -175,36 +171,89 @@ export default function Dashboard() {
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       
-      {/* Top Banner & Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-md border border-indigo-500/20">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-white border border-white/30 text-xs font-semibold uppercase tracking-wider">
-              Godown Summary
-            </span>
-            <span className="text-xs text-indigo-100 font-medium">MUMBAI TERMINAL — ROYAL ROADLINES</span>
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white mt-1">ROYAL ROADLINES Dashboard</h1>
-          <p className="text-xs text-indigo-100 mt-1 max-w-xl font-medium">
-            Real-time tracking of incoming Lorry Receipts (LR) and outgoing Loading Truck Memos.
-          </p>
+      {/* Top Banner & Title - Royal Theme */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#070d21] via-[#0f1c45] to-[#1b3280] text-white p-6 sm:p-8 shadow-xl border border-amber-400/20">
+        
+        {/* Subtle Decorative Golden Speedline Curves */}
+        <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-10 pointer-events-none overflow-hidden">
+          <svg className="w-full h-full" viewBox="0 0 400 200" fill="none">
+            <path d="M 0 180 Q 200 60 400 20" stroke="#f59e0b" strokeWidth="8" />
+            <path d="M 50 200 Q 250 80 400 40" stroke="#ffffff" strokeWidth="4" />
+          </svg>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="flex items-start sm:items-center gap-4">
+            <img 
+              src="/logo.png" 
+              alt="Royal Roadlines" 
+              className="h-14 sm:h-16 w-auto object-contain shrink-0" 
+            />
+            
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[11px] font-extrabold uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  MUMBAI CENTRAL TERMINAL
+                </span>
+                <span className="text-xs text-blue-200 font-semibold">
+                  FLEET OPERATIONS HUB
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black tracking-wide text-white mt-1.5 uppercase">
+                ROYAL ROADLINES Dashboard
+              </h1>
+              <p className="text-xs sm:text-sm text-blue-100/90 mt-1 max-w-xl font-medium">
+                Live freight tracking for incoming Lorry Receipts (LR) and outgoing Loading Truck Memos.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Action Navigation Buttons */}
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <button
+              onClick={() => navigate('/stock-in')}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs transition-all shadow-md shadow-amber-500/20 hover:scale-[1.02] cursor-pointer"
+            >
+              <PackagePlus className="w-4 h-4 stroke-[2.5]" />
+              <span>+ Stock In (LR)</span>
+            </button>
+
+            <button
+              onClick={() => navigate('/stock-out')}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all border border-white/25 hover:border-amber-400/40 cursor-pointer"
+            >
+              <Truck className="w-4 h-4" />
+              <span>+ Dispatch Memo</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom Tagline Ribbon */}
+        <div className="relative z-10 mt-5 pt-4 border-t border-white/15 flex flex-wrap items-center justify-between text-[11px] text-blue-200/90">
+          <div className="flex items-center gap-2 font-bold tracking-widest text-amber-300 uppercase">
+            <span>RELIABLE</span>
+            <span>•</span>
+            <span>SAFE</span>
+            <span>•</span>
+            <span>ON TIME</span>
+          </div>
+          <div className="text-slate-300 font-mono text-[10.5px]">
+            MASJID BUNDER • SAKINAKA • SANGLI • KOLHAPUR • SATARA
+          </div>
         </div>
       </div>
 
       {/* Quick Search Bar */}
-      <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border-2 border-slate-300">
+      <div className="bg-white p-3.5 sm:p-4 rounded-2xl shadow-xs border border-slate-200/90 hover:border-slate-300 transition-colors">
         <div className="relative">
-          <Search className="w-5 h-5 text-indigo-600 absolute left-3.5 top-1/2 -translate-y-1/2 stroke-[2.5]" />
+          <Search className="w-5 h-5 text-[#1b3280] absolute left-3.5 top-1/2 -translate-y-1/2 stroke-[2.5]" />
           <input
             type="text"
             placeholder="Search LR No, Memo No, Consignor, Consignee, Vehicle No, Driver, Station..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-11 pr-10 py-3 bg-slate-50 focus:bg-white rounded-xl border-2 border-slate-300 focus:border-indigo-600 text-sm font-bold text-slate-900 focus:ring-4 focus:ring-indigo-500/15 outline-none transition-all placeholder:text-slate-400 placeholder:font-semibold shadow-xs"
+            className="w-full pl-11 pr-10 py-3 bg-slate-50 focus:bg-white rounded-xl border border-slate-200 focus:border-[#1b3280] text-sm font-bold text-slate-900 focus:ring-4 focus:ring-blue-900/15 outline-none transition-all placeholder:text-slate-400 placeholder:font-normal shadow-2xs"
           />
           {searchTerm && (
             <button 
@@ -223,23 +272,23 @@ export default function Dashboard() {
         {/* Today's Stock In */}
         <div 
           onClick={() => navigate('/stock-in')}
-          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-indigo-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-lg hover:border-amber-400/80 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Stock In</span>
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-              <PackagePlus className="w-5 h-5" />
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Today's Stock In</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1b3280] border border-blue-100 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+              <PackagePlus className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900 font-mono">{todayStockInCount}</span>
-              <span className="text-xs font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md">
+              <span className="text-2xl font-black text-slate-900 font-mono">{todayStockInCount}</span>
+              <span className="text-xs font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
                 {todayStockInPackages} pkgs
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <ArrowDownRight className="w-3.5 h-3.5 text-emerald-500" /> Received at Godown
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+              <ArrowDownRight className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" /> Received at Godown
             </p>
           </div>
         </div>
@@ -247,23 +296,23 @@ export default function Dashboard() {
         {/* Today's Stock Out */}
         <div 
           onClick={() => navigate('/stock-out')}
-          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-emerald-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-lg hover:border-amber-400/80 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Stock Out</span>
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              <Truck className="w-5 h-5" />
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Today's Stock Out</span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+              <Truck className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900 font-mono">{todayStockOutCount}</span>
-              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+              <span className="text-2xl font-black text-slate-900 font-mono">{todayStockOutCount}</span>
+              <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
                 {todayStockOutPackages} pkgs
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <ArrowUpRight className="w-3.5 h-3.5 text-indigo-500" /> Dispatched via Lorry
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+              <ArrowUpRight className="w-3.5 h-3.5 text-[#1b3280] stroke-[2.5]" /> Dispatched via Lorry
             </p>
           </div>
         </div>
@@ -271,23 +320,23 @@ export default function Dashboard() {
         {/* Pending in Godown */}
         <div 
           onClick={() => navigate('/stock-in')}
-          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-amber-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-lg hover:border-amber-400/80 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sitting in Godown</span>
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-              <Boxes className="w-5 h-5" />
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sitting in Godown</span>
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/80 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+              <Boxes className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900 font-mono">{pendingGodownCount}</span>
-              <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+              <span className="text-2xl font-black text-slate-900 font-mono">{pendingGodownCount}</span>
+              <span className="text-xs font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
                 {pendingGodownPackages} pkgs pending
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-amber-500" /> Awaiting Truck Memo
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+              <Clock className="w-3.5 h-3.5 text-amber-600 stroke-[2.5]" /> Awaiting Truck Memo
             </p>
           </div>
         </div>
@@ -295,20 +344,20 @@ export default function Dashboard() {
         {/* Today's Total ToPay Freight */}
         <div 
           onClick={() => navigate('/stock-in')}
-          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-purple-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-lg hover:border-amber-400/80 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's To-Pay Freight</span>
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-              <IndianRupee className="w-5 h-5" />
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Today's To-Pay Freight</span>
+            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/70 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+              <IndianRupee className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900 font-mono">₹{todayFreightToPay.toLocaleString('en-IN')}</span>
+              <span className="text-2xl font-black text-slate-900 font-mono">₹{todayFreightToPay.toLocaleString('en-IN')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5 text-purple-500" /> Receivable on delivery
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+              <TrendingUp className="w-3.5 h-3.5 text-amber-600 stroke-[2.5]" /> Receivable on delivery
             </p>
           </div>
         </div>
@@ -316,20 +365,20 @@ export default function Dashboard() {
         {/* Today's Total Paid Freight */}
         <div 
           onClick={() => navigate('/stock-in')}
-          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-emerald-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-lg hover:border-amber-400/80 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's Paid Freight</span>
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              <IndianRupee className="w-5 h-5" />
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Today's Paid Freight</span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+              <IndianRupee className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900 font-mono">₹{todayFreightPaid.toLocaleString('en-IN')}</span>
+              <span className="text-2xl font-black text-slate-900 font-mono">₹{todayFreightPaid.toLocaleString('en-IN')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Received at booking
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" /> Received at booking
             </p>
           </div>
         </div>
@@ -337,20 +386,20 @@ export default function Dashboard() {
         {/* Today's Total T.B.B Freight */}
         <div 
           onClick={() => navigate('/stock-in')}
-          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-md hover:border-blue-300 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
+          className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 hover:shadow-lg hover:border-amber-400/80 hover:-translate-y-1 transition-all relative overflow-hidden group cursor-pointer"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Today's T.B.B Freight</span>
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-              <IndianRupee className="w-5 h-5" />
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Today's T.B.B Freight</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1b3280] border border-blue-100 flex items-center justify-center font-bold group-hover:scale-110 transition-transform">
+              <IndianRupee className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-slate-900 font-mono">₹{todayFreightTBB.toLocaleString('en-IN')}</span>
+              <span className="text-2xl font-black text-slate-900 font-mono">₹{todayFreightTBB.toLocaleString('en-IN')}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5 text-blue-500" /> Billed to company
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+              <TrendingUp className="w-3.5 h-3.5 text-[#1b3280] stroke-[2.5]" /> Billed to company account
             </p>
           </div>
         </div>
@@ -361,82 +410,94 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Recharts Bar Chart: Last 7 Days Stock In vs Stock Out */}
-        <div className="lg:col-span-2 bg-white p-5 rounded-2xl shadow-xs border border-slate-200 space-y-4">
-          <div className="flex items-center justify-between">
+        <div className="lg:col-span-2 bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
-              <h3 className="text-sm font-bold text-slate-800">Stock In vs Stock Out (Last 7 Days)</h3>
-              <p className="text-xs text-slate-500">Comparison of total packages received vs dispatched</p>
+              <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#1b3280]" />
+                Stock In vs Stock Out (Last 7 Days)
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">Comparison of total packages received vs dispatched</p>
             </div>
-            <div className="flex items-center gap-4 text-xs font-medium">
-              <span className="flex items-center gap-1.5 text-indigo-600">
-                <span className="w-3 h-3 rounded-xs bg-indigo-600 inline-block"></span> Stock In
+            <div className="flex items-center gap-4 text-xs font-bold">
+              <span className="flex items-center gap-1.5 text-[#1b3280]">
+                <span className="w-3 h-3 rounded-sm bg-[#1b3280] inline-block"></span> Stock In
               </span>
-              <span className="flex items-center gap-1.5 text-emerald-600">
-                <span className="w-3 h-3 rounded-xs bg-emerald-500 inline-block"></span> Stock Out
+              <span className="flex items-center gap-1.5 text-amber-600">
+                <span className="w-3 h-3 rounded-sm bg-amber-500 inline-block"></span> Stock Out
               </span>
             </div>
           </div>
 
-          <div className="h-64 w-full">
+          <div className="h-64 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                <XAxis dataKey="date" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} />
                 <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#64748b' }} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
-                  itemStyle={{ color: '#fff' }}
+                  contentStyle={{ 
+                    backgroundColor: '#0c1636', 
+                    borderRadius: '12px', 
+                    color: '#fff', 
+                    fontSize: '12px',
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.4)'
+                  }}
+                  itemStyle={{ color: '#fff', fontWeight: 'bold' }}
                 />
-                <Bar dataKey="Stock In Pkgs" fill="#4f46e5" radius={[4, 4, 0, 0]} barSize={24} />
-                <Bar dataKey="Stock Out Pkgs" fill="#10b981" radius={[4, 4, 0, 0]} barSize={24} />
+                <Bar dataKey="Stock In Pkgs" fill="#1b3280" radius={[4, 4, 0, 0]} barSize={22} />
+                <Bar dataKey="Stock Out Pkgs" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={22} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Godown Goods Quick Status */}
-        <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200 flex flex-col justify-between space-y-4">
+        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200 flex flex-col justify-between space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-bold text-slate-800">Godown Stock Breakdown</h3>
-              <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-100 text-amber-700 rounded-md uppercase">
-                Godown Status
+            <div className="flex items-center justify-between mb-1 pb-3 border-b border-slate-100">
+              <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">
+                Godown Inventory
+              </h3>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md uppercase">
+                Live Status
               </span>
             </div>
-            <p className="text-xs text-slate-500 mb-4">Current state of goods in storage</p>
+            <p className="text-xs text-slate-500 mb-4">Current state of goods stored in terminal warehouse</p>
 
             <div className="space-y-3">
-              <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-center justify-between">
+              <div className="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs">
-                    <Clock className="w-4 h-4" />
+                  <div className="w-8.5 h-8.5 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                    <Clock className="w-4 h-4 stroke-[2.5]" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-900">In Godown (Pending)</p>
-                    <p className="text-[11px] text-slate-500">Goods awaiting truck loading memo</p>
+                    <p className="text-[11px] text-slate-500">Awaiting outgoing dispatch memo</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="font-mono font-bold text-sm text-slate-900">{pendingGodownCount} LRs</p>
-                  <p className="text-[11px] font-semibold text-amber-700">{pendingGodownPackages} pkgs</p>
+                  <p className="text-[11px] font-bold text-amber-700">{pendingGodownPackages} pkgs</p>
                 </div>
               </div>
 
-              <div className="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-xl flex items-center justify-between">
+              <div className="p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-xl flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                    <CheckCircle2 className="w-4 h-4" />
+                  <div className="w-8.5 h-8.5 rounded-lg bg-[#1b3280] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                    <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-900">Dispatched (Stock Out)</p>
-                    <p className="text-[11px] text-slate-500">Loaded on outgoing trucks</p>
+                    <p className="text-[11px] text-slate-500">Loaded and in transit</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="font-mono font-bold text-sm text-slate-900">
                     {stockInList.length - pendingGodownCount} LRs
                   </p>
-                  <p className="text-[11px] font-semibold text-emerald-700">
+                  <p className="text-[11px] font-bold text-blue-800">
                     {stockInList.reduce((sum, item) => item.status === 'dispatched' ? sum + Number(item.packages || 0) : sum, 0)} pkgs
                   </p>
                 </div>
@@ -444,8 +505,8 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
-            <span>Total Receipts Created:</span>
+          <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-center justify-between font-medium">
+            <span>Total Registered LRs:</span>
             <span className="font-mono font-bold text-slate-900">{stockInList.length} LRs</span>
           </div>
         </div>
@@ -456,14 +517,15 @@ export default function Dashboard() {
       <div className="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">
+            <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400" />
               {searchTerm.trim() ? `Search Results (${filteredActivities.length})` : 'Recent Activity Feed'}
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 mt-0.5">
               {searchTerm.trim() ? `Matching "${searchTerm}"` : 'Latest Lorry Receipts and Truck Loading Memos'}
             </p>
           </div>
-          <span className="text-xs font-medium text-slate-500">
+          <span className="text-xs font-bold text-slate-500 font-mono">
             {searchTerm.trim() ? `Found ${filteredActivities.length} matching entries` : 'Showing last 10 entries'}
           </span>
         </div>
@@ -482,10 +544,10 @@ export default function Dashboard() {
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
                     act.activityType === 'Stock In' 
-                      ? 'bg-indigo-100 text-indigo-700' 
-                      : 'bg-emerald-100 text-emerald-700'
+                      ? 'bg-blue-50 text-[#1b3280] border border-blue-200/80' 
+                      : 'bg-amber-50 text-amber-700 border border-amber-200/80'
                   }`}>
-                    {act.activityType === 'Stock In' ? <PackagePlus className="w-5 h-5" /> : <Truck className="w-5 h-5" />}
+                    {act.activityType === 'Stock In' ? <PackagePlus className="w-5 h-5 stroke-[2.2]" /> : <Truck className="w-5 h-5 stroke-[2.2]" />}
                   </div>
 
                   <div className="min-w-0 flex-1">
@@ -493,16 +555,16 @@ export default function Dashboard() {
                       <span className="font-mono font-bold text-xs text-slate-900 shrink-0">
                         {act.activityType === 'Stock In' ? act.lrNo : act.memoNo}
                       </span>
-                      <span className={`text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full font-semibold uppercase whitespace-nowrap shrink-0 ${
+                      <span className={`text-[9px] sm:text-[10px] px-2 py-0.5 rounded-md font-bold uppercase whitespace-nowrap shrink-0 ${
                         act.activityType === 'Stock In'
-                          ? (act.status === 'dispatched' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700')
-                          : 'bg-indigo-100 text-indigo-700'
+                          ? (act.status === 'dispatched' ? 'bg-blue-50 text-[#1b3280] border border-blue-200/60' : 'bg-amber-50 text-amber-800 border border-amber-200')
+                          : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                       }`}>
                         {act.activityType === 'Stock In' ? (act.status === 'dispatched' ? 'Dispatched' : 'In Godown') : 'Memo Dispatch'}
                       </span>
                     </div>
                     
-                    <p className="text-xs text-slate-600 mt-0.5 truncate">
+                    <p className="text-xs text-slate-600 mt-1 truncate">
                       {act.activityType === 'Stock In' 
                         ? `${act.consignorName} → ${act.consigneeName} (${act.toStation})`
                         : `Lorry: ${act.lorryNo} | Driver: ${act.driverName} (${act.entries?.length || 0} LRs loaded)`}
@@ -512,21 +574,20 @@ export default function Dashboard() {
 
                 <div className="flex items-center gap-3 sm:gap-4 text-right shrink-0">
                   <div className="flex flex-col items-end justify-center">
-                    <p className="text-xs font-bold text-slate-800 whitespace-nowrap">
+                    <p className="text-xs font-bold text-slate-900 whitespace-nowrap font-mono">
                       {act.activityType === 'Stock In' ? `${act.packages} pkgs` : `${act.totalPackages} total`}
                     </p>
-                    <p className="text-[10px] text-slate-400 whitespace-nowrap">
+                    <p className="text-[10.5px] text-slate-400 whitespace-nowrap font-medium">
                       {new Date(act.date || act.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                     </p>
                   </div>
 
                   <button
                     onClick={() => act.activityType === 'Stock In' ? setSelectedLr(act) : setSelectedMemo(act)}
-                    className="p-1.5 sm:p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer shrink-0"
+                    className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-[#1b3280] hover:text-white text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
                   >
                     <Printer className="w-3.5 h-3.5 hidden sm:block" />
-                    <span className="sm:hidden text-[10px] font-bold">View</span>
-                    <span className="hidden sm:inline">View</span>
+                    <span>View</span>
                   </button>
                 </div>
               </div>

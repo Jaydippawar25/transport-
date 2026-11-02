@@ -248,12 +248,16 @@ export default function Reports() {
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       
       {/* Print-only Company Header */}
-      <div className="hidden print:block border-b-2 border-black pb-3 mb-4 text-center">
+      <div className="hidden print:flex flex-col items-center border-b-2 border-black pb-3 mb-4 text-center">
+        <img src="/logo.png" alt="Royal Roadlines" className="h-12 w-auto object-contain mb-1" />
         <h1 className="text-2xl font-black uppercase tracking-wider text-black">ROYAL ROADLINES</h1>
         <p className="text-[11px] font-semibold text-slate-700">
           MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Mumbai-400 003
         </p>
-        <div className="flex justify-between items-center text-xs font-bold text-slate-800 mt-2 pt-2 border-t border-slate-300">
+        <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mt-0.5">
+          RELIABLE • SAFE • ON TIME
+        </p>
+        <div className="flex justify-between items-center text-xs font-bold text-slate-800 mt-2 pt-2 border-t border-slate-300 w-full">
           <span>SECTION: {activeSection.replace('_', ' ')}</span>
           <span>DATE RANGE: {dateRange}</span>
           <span>PRINTED ON: {new Date().toLocaleDateString('en-IN')}</span>
@@ -263,12 +267,17 @@ export default function Reports() {
       {/* Page Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-indigo-50 text-indigo-600 font-bold border border-indigo-100">
-              <BarChart3 className="w-5 h-5" />
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-xl bg-blue-50 text-[#1b3280] font-bold border border-blue-200/80 shadow-2xs">
+              <BarChart3 className="w-5 h-5 stroke-[2.2]" />
             </span>
             <div>
-              <h1 className="text-xl font-bold text-slate-900">Transport Analytics & Reports</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-black text-slate-900 uppercase tracking-tight">Transport Analytics & Reports</h1>
+                <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-extrabold text-amber-800 uppercase">
+                  MANAGEMENT AUDIT
+                </span>
+              </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 Section-wise breakdown for Stock In, Stock Out, and Pending Godown Stock.
               </p>
@@ -281,13 +290,13 @@ export default function Reports() {
             onClick={handlePrint}
             className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold transition-all shadow-xs cursor-pointer"
           >
-            <Printer className="w-4 h-4 text-slate-500" /> Print Section Report
+            <Printer className="w-4 h-4 text-slate-500" /> Print Report
           </button>
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md shadow-amber-500/20 cursor-pointer"
           >
-            <Download className="w-4 h-4" /> Export CSV
+            <Download className="w-4 h-4 stroke-[2.5]" /> Export CSV
           </button>
         </div>
       </div>
@@ -299,8 +308,8 @@ export default function Reports() {
           
           {/* SECTION TABS (STOCK IN / STOCK OUT / PENDING STOCK) */}
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100 font-black text-xs uppercase tracking-widest text-indigo-700">
-              <FileSpreadsheet className="w-4 h-4 text-indigo-600" />
+            <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 font-black text-xs uppercase tracking-widest text-[#1b3280]">
+              <FileSpreadsheet className="w-4 h-4 text-[#1b3280]" />
               <span>REPORTS</span>
             </div>
 
@@ -310,7 +319,7 @@ export default function Reports() {
                 onClick={() => setActiveSection('STOCK_IN')}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer ${
                   activeSection === 'STOCK_IN'
-                    ? 'bg-indigo-600 text-white shadow-sm font-bold'
+                    ? 'bg-[#1b3280] text-white shadow-sm font-bold border-b-2 border-amber-400'
                     : 'text-slate-600 hover:text-slate-900 font-semibold'
                 }`}
               >
@@ -322,7 +331,7 @@ export default function Reports() {
                 onClick={() => setActiveSection('STOCK_OUT')}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer ${
                   activeSection === 'STOCK_OUT'
-                    ? 'bg-indigo-600 text-white shadow-sm font-bold'
+                    ? 'bg-[#1b3280] text-white shadow-sm font-bold border-b-2 border-amber-400'
                     : 'text-slate-600 hover:text-slate-900 font-semibold'
                 }`}
               >
@@ -334,7 +343,7 @@ export default function Reports() {
                 onClick={() => setActiveSection('PENDING_STOCK')}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer ${
                   activeSection === 'PENDING_STOCK'
-                    ? 'bg-indigo-600 text-white shadow-sm font-bold'
+                    ? 'bg-[#1b3280] text-white shadow-sm font-bold border-b-2 border-amber-400'
                     : 'text-slate-600 hover:text-slate-900 font-semibold'
                 }`}
               >

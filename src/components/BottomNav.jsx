@@ -12,7 +12,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 flex justify-between items-center px-1 pt-1 pb-[calc(env(safe-area-inset-bottom)_+_8px)] shadow-[0_-4px_6px_-1px_rgb(0,0,0,0.05)] z-40">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 flex justify-between items-center px-1 pt-1 pb-[calc(env(safe-area-inset-bottom)_+_8px)] shadow-[0_-4px_16px_rgba(11,27,78,0.08)] z-40">
       {navItems.map((item) => {
         const Icon = item.icon;
         return (
@@ -21,16 +21,22 @@ export default function BottomNav() {
             to={item.path}
             end={item.path === '/'}
             className={({ isActive }) => ` 
-              flex flex-col items-center justify-center w-full py-1.5 gap-0.5 text-[10px] font-semibold transition-colors
-              ${isActive ? 'text-indigo-700' : 'text-slate-500 hover:text-slate-800'}
+              flex flex-col items-center justify-center w-full py-1.5 gap-0.5 text-[10px] font-semibold transition-all
+              ${isActive ? 'text-[#1b3280] font-bold' : 'text-slate-500 hover:text-slate-800'}
             `}
           >
             {({ isActive }) => (
               <>
-                <div className={`p-2 rounded-full transition-colors ${isActive ? 'bg-indigo-100 text-indigo-700' : 'bg-transparent text-slate-500'}`}>
-                  <Icon className="w-5 h-5" />
+                <div className={`p-2 rounded-xl transition-all ${
+                  isActive 
+                    ? 'bg-gradient-to-r from-blue-700 to-[#1b3280] text-white shadow-sm shadow-blue-900/30 ring-2 ring-amber-400/50' 
+                    : 'bg-transparent text-slate-500 hover:bg-slate-100'
+                }`}>
+                  <Icon className="w-4.5 h-4.5" />
                 </div>
-                <span className="truncate w-full text-center">{item.label}</span>
+                <span className={`truncate w-full text-center ${isActive ? 'text-[#1b3280] font-extrabold' : ''}`}>
+                  {item.label}
+                </span>
               </>
             )}
           </NavLink>
@@ -39,4 +45,3 @@ export default function BottomNav() {
     </nav>
   );
 }
-

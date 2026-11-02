@@ -619,15 +619,22 @@ export default function StockIn() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-indigo-100 text-indigo-700 font-bold">
-              <PackagePlus className="w-5 h-5" />
+          <div className="flex items-center gap-2.5">
+            <span className="p-2 rounded-xl bg-blue-50 text-[#1b3280] border border-blue-200/80 font-bold shadow-2xs">
+              <PackagePlus className="w-5 h-5 stroke-[2.2]" />
             </span>
-            <h1 className="text-xl font-bold text-slate-900">Stock In (Lorry Receipt Entry)</h1>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-black text-slate-900 uppercase tracking-tight">Stock In (Lorry Receipt Entry)</h1>
+                <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-extrabold text-amber-800 uppercase">
+                  INCOMING BOOKINGS
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Enter incoming lorry receipts with transporter memo details, consignor/consignee data, and payment breakdown.
+              </p>
+            </div>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
-            Enter incoming lorry receipts with transporter memo details, consignor/consignee data, and payment breakdown.
-          </p>
         </div>
 
         <button
@@ -641,7 +648,7 @@ export default function StockIn() {
               }, 120);
             }
           }}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold text-xs transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-700 via-[#1b3280] to-blue-900 hover:from-blue-600 hover:to-[#1b3280] text-white rounded-xl font-bold text-xs transition-all shadow-md shadow-blue-950/25 ring-1 ring-amber-400/40 cursor-pointer hover:scale-[1.01]"
         >
           {showForm ? 'Close Entry Form' : '+ New Stock In Entry'}
         </button>
@@ -1201,7 +1208,7 @@ export default function StockIn() {
         <div className="hidden lg:block w-full">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-blue-50 text-blue-800 font-bold text-[11px] uppercase tracking-wider">
+              <tr className="bg-[#0c1636] text-white font-bold text-[11px] uppercase tracking-wider border-b-2 border-amber-400">
                 <th className="p-3 border-r border-slate-200 text-center w-12">SR.</th>
                 <th className="p-3 border-r border-slate-200">L.R. NO. & DATE</th>
                 <th className="p-3 border-r border-slate-200">CONSIGNOR</th>
@@ -1328,26 +1335,26 @@ export default function StockIn() {
             
             {/* SPREADSHEET TOTALS FOOTER ROW */}
             <tfoot>
-              <tr className="bg-blue-50 text-blue-900 border-t-2 border-slate-200 font-bold text-xs border-t-2 border-slate-200">
-                <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-700">
-                  TOTAL:
+              <tr className="bg-[#0c1636] text-white border-t-2 border-amber-400 font-bold text-xs">
+                <td colSpan={5} className="p-3 text-right uppercase tracking-wider font-black text-slate-300">
+                  GRAND TOTAL:
                 </td>
-                <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
+                <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-amber-300">
                   {totalPkgs} Pkgs
                 </td>
-                <td className="p-3 border-r border-slate-200 text-center font-mono font-black text-xs text-slate-800">
+                <td className="p-3 border-r border-slate-800 text-center font-mono font-black text-xs text-slate-300">
                   {totalWeight} kg
                 </td>
-                <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-amber-700">
+                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-amber-400">
                   ₹{totalToPay.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-emerald-700">
+                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-emerald-400">
                   ₹{totalPaid.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 border-r border-slate-200 text-right font-mono font-bold text-blue-700">
+                <td className="p-3 border-r border-slate-800 text-right font-mono font-bold text-cyan-300">
                   ₹{totalTBB.toLocaleString('en-IN')}
                 </td>
-                <td className="p-3 text-center font-mono font-black text-xs text-indigo-700">
+                <td className="p-3 text-center font-mono font-black text-xs text-amber-400">
                   ₹{grandTotal.toLocaleString('en-IN')}
                 </td>
               </tr>

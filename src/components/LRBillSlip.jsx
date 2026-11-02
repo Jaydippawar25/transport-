@@ -94,9 +94,16 @@ export default function LRBillSlip({ lr, copyTitle, formattedDate, paperColor = 
 
       {/* COMPANY HEADER SECTION */}
       <div className="border-b-2 border-black py-0.5 px-1 text-center flex flex-col items-center">
-        <h1 className="text-base sm:text-lg md:text-xl font-black uppercase tracking-wider text-black leading-none">
-          ROYAL ROADLINES
-        </h1>
+        <div className="flex items-center justify-center gap-2 mb-0.5">
+          <img 
+            src="/logo.png" 
+            alt="Royal Roadlines" 
+            className="h-6 sm:h-7 w-auto object-contain" 
+          />
+          <h1 className="text-base sm:text-lg md:text-xl font-black uppercase tracking-wider text-black leading-none">
+            ROYAL ROADLINES
+          </h1>
+        </div>
         <p className="text-[6px] sm:text-[7px] font-medium leading-tight max-w-2xl mt-0.5">
           MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W), Near Bhandari Police Chowki, Mumbai-400 003 Mob.8087209449.
           <br className="hidden sm:inline" /> SAKINAKA : Gala No.7, Sarita Estate, Opp. St. Judes School, Hearoma Hotel & Lalji Transport, Sakinaka. Mob.9021521272

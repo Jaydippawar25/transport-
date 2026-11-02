@@ -231,7 +231,9 @@ export default function Accounting() {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-            <Calculator className="w-8 h-8 text-indigo-600 shrink-0" />
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1b3280] border border-blue-200/80 flex items-center justify-center font-bold shadow-2xs">
+              <Calculator className="w-6 h-6 stroke-[2.2]" />
+            </div>
             Accounting & Profit/Loss Report
           </h1>
           <p className="text-sm text-slate-500 font-medium mt-1">
@@ -357,7 +359,7 @@ export default function Accounting() {
           </div>
         </div>
 
-        <div className="bg-slate-900 p-6 rounded-2xl shadow-lg border border-slate-200 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#070d21] via-[#0c1636] to-[#1b3280] p-6 rounded-2xl shadow-xl border-2 border-amber-400/50 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <Calculator className="w-24 h-24" />
           </div>

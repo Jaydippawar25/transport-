@@ -114,7 +114,7 @@ export default function Login() {
               <img 
                 src="/logo.png" 
                 alt="Royal Roadlines Logo" 
-                className="w-14 h-14 object-contain drop-shadow-md md:hidden shrink-0" 
+                className="h-12 w-auto max-w-[90px] object-contain drop-shadow-xs md:hidden shrink-0" 
               />
               <div>
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-[#2a4393] tracking-wide uppercase">
@@ -181,7 +181,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 bg-gradient-to-r from-[#212c75] to-[#1c235b] hover:from-[#1b2460] hover:to-[#161c48] text-white font-semibold text-sm rounded-lg shadow-lg shadow-indigo-900/30 transition-all cursor-pointer disabled:opacity-50"
+                  className="w-full py-3 bg-gradient-to-r from-[#0d173d] via-[#14235e] to-[#1b3280] hover:from-[#0a112c] hover:to-[#14235e] text-white font-black text-sm rounded-xl shadow-lg shadow-blue-950/40 border border-amber-400/40 transition-all cursor-pointer disabled:opacity-50 tracking-wider uppercase"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
@@ -232,7 +232,7 @@ export default function Login() {
         </div>
 
         {/* Right Side: Deep Blue Curved Overlay Container */}
-        <div className="w-full md:w-2/5 bg-gradient-to-br from-[#293796] via-[#1f2873] to-[#161a52] relative overflow-hidden flex items-center justify-center p-8 min-h-[220px] md:min-h-full">
+        <div className="w-full md:w-2/5 bg-gradient-to-br from-[#070d21] via-[#0f1c45] to-[#1b3280] relative overflow-hidden flex items-center justify-center p-8 min-h-[220px] md:min-h-full">
           
           {/* S-Curve Divider Effect */}
           <div className="hidden md:block absolute -left-12 top-0 bottom-0 w-24 bg-white rounded-r-[100px] pointer-events-none transform scale-y-125"></div>
@@ -267,14 +267,18 @@ export default function Login() {
           </div>
 
           {/* Center Brand Badge */}
-          <div className="relative z-10 text-center text-white space-y-3">
-            <img 
-              src="/logo.png" 
-              alt="Royal Roadlines" 
-              className="w-32 h-32 object-contain mx-auto drop-shadow-[0_12px_28px_rgba(0,0,0,0.65)] hover:scale-105 transition-transform duration-300" 
-            />
-            <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
-            <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003</p>
+          <div className="relative z-10 text-center text-white space-y-4">
+            <div className="max-w-[260px] mx-auto hover:scale-105 transition-transform duration-300">
+              <img 
+                src="/logo.png" 
+                alt="Royal Roadlines" 
+                className="w-full h-auto object-contain" 
+              />
+            </div>
+            <div>
+              <h2 className="text-xl font-black tracking-wide text-white uppercase">ROYAL ROADLINES</h2>
+              <p className="text-xs text-cyan-200 font-medium max-w-[220px] mx-auto leading-tight mt-1">MASJID BUNDER : C/O, G. Shantilal Transport B.I.T Bldg. No.3, Bhandari Street, Near masjid Bunder Station(W),Near Bhandari Police Chowki, Mumbai-400 003</p>
+            </div>
           </div>
 
         </div>

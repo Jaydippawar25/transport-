@@ -154,12 +154,19 @@ export default function TransportAgent() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-800 flex items-center gap-3">
-            <Users className="w-8 h-8 text-blue-600" />
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+              AGENT COMMISSION & DISBURSEMENT
+            </span>
+          </div>
+          <h1 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1b3280] border border-blue-200/80 flex items-center justify-center font-bold shadow-2xs">
+              <Users className="w-6 h-6 stroke-[2.2]" />
+            </div>
             Transport Agent Ledger
           </h1>
-          <p className="text-sm font-medium text-slate-500 mt-1">
-            View all stock out memos dispatched by transport agent
+          <p className="text-xs font-medium text-slate-500 mt-1">
+            View all stock out memos dispatched by transport agent and reconcile agent balances
           </p>
         </div>
         <button

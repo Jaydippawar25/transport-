@@ -163,7 +163,8 @@ export default function MemoPrintModal({ memo, stockIn = [], onClose }) {
                     <div className="w-1/4">
                       <div className="text-[10px] uppercase font-bold text-slate-700 pr-2">SUBJECT TO ICHALKARANJI JURISDICTION</div>
                     </div>
-                    <div className="w-2/4 text-center">
+                    <div className="w-2/4 text-center flex flex-col items-center">
+                      <img src="/logo.png" alt="Royal Roadlines" className="h-10 w-auto object-contain mb-1" />
                       <h1 className="text-3xl font-serif font-black tracking-wider uppercase text-black whitespace-nowrap" style={{ textShadow: '1.5px 1.5px 0px #ea580c, -1.5px -1.5px 0px #0284c7' }}>
                         ROYAL ROADLINES
                       </h1>
