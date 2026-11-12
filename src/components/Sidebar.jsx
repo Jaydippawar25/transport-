@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, 
+  LayoutDashboard,
+  Receipt, 
   PackagePlus, 
   Truck, 
   FolderKanban,
@@ -28,6 +29,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
     { label: 'Stock In (LR Entry)', path: '/stock-in', icon: PackagePlus },
     { label: 'Stock Out (Memo)', path: '/stock-out', icon: Truck },
+    { label: 'Expenses', path: '/expenses', icon: Receipt },
     { label: 'Transport Agent', path: '/transport-agent', icon: Users },
     { label: 'Masters (Drop Box)', path: '/masters', icon: FolderKanban },
     { label: 'Accounting', path: '/accounting', icon: Calculator },

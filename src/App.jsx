@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import StockIn from './pages/StockIn';
 import StockOut from './pages/StockOut';
+import Expenses from './pages/Expenses';
 import Reports from './pages/Reports';
 import Accounting from './pages/Accounting';
 import Masters from './pages/Masters';
@@ -65,6 +66,7 @@ export default function App() {
             <Route path="/dashboard" element={<AuthenticatedRoute><Dashboard /></AuthenticatedRoute>} />
             <Route path="/stock-in" element={<AuthenticatedRoute><StockIn /></AuthenticatedRoute>} />
             <Route path="/stock-out" element={<AuthenticatedRoute><StockOut /></AuthenticatedRoute>} />
+            <Route path="/expenses" element={<AuthenticatedRoute><Expenses /></AuthenticatedRoute>} />
             <Route path="/transport-agent" element={<AuthenticatedRoute><TransportAgent /></AuthenticatedRoute>} />
             <Route path="/masters" element={<AuthenticatedRoute><Masters /></AuthenticatedRoute>} />
             <Route path="/reports" element={<AuthenticatedRoute><Reports /></AuthenticatedRoute>} />

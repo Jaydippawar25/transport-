@@ -398,12 +398,40 @@ export default function StockIn() {
       } else {
         savedLr = await dataService.addStockIn(lrPayload);
       }
+
+      // Auto-save manual entries (From Station, Destination, Consignor, Consignee, Vehicle, Driver, Transporter) to Masters (Drop Box)
+      const autoSaveResult = await dataService.autoSaveMasters({
+        fromStation: formData.fromStation,
+        toStation: formData.toStation,
+        consignorName: formData.consignorName,
+        consignorAddress: formData.consignorAddress,
+        consignorGSTIN: formData.consignorGSTIN,
+        consigneeName: formData.consigneeName,
+        consigneeAddress: formData.consigneeAddress,
+        consigneeGSTIN: formData.consigneeGSTIN,
+        vehicleNo: formData.vehicleNo,
+        driverName: formData.driverName,
+        ownerName: formData.ownerName,
+        transportAgent: formData.transporterName
+      });
+
+      if (autoSaveResult?.hasChanges) {
+        const [updatedStations, updatedMasters] = await Promise.all([
+          dataService.getStations(),
+          dataService.getMasters()
+        ]);
+        setStations(updatedStations);
+        setMasters(updatedMasters);
+      }
       
       if (printAfterSave) {
         setSelectedLr(savedLr);
       } else {
-        setToastMsg(`Stock In Entry ${cleanLrNo} ${editingId ? 'updated' : 'saved'} successfully!`);
-        setTimeout(() => setToastMsg(''), 3000);
+        const addedNote = autoSaveResult?.addedItems?.length > 0 
+          ? ` (Saved ${autoSaveResult.addedItems.length} new Drop Box master${autoSaveResult.addedItems.length > 1 ? 's' : ''})` 
+          : '';
+        setToastMsg(`Stock In Entry ${cleanLrNo} ${editingId ? 'updated' : 'saved'} successfully!${addedNote}`);
+        setTimeout(() => setToastMsg(''), 3500);
       }
       
       // Generate Next Sequential LR No

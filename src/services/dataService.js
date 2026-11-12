@@ -29,6 +29,7 @@ const STORAGE_KEYS = {
   STOCK_OUT: 'transtrack_stock_out',
   STATIONS: 'transtrack_stations',
   MASTERS: 'transtrack_masters',
+  EXPENSES: 'transtrack_expenses',
   SEEDED: 'transtrack_is_seeded'
 };
 
@@ -60,7 +61,9 @@ const cache = {
   stations: null,
   stationsTime: 0,
   masters: null,
-  mastersTime: 0
+  mastersTime: 0,
+  expenses: null,
+  expensesTime: 0
 };
 
 const CACHE_TTL_STOCK_MS = 60 * 1000; // 60s cache for stock records
@@ -80,6 +83,10 @@ const initLocalStorageIfNeeded = () => {
 // Core Data Service API
 export const dataService = {
   invalidateCache(type = 'all') {
+    if (type === 'all' || type === 'expenses') {
+      cache.expenses = null;
+      cache.expensesTime = 0;
+    }
     if (type === 'all' || type === 'stockIn') {
       cache.stockIn = null;
       cache.stockInTime = 0;
@@ -911,6 +918,334 @@ export const dataService = {
       setLocal(STORAGE_KEYS.STOCK_IN, updatedStockIn);
     }
 
+    return true;
+  },
+
+  // -------------------------------------------------------------
+  // OPERATING EXPENSES
+  // -------------------------------------------------------------
+  // -------------------------------------------------------------
+  // AUTOMATIC SAVING OF MANUAL INPUTS TO MASTERS (DROP BOX)
+  // -------------------------------------------------------------
+  async autoSaveMasters({
+    fromStation,
+    toStation,
+    consignorName,
+    consignorAddress,
+    consignorGSTIN,
+    consigneeName,
+    consigneeAddress,
+    consigneeGSTIN,
+    vehicleNo,
+    ownerName,
+    driverName,
+    transportAgent,
+    transportAgentMobile
+  } = {}) {
+    this.invalidateCache('masters');
+    this.invalidateCache('stations');
+
+    let currentMasters = await this.getMasters({ forceRefresh: true });
+    if (!currentMasters) {
+      initLocalStorageIfNeeded();
+      currentMasters = getLocal(STORAGE_KEYS.MASTERS, INITIAL_MASTERS);
+    }
+
+    const norm = (s) => (s || '').trim().toUpperCase();
+    let hasChanges = false;
+    const addedItems = [];
+
+    const updatedMasters = {
+      consignors: [...(currentMasters.consignors || [])],
+      consignees: [...(currentMasters.consignees || [])],
+      vehicles: [...(currentMasters.vehicles || [])],
+      stations: [...(currentMasters.stations || [])],
+      deliveryPersons: [...(currentMasters.deliveryPersons || [])],
+      drivers: [...(currentMasters.drivers || [])],
+      transportAgents: [...(currentMasters.transportAgents || [])]
+    };
+
+    // 1. Stations (FROM & TO)
+    const candidateStations = [fromStation, toStation].map(norm).filter(Boolean);
+    const existingStationNames = new Set(
+      updatedMasters.stations.map(s => norm(s.name))
+    );
+    const localStations = getLocal(STORAGE_KEYS.STATIONS, INITIAL_STATIONS);
+    localStations.forEach(s => existingStationNames.add(norm(s)));
+
+    for (const st of candidateStations) {
+      if (st && !existingStationNames.has(st)) {
+        existingStationNames.add(st);
+        const newStation = {
+          id: `m-sta-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name: st
+        };
+        updatedMasters.stations.unshift(newStation);
+        hasChanges = true;
+        addedItems.push(`Station: ${st}`);
+
+        if (!localStations.some(s => norm(s) === st)) {
+          localStations.unshift(st);
+          setLocal(STORAGE_KEYS.STATIONS, localStations);
+        }
+      }
+    }
+
+    // 2. Consignor (Sender)
+    if (consignorName && consignorName.trim()) {
+      const cleanName = consignorName.trim();
+      const existingIdx = updatedMasters.consignors.findIndex(c => norm(c.name) === norm(cleanName));
+      if (existingIdx === -1) {
+        const newConsignor = {
+          id: `m-con-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name: cleanName,
+          address: (consignorAddress || '').trim(),
+          gstin: (consignorGSTIN || '').trim().toUpperCase(),
+          mobile: ''
+        };
+        updatedMasters.consignors.unshift(newConsignor);
+        hasChanges = true;
+        addedItems.push(`Consignor: ${cleanName}`);
+      } else {
+        const ex = updatedMasters.consignors[existingIdx];
+        let modified = false;
+        let newAddress = ex.address;
+        let newGstin = ex.gstin;
+        if (consignorAddress && consignorAddress.trim() && !ex.address) {
+          newAddress = consignorAddress.trim();
+          modified = true;
+        }
+        if (consignorGSTIN && consignorGSTIN.trim() && !ex.gstin) {
+          newGstin = consignorGSTIN.trim().toUpperCase();
+          modified = true;
+        }
+        if (modified) {
+          updatedMasters.consignors[existingIdx] = {
+            ...ex,
+            address: newAddress,
+            gstin: newGstin
+          };
+          hasChanges = true;
+        }
+      }
+    }
+
+    // 3. Consignee (Receiver)
+    if (consigneeName && consigneeName.trim()) {
+      const cleanName = consigneeName.trim();
+      const existingIdx = updatedMasters.consignees.findIndex(c => norm(c.name) === norm(cleanName));
+      if (existingIdx === -1) {
+        const newConsignee = {
+          id: `m-cee-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name: cleanName,
+          address: (consigneeAddress || '').trim(),
+          gstin: (consigneeGSTIN || '').trim().toUpperCase(),
+          mobile: ''
+        };
+        updatedMasters.consignees.unshift(newConsignee);
+        hasChanges = true;
+        addedItems.push(`Consignee: ${cleanName}`);
+      } else {
+        const ex = updatedMasters.consignees[existingIdx];
+        let modified = false;
+        let newAddress = ex.address;
+        let newGstin = ex.gstin;
+        if (consigneeAddress && consigneeAddress.trim() && !ex.address) {
+          newAddress = consigneeAddress.trim();
+          modified = true;
+        }
+        if (consigneeGSTIN && consigneeGSTIN.trim() && !ex.gstin) {
+          newGstin = consigneeGSTIN.trim().toUpperCase();
+          modified = true;
+        }
+        if (modified) {
+          updatedMasters.consignees[existingIdx] = {
+            ...ex,
+            address: newAddress,
+            gstin: newGstin
+          };
+          hasChanges = true;
+        }
+      }
+    }
+
+    // 4. Vehicle & Owner Name
+    if (vehicleNo && vehicleNo.trim()) {
+      const cleanVeh = norm(vehicleNo);
+      const existingIdx = updatedMasters.vehicles.findIndex(v => norm(v.vehicleNo) === cleanVeh);
+      if (existingIdx === -1) {
+        const newVehicle = {
+          id: `m-veh-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          vehicleNo: cleanVeh,
+          ownerName: (ownerName || '').trim(),
+          address: '',
+          mobile: ''
+        };
+        updatedMasters.vehicles.unshift(newVehicle);
+        hasChanges = true;
+        addedItems.push(`Vehicle: ${cleanVeh}`);
+      } else if (ownerName && ownerName.trim() && !updatedMasters.vehicles[existingIdx].ownerName) {
+        updatedMasters.vehicles[existingIdx] = {
+          ...updatedMasters.vehicles[existingIdx],
+          ownerName: ownerName.trim()
+        };
+        hasChanges = true;
+      }
+    }
+
+    // 5. Driver Name
+    if (driverName && driverName.trim()) {
+      const cleanDriver = driverName.trim();
+      const existingIdx = updatedMasters.drivers.findIndex(d => norm(d.name) === norm(cleanDriver));
+      if (existingIdx === -1) {
+        const newDriver = {
+          id: `m-dri-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name: cleanDriver,
+          address: '',
+          mobile: ''
+        };
+        updatedMasters.drivers.unshift(newDriver);
+        hasChanges = true;
+        addedItems.push(`Driver: ${cleanDriver}`);
+      }
+    }
+
+    // 6. Transport Agent & Mobile
+    if (transportAgent && transportAgent.trim()) {
+      const cleanAgent = transportAgent.trim();
+      const cleanMobile = (transportAgentMobile || '').trim();
+      const existingIdx = updatedMasters.transportAgents.findIndex(a => norm(a.name) === norm(cleanAgent));
+      if (existingIdx === -1) {
+        const newAgent = {
+          id: `m-agt-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          name: cleanAgent,
+          mobile: cleanMobile,
+          address: '',
+          gstin: ''
+        };
+        updatedMasters.transportAgents.unshift(newAgent);
+        hasChanges = true;
+        addedItems.push(`Transport Agent: ${cleanAgent}`);
+      } else if (cleanMobile && !updatedMasters.transportAgents[existingIdx].mobile) {
+        updatedMasters.transportAgents[existingIdx] = {
+          ...updatedMasters.transportAgents[existingIdx],
+          mobile: cleanMobile
+        };
+        hasChanges = true;
+      }
+    }
+
+    // Commit changes
+    if (hasChanges) {
+      if (isFirebaseConfigured && db) {
+        try {
+          await setDoc(doc(db, 'masters', 'main'), updatedMasters);
+        } catch (err) {
+          console.error("Firestore save auto-masters error:", err);
+        }
+      }
+      setLocal(STORAGE_KEYS.MASTERS, updatedMasters);
+      cache.masters = updatedMasters;
+      cache.mastersTime = Date.now();
+    }
+
+    return { hasChanges, addedItems, updatedMasters };
+  },
+
+  async getExpenses({ forceRefresh = false } = {}) {
+    if (!forceRefresh && cache.expenses && (Date.now() - cache.expensesTime < CACHE_TTL_STOCK_MS)) {
+      return cache.expenses;
+    }
+    if (isFirebaseConfigured && db) {
+      try {
+        const q = query(collection(db, 'expenses'), orderBy('createdAt', 'desc'));
+        const snap = await getDocs(q);
+        const list = snap.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            date: data.date?.toDate ? data.date.toDate().toISOString() : data.date,
+            createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt
+          };
+        });
+        cache.expenses = list;
+        cache.expensesTime = Date.now();
+        return list;
+      } catch (err) {
+        console.warn("Firestore fetch error for expenses, reading local fallback:", err);
+      }
+    }
+    const fallback = getLocal(STORAGE_KEYS.EXPENSES, []);
+    cache.expenses = fallback;
+    cache.expensesTime = Date.now();
+    return fallback;
+  },
+
+  async addExpense(expenseData) {
+    this.invalidateCache('expenses');
+    const formattedData = {
+      ...expenseData,
+      amount: Number(expenseData.amount || 0),
+      date: expenseData.date || new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString()
+    };
+    if (isFirebaseConfigured && db) {
+      try {
+        const docRef = await addDoc(collection(db, 'expenses'), {
+          ...formattedData,
+          createdAt: serverTimestamp()
+        });
+        const saved = { ...formattedData, id: docRef.id };
+        const currentLocal = getLocal(STORAGE_KEYS.EXPENSES, []);
+        setLocal(STORAGE_KEYS.EXPENSES, [saved, ...currentLocal]);
+        return saved;
+      } catch (err) {
+        console.warn("Firestore add error for expense, falling back to local:", err);
+      }
+    }
+    const currentExpenses = getLocal(STORAGE_KEYS.EXPENSES, []);
+    const newRecord = {
+      ...formattedData,
+      id: `exp-${Date.now()}`
+    };
+    setLocal(STORAGE_KEYS.EXPENSES, [newRecord, ...currentExpenses]);
+    return newRecord;
+  },
+
+  async updateExpense(id, expenseData) {
+    this.invalidateCache('expenses');
+    const formattedData = {
+      ...expenseData,
+      amount: Number(expenseData.amount || 0),
+      updatedAt: new Date().toISOString()
+    };
+    if (isFirebaseConfigured && db) {
+      try {
+        const docRef = doc(db, 'expenses', id);
+        await updateDoc(docRef, formattedData);
+      } catch (err) {
+        console.warn("Firestore update error for expense:", err);
+      }
+    }
+    const currentExpenses = getLocal(STORAGE_KEYS.EXPENSES, []);
+    const updated = currentExpenses.map(item => item.id === id ? { ...item, ...formattedData } : item);
+    setLocal(STORAGE_KEYS.EXPENSES, updated);
+    return { id, ...formattedData };
+  },
+
+  async deleteExpense(id) {
+    this.invalidateCache('expenses');
+    if (isFirebaseConfigured && db) {
+      try {
+        await deleteDoc(doc(db, 'expenses', id));
+      } catch (err) {
+        console.warn("Firestore delete error for expense:", err);
+      }
+    }
+    const currentExpenses = getLocal(STORAGE_KEYS.EXPENSES, []);
+    const updated = currentExpenses.filter(item => item.id !== id);
+    setLocal(STORAGE_KEYS.EXPENSES, updated);
     return true;
   },
 
